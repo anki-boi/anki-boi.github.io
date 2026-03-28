@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<!-- Chart.js for DISC Pie Chart -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Jeyson Dagondon - Licensed Pharmacist & Automation Engineer specializing in clinical data management, health informatics, AI/LLM operations, and automation architecture">
@@ -1524,59 +1526,64 @@
         </div>
     </section>
 
-    <!-- Personality Profile Section -->
-    <section id="personality">
-        <div class="section-header">
-            <h2 class="section-title"><i class="fas fa-brain"></i> Personality Profile</h2>
-            <p class="section-subtitle">How I work and what drives me</p>
-        </div>
-        <div class="personality-grid">
-            <div class="personality-card">
-                <h3><i class="fas fa-seedling"></i> The Growth Seeker</h3>
-                <p>Curious, internally motivated, and adaptable. I devote myself to improvement and have a thirst for knowledge that's genuinely useful — not just interesting. I reflect well on failures and treat them as data.</p>
-                <div class="personality-stats">
-                    <div class="stat-item">
-                        <div class="stat-label">Originality</div>
-                        <div class="stat-value">95%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Impartiality</div>
-                        <div class="stat-value">98%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Adaptability</div>
-                        <div class="stat-value">85%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Proactiveness</div>
-                        <div class="stat-value">92%</div>
-                    </div>
-                </div>
-            </div>
-            <div class="personality-card">
-                <h3><i class="fas fa-chart-pie"></i> DISC Profile</h3>
-                <p>Results-oriented with a strong influence dimension. I push for outcomes, debate ideas freely, and care about the team's success — but I don't need to be the loudest voice in the room.</p>
-                <div class="personality-stats">
-                    <div class="stat-item">
-                        <div class="stat-label">Dominance</div>
-                        <div class="stat-value">40%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Influence</div>
-                        <div class="stat-value">24%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Steadiness</div>
-                        <div class="stat-value">24%</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Compliance</div>
-                        <div class="stat-value">12%</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+	<!-- Personality Profile Section -->
+	<section id="personality">
+	  <div class="section-header">
+		<h2 class="section-title"><i class="fas fa-brain"></i> Personality Profile</h2>
+		<p class="section-subtitle">How I work and what drives me</p>
+	  </div>
+	  <div class="personality-grid">
+		
+		<!-- Growth Seeker Card -->
+		<div class="personality-card">
+		  <h3><i class="fas fa-seedling"></i> The Growth Seeker</h3>
+		  <p>
+			Curious, internally motivated, and adaptable. I devote myself to improvement and have a thirst for knowledge that's genuinely useful — not just interesting. I reflect well on failures and treat them as data.
+		  </p>
+		  <div class="personality-stats">
+			<div class="stat-item">
+			  <div class="stat-label">Originality</div>
+			  <div class="stat-value">95%</div>
+			</div>
+			<div class="stat-item">
+			  <div class="stat-label">Impartiality</div>
+			  <div class="stat-value">98%</div>
+			</div>
+			<div class="stat-item">
+			  <div class="stat-label">Adaptability</div>
+			  <div class="stat-value">85%</div>
+			</div>
+			<div class="stat-item">
+			  <div class="stat-label">Proactiveness</div>
+			  <div class="stat-value">92%</div>
+			</div>
+		  </div>
+		  <a href="https://www.dropbox.com/scl/fi/akbyuoukx9vy9evvv0eu6/PrinciplesYou-Jeyson-Dagondon-Results.pdf?rlkey=ds8ga93wawa8y6f5p09dkbzcz&st=u8in36qw&dl=0" 
+			 class="btn btn-secondary" 
+			 target="_blank" 
+			 rel="noopener"
+			 style="margin-top: 1.5rem; width: 100%;">
+			<i class="fas fa-external-link-alt"></i> View Full PrinciplesYou Profile
+		  </a>
+		</div>
+
+		<!-- DISC Profile Card -->
+		<div class="personality-card">
+		  <h3><i class="fas fa-chart-pie"></i> DISC Profile</h3>
+		  <p>
+			Results-oriented with a strong influence dimension. I push for outcomes, debate ideas freely, and care about the team's success — but I don't need to be the loudest voice in the room.
+		  </p>
+		  <canvas id="discChart" style="max-width: 300px; margin: 1.5rem auto; display: block;"></canvas>
+		  <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+			<span class="skill-tag" style="background: #2563eb; color: white;">Dominance 40%</span>
+			<span class="skill-tag" style="background: #06b6d4; color: white;">Influence 24%</span>
+			<span class="skill-tag" style="background: #10b981; color: white;">Steadiness 24%</span>
+			<span class="skill-tag" style="background: #8b5cf6; color: white;">Compliance 12%</span>
+		  </div>
+		</div>
+
+	  </div>
+	</section>
 
     <!-- Contact Section -->
     <section id="contact" class="contact-section">
@@ -1830,6 +1837,51 @@
         document.querySelectorAll('.project-card').forEach((item, index) => {
             item.style.transitionDelay = `${index * 0.1}s`;
         });
+		
+		// DISC Pie Chart
+		document.addEventListener('DOMContentLoaded', function() {
+		  const ctx = document.getElementById('discChart');
+		  if (ctx) {
+			new Chart(ctx, {
+			  type: 'doughnut',
+			  data: {
+				labels: ['Dominance', 'Influence', 'Steadiness', 'Compliance'],
+				datasets: [{
+				  data: [40, 24, 24, 12],
+				  backgroundColor: [
+					'#2563eb', // Dominance - blue
+					'#06b6d4', // Influence - cyan
+					'#10b981', // Steadiness - emerald
+					'#8b5cf6'  // Compliance - violet
+				  ],
+				  borderWidth: 0,
+				  hoverOffset: 8
+				}]
+			  },
+			  options: {
+				responsive: true,
+				maintainAspectRatio: true,
+				cutout: '65%',
+				plugins: {
+				  legend: {
+					display: false
+				  },
+				  tooltip: {
+					callbacks: {
+					  label: function(context) {
+						return `${context.label}: ${context.parsed}%`;
+					  }
+					}
+				  }
+				},
+				animation: {
+				  animateRotate: true,
+				  animateScale: true
+				}
+			  }
+			});
+		  }
+		});
     </script>
 </body>
 </html>
