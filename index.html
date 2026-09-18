@@ -100,13 +100,13 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px
   box-shadow:0 0 0 1px rgba(255,255,255,.06) inset, 0 6px 18px -8px rgba(13,15,20,.6);
   transition:transform .6s var(--ease)}
 .brand:hover .mono{transform:rotate(-6deg) scale(1.05)}
-.brand small{display:block;font-size:.68rem;font-weight:500;color:var(--mut);letter-spacing:.04em;text-transform:uppercase;line-height:1.2}
+.brand small{display:block;font-size:.68rem;font-weight:500;color:var(--mut);letter-spacing:.04em;text-transform:uppercase;line-height:1.2;white-space:nowrap}
 nav ul{display:flex;align-items:center;gap:34px;list-style:none;margin:0;padding:0}
 nav ul a{font-size:.855rem;font-weight:500;color:var(--ink-2);position:relative;padding:4px 0;letter-spacing:-.005em}
 nav ul a:not(.nav-cta)::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--bronze);
   transform:scaleX(0);transform-origin:left;transition:transform .55s var(--ease)}
 nav ul a:not(.nav-cta):hover::after{transform:scaleX(1)}
-.nav-cta{background:var(--ink);color:#fff!important;padding:9px 18px;border-radius:100px;font-size:.82rem;
+.nav-cta{background:var(--ink);color:#fff!important;padding:9px 18px;border-radius:100px;font-size:.82rem;white-space:nowrap;flex:0 0 auto;
   transition:background .4s var(--ease),transform .4s var(--ease),box-shadow .4s var(--ease)}
 .nav-cta:hover{background:var(--bronze);transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(138,95,46,.7)}
 /* Before scroll the nav sits on the dark hero — force light-on-dark or it goes invisible. */
@@ -117,7 +117,9 @@ nav:not(.scrolled) ul a:not(.nav-cta){color:rgba(255,255,255,.88)}
 nav:not(.scrolled) ul a:not(.nav-cta)::after{background:var(--gold)}
 nav:not(.scrolled) .nav-cta{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);color:#fff!important}
 nav:not(.scrolled) .nav-cta:hover{background:var(--gold);border-color:var(--gold);color:#1a1206!important}
-@media(max-width:840px){nav ul li:not(:last-child){display:none}}
+@media(max-width:840px){nav ul li:not(:last-child){display:none}nav .wrap{gap:16px}}
+/* Subtitle can't fit beside the CTA on narrow phones — drop it, keep the nav one clean row. */
+@media(max-width:520px){nav .wrap{padding:0 16px;gap:12px}.brand small{display:none}.nav-cta{padding:9px 16px}}
 
 /* ============================================================
    HERO
