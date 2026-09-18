@@ -281,6 +281,8 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 .proj:hover::after{transform:scaleX(1)}
 .proj.wide{grid-column:span 2}
 .proj-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.proj-imgs.two{grid-template-columns:repeat(2,1fr)}
+.proj-imgs.one{grid-template-columns:1fr}
 .proj-imgs figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
 .proj-imgs img{width:100%;display:block}
 .flag{align-self:flex-start;font-size:.655rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
@@ -525,15 +527,24 @@ footer a:hover{color:var(--gold)}
         <h3>True-Anki-MCQ Note Template</h3>
         <p>A responsive HTML/CSS/JS Anki card template with randomised order, multi-answer support, and visual feedback. My most-starred repository — and the card I wish I&rsquo;d had in pharmacy school.</p>
         <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">JavaScript</span><span class="chip">Anki</span></div>
+        <div class="proj-imgs two">
+          <figure><img src="img/anki-template-front.png" alt="Anki card front showing the question and a Show Choices button" loading="lazy"></figure>
+          <figure><img src="img/anki-template-choices.png" alt="Multiple choice answers revealed below the question" loading="lazy"></figure>
+        </div>
         <a class="proj-link" href="https://github.com/anki-boi/True-Anki-MCQ-Note-Template" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj rv" style="--d:70ms">
+      <article class="proj wide rv" style="--d:70ms">
         <span class="flag">Product</span>
         <h3>DateCard</h3>
         <p>A QR-based dating card for the PH market — no app, no algorithm. React + Vite + Supabase, demo-mode without credentials, MIT licensed. Idea to shipped product, end to end.</p>
         <div class="chips"><span class="chip">React</span><span class="chip">Vite</span><span class="chip">Supabase</span><span class="chip">MIT</span></div>
+        <div class="proj-imgs">
+          <figure><img src="img/datecard-landing.png" alt="DateCard landing page — Your dating profile, unchained" loading="lazy"></figure>
+          <figure><img src="img/datecard-dashboard.png" alt="DateCard dashboard with applications, accept/decline and a per-card QR code" loading="lazy"></figure>
+          <figure><img src="img/datecard-profile.png" alt="Public DateCard profile with prompts and locked social links" loading="lazy"></figure>
+        </div>
         <a class="proj-link" href="https://github.com/anki-boi/datecard" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
@@ -543,6 +554,9 @@ footer a:hover{color:var(--gold)}
         <h3>PH Pharmacy Setup Guide</h3>
         <p>A single-page guide to standing up a community pharmacy in the Philippines — licensing, layout, and compliance. Written from the regulatory side of the counter, not the marketing side.</p>
         <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">Regulatory</span><span class="chip">Healthcare</span></div>
+        <div class="proj-imgs one">
+          <figure><img src="img/ph-guide.png" alt="PH Pharmacy Setup Guide quest board with phases, priorities and progress" loading="lazy"></figure>
+        </div>
         <a class="proj-link" href="https://github.com/anki-boi/PH-Pharmacy-Setup-Guide" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
