@@ -582,6 +582,7 @@ footer a:hover{color:var(--gold)}
           <li>Staleness is invisible until you're pages deep: a 297-job search ran <strong><span class="mk pain">40&ndash;46 days old</span></strong></li>
           <li>A naive keyword filter destroys itself &mdash; <code>AI</code> as a substring matched <strong>every listing</strong></li>
           <li>Every screening decision is thrown away, so the same judgement gets paid for again tomorrow</li>
+          <li>The card is not the listing: the keyword, the off-platform ask and the real hours are all in the description</li>
         </ul>
           </div>
           <div class="psi-item fix">
@@ -591,6 +592,7 @@ footer a:hover{color:var(--gold)}
           <li>A hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider</li>
           <li>Exact word-or-phrase matching, not substrings</li>
           <li>A recency window applied first, and salaries normalised at live ECB rates</li>
+          <li><code>Scan</code> opens each listing and re-decides it against its full description &mdash; two at a time, capped, and cached for 7 days so <span class="u">changing a keyword costs no requests</span></li>
           <li>One page appended per scroll &mdash; eight <em>Next</em> clicks, gone</li>
         </ul>
           </div>
@@ -600,14 +602,15 @@ footer a:hover{color:var(--gold)}
           <li>Screening effort <span class="mk win">stops scaling with market volume</span></li>
           <li>Every mark on the page names its reason</li>
           <li>A filter you can't audit is one you stop trusting</li>
+          <li>An earlier version demoted off-platform listings and moved <strong><span class="mk pain">176 of 227</span></strong> out of High yield &mdash; a filter that had stopped filtering. Now pay decides, and a keyword only decorates</li>
           <li>It refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure, and the 40 h/week assumption is printed on the card</li>
         </ul>
           </div>
         </div>
         <div class="proj-imgs">
-          <figure><img src="img/ojph-list.webp" alt="OnlineJobs.ph listings with salaries normalised to a monthly figure, unwanted listings hidden, and a matching listing outlined in green" loading="lazy"></figure>
-          <figure><img src="img/ojph-settings.webp" alt="The in-page settings panel: a recency window, and separate negative and positive keyword lists" loading="lazy"></figure>
-          <figure><img src="img/ojph-highlight.webp" alt="Listings badged with the keyword that matched, a monthly-goal annotation, and a status chip counting what was hidden" loading="lazy"></figure>
+          <figure><img src="img/ojph-list.webp" alt="OnlineJobs.ph listings with salaries normalised to a monthly figure, unwanted listings hidden, and a status panel showing hidden, keyword and high-yield counts" loading="lazy"></figure>
+          <figure><img src="img/ojph-settings.webp" alt="The in-page settings panel open over the live list: recency window, separate negative and positive keyword lists, salary goals and the deep-scan toggles" loading="lazy"></figure>
+          <figure><img src="img/ojph-card.webp" alt="A single listing showing the keyword badge, the converted hourly figure, an at-or-above-your-goal line, and the site's own posted rate underneath" loading="lazy"></figure>
         </div>
         <div class="metrics">
           <div><b>40&ndash;46 d</b><span>Staleness found deep in results</span></div>
