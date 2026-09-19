@@ -304,6 +304,15 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
   letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin-bottom:11px}
 .psi-item b::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;flex:0 0 auto}
 .psi-item p{font-size:.9rem;color:var(--ink-2);line-height:1.66;margin:0}
+/* Problem / Fix / Impact read as short marker lists, not paragraphs: − / + / ★ */
+.psi-item ul{margin:0;padding:0;list-style:none}
+.psi-item li{position:relative;padding-left:20px;font-size:.885rem;color:var(--ink-2);line-height:1.6}
+.psi-item li+li{margin-top:9px}
+.psi-item li::before{position:absolute;left:0;top:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-weight:600;line-height:1.6}
+.psi-item.problem li::before{content:"\2212";color:var(--bronze)}
+.psi-item.fix li::before{content:"+";color:var(--ink)}
+.psi-item.impact li::before{content:"\2605";color:#3d7a46;font-family:var(--sans);font-size:.85em}
 .psi-item.fix b{color:var(--ink)}
 .psi-item.impact b{color:#3d7a46}
 
@@ -523,17 +532,33 @@ footer a:hover{color:var(--gold)}
         <h3>OJ.ph Cleaner</h3>
         <p class="sub">Yes &mdash; this is how your listing got read. I built the filter the job board doesn't ship to solve my own hunt, and it is still what I screen with.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>A listing page with no way to narrow it, and nothing filterable about the two facts that matter. Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so it can't be compared. Staleness is invisible until you're pages deep (measured: a 297-job search ran <strong>40&ndash;46 days old</strong>). And a naive keyword filter destroys itself: <code>AI</code> as a substring matched <strong>every listing</strong>, quietly turning keyword hiding off.</p>
+            <ul>
+          <li>Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so nothing is comparable</li>
+          <li>Staleness is invisible until you're pages deep: a 297-job search ran <strong>40&ndash;46 days old</strong></li>
+          <li>A naive keyword filter destroys itself &mdash; <code>AI</code> as a substring matched <strong>every listing</strong></li>
+          <li>Every screening decision is thrown away, so the same judgement gets paid for again tomorrow</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>Three outcomes instead of two: negative keywords hide, positive keywords highlight and never hide, and a hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider. Exact word/phrase matching, a recency window applied first, salaries normalised to a monthly figure at live ECB rates, and perpetual pagination &mdash; one page per scroll.</p>
+            <ul>
+          <li>Negative keywords hide; positive keywords highlight and never hide</li>
+          <li>A hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider</li>
+          <li>Exact word-or-phrase matching, not substrings</li>
+          <li>A recency window applied first, and salaries normalised at live ECB rates</li>
+          <li>One page appended per scroll &mdash; eight <em>Next</em> clicks, gone</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>Screening effort stops scaling with market volume. Eight <em>Next</em> clicks become one continuous scroll, and every mark on the page names its reason &mdash; a filter you can't audit is one you stop trusting. It also refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure rather than inventing a month, and the 40 h/week assumption is printed on the card.</p>
+            <ul>
+          <li>Screening effort stops scaling with market volume</li>
+          <li>Every mark on the page names its reason</li>
+          <li>A filter you can't audit is one you stop trusting</li>
+          <li>It refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure, and the 40 h/week assumption is printed on the card</li>
+        </ul>
           </div>
         </div>
         <div class="metrics">
@@ -551,17 +576,31 @@ footer a:hover{color:var(--gold)}
         <h3>Clinical automation suite &mdash; 40 scripts</h3>
         <p class="sub">Tampermonkey userscripts automating the back office of a live US telehealth clinic: order entry, pharmacy-portal sessions, carrier tracking, patient-data handoffs, SMS/PDF workflows. Public mirror is identifier-scrubbed.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>One prescription meant re-typing the same patient data into whichever compounding-pharmacy portal the order needed, then finding its tracking number by hand and pasting it into a sheet, then writing the patient SMS from scratch. Roughly 15&ndash;20 manual actions per order, every one of them a chance to pick the wrong patient or the wrong vial.</p>
+            <ul>
+          <li>One prescription meant re-typing the same patient data into whichever pharmacy portal the order needed</li>
+          <li>Then finding its tracking number by hand and pasting it into a sheet</li>
+          <li>Then writing the patient SMS from scratch</li>
+          <li>~15&ndash;20 manual actions per order &mdash; each one a chance to pick the wrong patient or the wrong vial</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>40 scripts that each do one job. Not one extension &mdash; because these portals change their DOM constantly, maintenance is the steady state, and isolation is what keeps a selector fix for FedEx from breaking patient messaging. Shared <span class="hl">token-based design system</span> gives 40 injected panels one coherent look without a monolith.</p>
+            <ul>
+          <li>40 scripts that each do one job</li>
+          <li>Deliberately <em>not</em> one extension &mdash; these portals change their DOM constantly, so isolation keeps a selector fix for FedEx from breaking patient messaging</li>
+          <li>A shared token-based design system gives 40 injected panels one coherent look without a monolith</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong> returned. Wrong-patient and wrong-vial entries designed out: a lookup returning two matches stops for a human, and the questionnaire is never auto-submitted. Every check the gate runs is a failure that once cost real time.</p>
+            <ul>
+          <li><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong> returned</li>
+          <li>Wrong-patient and wrong-vial entries designed out</li>
+          <li>A lookup returning two matches stops for a human; the questionnaire is never auto-submitted</li>
+          <li>Every check the gate runs is a failure that once cost real time</li>
+        </ul>
           </div>
         </div>
         <div class="metrics">
@@ -580,17 +619,32 @@ footer a:hover{color:var(--gold)}
         <h3>Job Hunter Dashboard</h3>
         <p class="sub">A local job-tracking dashboard for OnlineJobs.ph &mdash; built while I was the one doing the job hunt.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>Finding work on a job board means scrolling thousands of unfiltered listings, with no way to tell which ones actually match your r&eacute;sum&eacute;, salaries quoted in mixed currencies you convert in your head, and applications tracked in a spreadsheet you forget to update.</p>
+            <ul>
+          <li>Thousands of listings, and no way to tell which ones actually match your r&eacute;sum&eacute;</li>
+          <li>Salaries quoted in mixed currencies, converted in your head</li>
+          <li>Applications tracked in a spreadsheet that goes stale exactly when you're busiest</li>
+          <li>No signal on whether a listing has already closed</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>FastAPI + SQLite backend with a live SSE scrape console, keyword/category/skill scoping, and an ATS score for every listing &mdash; <strong>deterministic, not LLM</strong>, because recruiter first passes are keyword-and-structure based and a rule scorer can't hallucinate a match. One-click r&eacute;sum&eacute; tailoring that rewrites and reorders only, never invents facts, and falls back rather than shipping bad output. Plus a 1-page CV builder that iterates until it really is one page.</p>
+            <ul>
+          <li>Live SSE scrape console with keyword / category / skill scoping</li>
+          <li>An ATS score for every listing &mdash; <strong>deterministic, not LLM</strong>, because recruiter first passes are keyword-and-structure based and a rule scorer can't hallucinate a match</li>
+          <li>One-click r&eacute;sum&eacute; tailoring that rewrites and reorders only, never invents facts, and falls back rather than shipping bad output</li>
+          <li>A 1-page CV builder that iterates until it really is one page</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>A multi-hour manual sweep becomes one scoped run, and every listing comes back pre-scored for fit. Auto-run plus desktop alerts mean the tracker tells you when to act instead of going stale, and a parse watchdog raises a structure-change alert when the site's markup shifts &mdash; so a silent zero can't masquerade as "no new jobs today". Spec-driven with CI, pre-push gates and a 359-test suite: personal code held to production standards, because the habit is the point.</p>
+            <ul>
+          <li>A multi-hour manual sweep becomes one scoped, pre-scored run</li>
+          <li>Auto-run plus desktop alerts &mdash; the tracker tells you when to act instead of going stale</li>
+          <li>A parse watchdog raises a structure-change alert, so a silent zero can't masquerade as &ldquo;no new jobs today&rdquo;</li>
+          <li>Spec-driven: CI, pre-push gates and a 359-test suite</li>
+        </ul>
           </div>
         </div>
         <div class="proj-imgs">
@@ -609,17 +663,31 @@ footer a:hover{color:var(--gold)}
         <h3>True-Anki-MCQ Note Template</h3>
         <p class="sub">An Anki card template built on one uncomfortable observation about how pharmacy students actually study.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>Anki's default is pure active recall &mdash; blank-page retrieval. It's the gold standard for long-term retention, but the pharmacy board exam is <strong>100% multiple choice</strong>. Drilling full recall for a recognition test is overkill: you spend the same study minute on a harder task and get less exam-relevant yield per minute.</p>
+            <ul>
+          <li>Anki's default is pure active recall &mdash; retrieving an answer from nothing</li>
+          <li>That's the gold standard for retention, and the right tool when you must <em>produce</em> an answer</li>
+          <li>But the pharmacy board exam is <strong>100% multiple choice</strong> &mdash; it measures recognition, not production</li>
+          <li>So drilling full recall for a recognition test spends the same study minute on a strictly harder task</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>A template that trains recognition under exam conditions instead: click to select, randomised choice order so you can't memorise positions, single and multi-answer support, and immediate <em>correct / wrong / missed</em> feedback. A dynamic selection limit hints at how many answers exist without revealing which.</p>
+            <ul>
+          <li>Commit to a choice before anything is revealed</li>
+          <li>Choice order randomised on every rep, so position carries no signal</li>
+          <li>Single and multi-answer, with each choice marked <em>correct</em>, <em>wrong</em> or <em>missed</em> &mdash; two different study signals</li>
+          <li>A dynamic selection limit that says how many answers exist without revealing which</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>Familiarity with the real question format rather than picture-perfect recall &mdash; deliberately matched to the target. Also the reason it's my most-starred repo: a lot of people were quietly over-studying for recognition exams.</p>
+            <ul>
+          <li>Familiarity with the real question format, deliberately matched to the target</li>
+          <li>Higher yield per study minute than picture-perfect recall</li>
+          <li>My most-starred repo &mdash; a lot of people were quietly over-studying for recognition exams</li>
+        </ul>
           </div>
         </div>
         <div class="proj-imgs two">
@@ -636,17 +704,31 @@ footer a:hover{color:var(--gold)}
         <h3>Anki MCQ Importer</h3>
         <p class="sub">The card-making step, deleted. Semester after semester.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>Every exam block arrived as folders of hundreds of lecture slide images. Turning those into flashcards meant reading each slide, deciding what was testable, writing the question, inventing plausible distractors, and typing it all in &mdash; so the cards got made only for the subjects I had time left for.</p>
+            <ul>
+          <li>Every exam block arrived as folders of hundreds of lecture-slide images</li>
+          <li>Each card meant reading the slide, deciding what was testable, writing the question, inventing plausible distractors, and typing it in</li>
+          <li>~1 minute per card &mdash; a 500-image block is <strong>8+ hours of transcription</strong> before you learn anything</li>
+          <li>So decks got built for the subjects you had time for, usually not the ones you were worst at</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>An Anki add-on that batch-processes a folder of images through the Gemini API into structured MCQ cards, with context carried across pages for continuity and automatic subdeck creation from parsed subtopics. Supports MCQ, cloze and basic formats via multiple prompt profiles.</p>
+            <ul>
+          <li>Batch-processes folders of images through the Gemini API into structured MCQ cards</li>
+          <li>Context carried across consecutive pages, so a table split over two slides stays coherent</li>
+          <li>Automatic subdeck creation from the parsed subtopic</li>
+          <li>Prompts persist in runtime config &mdash; the prompt you spent an evening tuning survives every update</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>Card creation went from about a minute of thinking-and-typing per card to a batch job. Prompts persist in runtime config, so profile edits survive add-on updates &mdash; the pipeline doesn't reset itself every time it's fixed.</p>
+            <ul>
+          <li>Card authoring goes from ~1 minute each to a batch job</li>
+          <li>Deck size stops being capped by typing stamina</li>
+          <li>An add-on that's safe to update keeps getting fixes</li>
+        </ul>
           </div>
         </div>
         <div class="metrics">
@@ -664,17 +746,33 @@ footer a:hover{color:var(--gold)}
         <h3>DateCard</h3>
         <p class="sub">A QR-based dating card for the PH market. No app, no algorithm.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>There's no good way to show someone who you are when you meet them in public. Handing over a social handle is an all-or-nothing broadcast, and plenty of people would rather choose exactly who sees which side of them. Meanwhile dating apps insert an algorithm between two people who already met face to face.</p>
+            <ul>
+          <li>There's no good way to show someone who you are when you meet them in public</li>
+          <li>&ldquo;Find me on Instagram&rdquo; is an all-or-nothing broadcast &mdash; they get the last three years, not the person you just met</li>
+          <li>There's no way to hand over one side of yourself</li>
+          <li>Plenty of people have no public social presence and won't build one just to be findable</li>
+          <li>Dating apps solve discovery for <em>strangers</em> &mdash; not for someone you already met</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>Build a profile, get a link and a QR code. Someone scans it, reads who you are, and <strong>applies to connect</strong>. You approve or decline &mdash; only then do they get your socials. One account, up to three profiles (serious / casual / friendship), each with its own link, QR and inbox, and public pages never link profiles to each other.</p>
+            <ul>
+          <li>Scan the QR &rarr; read the profile &rarr; <strong>apply to connect</strong> &rarr; you approve or decline</li>
+          <li>Only then do they get your socials</li>
+          <li>One account holds up to three profiles &mdash; serious / casual / friendship &mdash; each with its own card and inbox</li>
+          <li>Socials are never in the public page payload: reachable only through an RPC that checks for an accepted application</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>Replaces "find me on Instagram" with an exchange you control, and it works in public with no app installed. Socials are RPC-only &mdash; they can't be scraped from the page. Giving someone a card is also just more professional than adding a stranger.</p>
+            <ul>
+          <li>Replaces &ldquo;find me on Instagram&rdquo; with an exchange you control</li>
+          <li>Works in public, no app installed, no algorithm in between</li>
+          <li>You choose who sees which side of you</li>
+          <li>Giving someone a card is more professional than adding a stranger</li>
+        </ul>
           </div>
         </div>
         <div class="proj-imgs">
@@ -692,17 +790,31 @@ footer a:hover{color:var(--gold)}
         <h3>PH Pharmacy Setup Guide</h3>
         <p class="sub">Everything I know about standing up a community pharmacy in the Philippines, ordered so you can't get lost in it.</p>
         <div class="psi">
-          <div class="psi-item">
+          <div class="psi-item problem">
             <b>Problem</b>
-            <p>Setting up a pharmacy here is a maze of licensing, layout and compliance steps with no published order to them. People stall because they can't tell which phase they're actually in or what the next move is &mdash; and a goal measured in months loses momentum fast when progress is invisible.</p>
+            <ul>
+          <li>Licensing, layout, capital and compliance steps with no published order to them</li>
+          <li>You can't tell which phase you're in &mdash; a week on layout drawings while a permit you needed first sits unstarted</li>
+          <li>&ldquo;Done&rdquo; is undefined: every step is some paperwork, so there's no moment you can stop thinking about it</li>
+          <li>Progress is invisible for months &mdash; the failure that actually ends most setups</li>
+        </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>A single-page quest board: phases, priorities and progress tracking, so the current phase is always the obvious thing on screen. Deliberately gamified, because a long-term goal needs a visible progress loop or it dies.</p>
+            <ul>
+          <li>Seven ordered phases, 24 entries, worked in order</li>
+          <li>Every entry ticks off, and the tick is remembered</li>
+          <li>A &ldquo;licensed RPh&rdquo; toggle hides the pre-license phase</li>
+          <li>Progress stays local: one file, no build, no account</li>
+        </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>"Where do I even start?" and "what's next?" become a glance instead of research. Written from the regulatory side of the counter, not the marketing side.</p>
+            <ul>
+          <li>&ldquo;Where do I start / what's next?&rdquo; becomes a glance instead of research</li>
+          <li>A months-long goal gets a visible progress loop &mdash; deliberately gamified</li>
+          <li>Prints as a document for a partner, landlord or bank</li>
+        </ul>
           </div>
         </div>
         <div class="proj-imgs one">
