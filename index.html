@@ -558,11 +558,11 @@ footer a:hover{color:var(--gold)}
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>FastAPI + SQLite backend with a live SSE scrape console, keyword/category/skill scoping, ATS scoring of your r&eacute;sum&eacute; against every listing, one-click r&eacute;sum&eacute; tailoring and 1-page CV builds, and FX-normalized salaries that record the rate they used.</p>
+            <p>FastAPI + SQLite backend with a live SSE scrape console, keyword/category/skill scoping, and an ATS score for every listing &mdash; <strong>deterministic, not LLM</strong>, because recruiter first passes are keyword-and-structure based and a rule scorer can't hallucinate a match. One-click r&eacute;sum&eacute; tailoring that rewrites and reorders only, never invents facts, and falls back rather than shipping bad output. Plus a 1-page CV builder that iterates until it really is one page.</p>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>A multi-hour manual sweep becomes one scoped run, and every listing comes back pre-scored for fit. Spec-driven with CI, pre-push gates and a written roadmap &mdash; personal code held to production standards, because the habit is the point.</p>
+            <p>A multi-hour manual sweep becomes one scoped run, and every listing comes back pre-scored for fit. Auto-run plus desktop alerts mean the tracker tells you when to act instead of going stale, and a parse watchdog raises a structure-change alert when the site's markup shifts &mdash; so a silent zero can't masquerade as "no new jobs today". Spec-driven with CI, pre-push gates and a 359-test suite: personal code held to production standards, because the habit is the point.</p>
           </div>
         </div>
         <div class="proj-imgs">
@@ -578,27 +578,27 @@ footer a:hover{color:var(--gold)}
       <article class="proj rv">
         <span class="flag">Chrome Extension</span>
         <h3>OJ.ph Cleaner</h3>
-        <p class="sub">The filter the job board doesn't have. Built to solve my own hunt, then shipped and kept.</p>
+        <p class="sub">The filter the job board doesn't ship. Built to solve my own hunt, then kept.</p>
         <div class="psi">
           <div class="psi-item">
             <b>Problem</b>
-            <p>Listings arrive unfiltered. Salary is buried in the description body rather than a field, and a keyword hit in the title often doesn't mean what you searched for &mdash; so you open a hundred tabs to reject ninety of them.</p>
+            <p>A listing page with no way to narrow it, and nothing filterable about the two facts that matter. Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so it can't be compared. Staleness is invisible until you're pages deep (measured: a 297-job search ran <strong>40&ndash;46 days old</strong>). And a naive keyword filter destroys itself: <code>AI</code> as a substring matched <strong>every listing</strong>, quietly turning keyword hiding off.</p>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
-            <p>A Manifest V3 extension with a user-editable rules engine that deep-scans full job descriptions &mdash; not just titles &mdash; against salary floors and keyword rules you define, with a re-scan when listings update.</p>
+            <p>Three outcomes instead of two: negative keywords hide, positive keywords highlight and never hide, and a hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider. Exact word/phrase matching, a recency window applied first, salaries normalised to a monthly figure at live ECB rates, and perpetual pagination &mdash; one page per scroll.</p>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
-            <p>Days of scrolling collapse into a shortlist. And because the rules are the user's, it stays useful as the market moves instead of needing me to ship an update.</p>
+            <p>Screening effort stops scaling with market volume. Eight <em>Next</em> clicks become one continuous scroll, and every mark on the page names its reason &mdash; a filter you can't audit is one you stop trusting. It also refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure rather than inventing a month, and the 40 h/week assumption is printed on the card.</p>
           </div>
         </div>
         <div class="metrics">
-          <div><b>MV3</b><span>Current extension platform</span></div>
-          <div><b>Deep scan</b><span>Full description, not titles</span></div>
-          <div><b>0</b><span>Server round-trips</span></div>
+          <div><b>40&ndash;46 d</b><span>Staleness found deep in results</span></div>
+          <div><b>3</b><span>Outcomes: hide / highlight / reconsider</span></div>
+          <div><b>1 req</b><span>Per scroll, throttled</span></div>
         </div>
-        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Rules engine</span></div>
+        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Live FX rates</span><span class="chip">CDP test harness</span></div>
         <a class="proj-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
