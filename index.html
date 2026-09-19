@@ -270,8 +270,8 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 @media(max-width:640px){.tools{grid-template-columns:1fr}}
 
 /* ---------- Projects ---------- */
-.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
-.proj{position:relative;display:flex;flex-direction:column;padding:32px 30px 30px;border:1px solid var(--line);
+.projects{display:grid;grid-template-columns:1fr;gap:26px}
+.proj{position:relative;display:flex;flex-direction:column;padding:clamp(30px,3.2vw,46px) clamp(26px,3.2vw,46px) clamp(28px,2.8vw,40px);border:1px solid var(--line);
   border-radius:var(--r-lg);background:var(--paper-2);overflow:hidden;
   transition:transform .6s var(--ease),border-color .6s var(--ease),box-shadow .6s var(--ease)}
 .proj::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s var(--ease);
@@ -281,19 +281,40 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 .proj:hover{transform:translateY(-5px);border-color:rgba(138,95,46,.32);box-shadow:var(--sh-2)}
 .proj:hover::before{opacity:1}
 .proj:hover::after{transform:scaleX(1)}
-.proj.wide{grid-column:span 2}
-.proj-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.proj.wide{grid-column:span 1}
+.proj-imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:30px}
 .proj-imgs.two{grid-template-columns:repeat(2,1fr)}
 .proj-imgs.one{grid-template-columns:1fr}
-.proj-imgs figure{margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--paper)}
+.proj-imgs figure{margin:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper)}
 .proj-imgs img{width:100%;display:block}
 .flag{align-self:flex-start;font-size:.655rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
   color:var(--bronze);background:var(--bronze-soft);border:1px solid rgba(138,95,46,.2);
   padding:5px 11px;border-radius:100px;margin-bottom:20px;position:relative}
-.proj h3{font-size:1.42rem;font-weight:500;letter-spacing:-.025em;line-height:1.2;position:relative}
-.proj.wide h3{font-size:1.7rem;max-width:22ch}
-.proj p{margin-top:15px;font-size:.925rem;color:var(--mut);line-height:1.68;position:relative;flex:1}
-.proj .chips{margin-top:22px}
+.proj h3{font-size:clamp(1.45rem,2.4vw,1.95rem);font-weight:500;letter-spacing:-.028em;line-height:1.14;position:relative;max-width:36ch}
+.proj.wide h3{max-width:36ch}
+.proj .sub{margin-top:16px;font-size:1.005rem;line-height:1.7;color:var(--ink-2);position:relative;max-width:82ch}
+.proj p{margin-top:15px;font-size:.94rem;color:var(--mut);line-height:1.68;position:relative}
+
+/* Problem -> Fix -> Impact. The point of the full-width card: room for the reasoning,
+   not just the feature list. */
+.psi{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:30px;position:relative}
+.psi-item{background:var(--paper-2);padding:22px 24px 24px}
+.psi-item b{display:flex;align-items:center;gap:8px;font-family:var(--sans);font-size:.645rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--bronze);margin-bottom:11px}
+.psi-item b::before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor;flex:0 0 auto}
+.psi-item p{font-size:.9rem;color:var(--ink-2);line-height:1.66;margin:0}
+.psi-item.fix b{color:var(--ink)}
+.psi-item.impact b{color:#3d7a46}
+
+/* Headline numbers, for cards with no screenshot to carry the width. */
+.metrics{display:flex;flex-wrap:wrap;margin-top:28px;padding-top:24px;border-top:1px solid var(--line);position:relative}
+.metrics>div{padding-right:36px;margin-right:36px;border-right:1px solid var(--line)}
+.metrics>div:last-child{border-right:0;margin-right:0;padding-right:0}
+.metrics b{display:block;font-family:var(--serif);font-size:1.6rem;font-weight:500;letter-spacing:-.03em;
+  color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+.metrics span{display:block;margin-top:8px;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+.proj .chips{margin-top:30px}
 .proj-link{margin-top:22px;display:inline-flex;align-items:center;gap:8px;font-size:.83rem;font-weight:600;
   color:var(--bronze);position:relative;width:fit-content}
 .proj-link svg{width:13px;height:13px;transition:transform .5s var(--ease)}
@@ -301,7 +322,11 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 .proj-link::after{content:"";position:absolute;left:0;bottom:-3px;width:100%;height:1px;background:currentColor;
   transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
 .proj-link:hover::after{transform:scaleX(1)}
-@media(max-width:820px){.projects{grid-template-columns:1fr}.proj.wide{grid-column:span 1}.proj-imgs{grid-template-columns:1fr}}
+@media(max-width:900px){.psi{grid-template-columns:1fr}.psi-item{padding:20px 22px}
+  .metrics>div{padding-right:24px;margin-right:24px}}
+@media(max-width:640px){
+  .proj-imgs,.proj-imgs.two{grid-template-columns:1fr}
+  .metrics>div{border-right:0;padding-right:0;margin-right:0;flex:1 1 42%;padding-bottom:16px}}
 
 /* ---------- Experience ---------- */
 .exp{border-top:1px solid var(--line)}
@@ -412,6 +437,7 @@ footer a:hover{color:var(--gold)}
         <p class="lead rv">I didn&rsquo;t start in pharmacy. I started by breaking things — reverse-engineering spreadsheets, building trading bots, and figuring out why automated systems fail.</p>
         <p class="rv" style="--d:80ms">That instinct followed me through pharmacy school and into the clinic. Today I run the operations layer of a US telehealth clinic, and I build the tooling that keeps it moving: a <span class="hl">45+ script suite</span> of Tampermonkey userscripts and Manifest V3 Chrome extensions covering intake, order queues, tracking, and address validation across a CRM and seven pharmacy portals.</p>
         <p class="rv" style="--d:140ms">I&rsquo;m not naturally a detail-oriented person — my own assessments say so. Automation and checklists are how I compensate, and it&rsquo;s exactly why I notice when a workflow is only holding together because someone remembers to do something.</p>
+        <p class="rv" style="--d:170ms">I don&rsquo;t have a favourite platform. A CRM, a pharmacy portal, a job board, a spreadsheet, an exam — it doesn&rsquo;t matter. If something is inefficient, I will spend disproportionate time making sure it can never become a problem again. That&rsquo;s why the work below spans six unrelated systems, and why the system was never the interesting part.</p>
         <blockquote class="pullquote rv" style="--d:200ms">&ldquo;If your practice runs on a manual workflow that shouldn&rsquo;t be manual, that&rsquo;s my specialty.&rdquo;</blockquote>
       </div>
 
@@ -488,65 +514,174 @@ footer a:hover{color:var(--gold)}
     <div class="sec-head">
       <div class="idx rv">03 &nbsp;/&nbsp; Selected Work</div>
       <h2 class="rv" style="--d:60ms">Built to solve real problems.</h2>
-      <p class="rv" style="--d:120ms">Production tools running against live systems — not toy demos. Every public repository below is identifier-scrubbed and open.</p>
+      <p class="rv" style="--d:120ms">Production tools running against live systems — not toy demos. Each one is here because something was slow, error-prone or silently wrong, and each card reads <span class="hl">problem → fix → impact</span>. Every repository below is open.</p>
     </div>
 
     <div class="projects">
-      <article class="proj wide rv">
+      <article class="proj rv">
         <span class="flag">&#9733; Flagship &middot; In production</span>
-        <h3>Clinical automation suite — 45+ scripts &amp; extensions</h3>
-        <p>Tampermonkey userscripts and Manifest V3 Chrome extensions automating clinical admin for a live US telehealth clinic: order and queue automation, a tracking bus, an address validator, and pharmacy-portal session handling among 40+ more. Zero-config for non-technical coworkers, human-in-the-loop by design. The public mirror carries a scrubbed subset with every client identifier replaced.</p>
-        <div class="chips"><span class="chip">JavaScript</span><span class="chip">Tampermonkey</span><span class="chip">Chrome MV3</span><span class="chip">Chrome DevTools Protocol</span><span class="chip">Zoho CRM</span></div>
-        <a class="proj-link" href="https://github.com/anki-boi/userscript-showcase" target="_blank" rel="noopener">View the code
+        <h3>Clinical automation suite &mdash; 40 scripts</h3>
+        <p class="sub">Tampermonkey userscripts automating the back office of a live US telehealth clinic: order entry, pharmacy-portal sessions, carrier tracking, patient-data handoffs, SMS/PDF workflows. Public mirror is identifier-scrubbed.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>One prescription meant re-typing the same patient data into whichever compounding-pharmacy portal the order needed, then finding its tracking number by hand and pasting it into a sheet, then writing the patient SMS from scratch. Roughly 15&ndash;20 manual actions per order, every one of them a chance to pick the wrong patient or the wrong vial.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>40 scripts that each do one job. Not one extension &mdash; because these portals change their DOM constantly, maintenance is the steady state, and isolation is what keeps a selector fix for FedEx from breaking patient messaging. Shared <span class="hl">token-based design system</span> gives 40 injected panels one coherent look without a monolith.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong> returned. Wrong-patient and wrong-vial entries designed out: a lookup returning two matches stops for a human, and the questionnaire is never auto-submitted. Every check the gate runs is a failure that once cost real time.</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div><b>40</b><span>Scripts, one job each</span></div>
+          <div><b>~6 min &rarr; 40 s</b><span>Per order</span></div>
+          <div><b>40&ndash;60 h</b><span>Returned per month</span></div>
+          <div><b>0</b><span>Shared failure domains</span></div>
+        </div>
+        <div class="chips"><span class="chip">JavaScript</span><span class="chip">Tampermonkey</span><span class="chip">Chrome DevTools Protocol</span><span class="chip">Zoho CRM</span><span class="chip">Design tokens</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/userscript-showcase" target="_blank" rel="noopener">View the code &amp; the problem log
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj wide rv">
+      <article class="proj rv">
         <span class="flag">Full-Stack &middot; 359 tests</span>
         <h3>Job Hunter Dashboard</h3>
-        <p>A local job-tracking dashboard for OnlineJobs.ph: scraper with a live SSE activity console, keyword/category/skill scoping, ATS scoring of your resume against each listing, one-click resume tailoring and 1-page CV builds, and currency-normalized salaries from live FX rates. Spec-driven: CI, pre-push quality gates, and a written roadmap &mdash; personal code held to production standards.</p>
-        <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">SSE</span><span class="chip">pytest</span></div>
+        <p class="sub">A local job-tracking dashboard for OnlineJobs.ph &mdash; built while I was the one doing the job hunt.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>Finding work on a job board means scrolling thousands of unfiltered listings, with no way to tell which ones actually match your r&eacute;sum&eacute;, salaries quoted in mixed currencies you convert in your head, and applications tracked in a spreadsheet you forget to update.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>FastAPI + SQLite backend with a live SSE scrape console, keyword/category/skill scoping, ATS scoring of your r&eacute;sum&eacute; against every listing, one-click r&eacute;sum&eacute; tailoring and 1-page CV builds, and FX-normalized salaries that record the rate they used.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>A multi-hour manual sweep becomes one scoped run, and every listing comes back pre-scored for fit. Spec-driven with CI, pre-push gates and a written roadmap &mdash; personal code held to production standards, because the habit is the point.</p>
+          </div>
+        </div>
         <div class="proj-imgs">
           <figure><img src="img/jobhunter-live-console.png" alt="Live scrape console streaming results" loading="lazy"></figure>
           <figure><img src="img/jobhunter-detail-modal.png" alt="Job detail modal with ATS score and resume tailoring" loading="lazy"></figure>
           <figure><img src="img/jobhunter-dashboard.png" alt="Dashboard with filters and job table" loading="lazy"></figure>
         </div>
+        <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">SSE</span><span class="chip">pytest</span></div>
         <a class="proj-link" href="https://github.com/anki-boi/onlinejobs.ph-suite" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj rv" style="--d:70ms">
-        <span class="flag">AI Pipeline</span>
-        <h3>Anki MCQ Importer</h3>
-        <p>An Anki add-on that batch-processes folders of study images through the Google Gemini API into structured, high-yield MCQ flashcards with organised subdecks — a pipeline, not a one-off script.</p>
-        <div class="chips"><span class="chip">Python</span><span class="chip">Gemini API</span><span class="chip">Anki add-on</span></div>
-        <a class="proj-link" href="https://github.com/anki-boi/Anki-MCQ-Importer-AI-Batch-Generator" target="_blank" rel="noopener">View the code
+      <article class="proj rv">
+        <span class="flag">Chrome Extension</span>
+        <h3>OJ.ph Cleaner</h3>
+        <p class="sub">The filter the job board doesn't have. Built to solve my own hunt, then shipped and kept.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>Listings arrive unfiltered. Salary is buried in the description body rather than a field, and a keyword hit in the title often doesn't mean what you searched for &mdash; so you open a hundred tabs to reject ninety of them.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>A Manifest V3 extension with a user-editable rules engine that deep-scans full job descriptions &mdash; not just titles &mdash; against salary floors and keyword rules you define, with a re-scan when listings update.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>Days of scrolling collapse into a shortlist. And because the rules are the user's, it stays useful as the market moves instead of needing me to ship an update.</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div><b>MV3</b><span>Current extension platform</span></div>
+          <div><b>Deep scan</b><span>Full description, not titles</span></div>
+          <div><b>0</b><span>Server round-trips</span></div>
+        </div>
+        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Rules engine</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
       <article class="proj rv">
         <span class="flag">Open Source &middot; 15&#9733;</span>
         <h3>True-Anki-MCQ Note Template</h3>
-        <p>A responsive HTML/CSS/JS Anki card template with randomised order, multi-answer support, and visual feedback. My most-starred repository — and the card I wish I&rsquo;d had in pharmacy school.</p>
-        <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">JavaScript</span><span class="chip">Anki</span></div>
+        <p class="sub">An Anki card template built on one uncomfortable observation about how pharmacy students actually study.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>Anki's default is pure active recall &mdash; blank-page retrieval. It's the gold standard for long-term retention, but the pharmacy board exam is <strong>100% multiple choice</strong>. Drilling full recall for a recognition test is overkill: you spend the same study minute on a harder task and get less exam-relevant yield per minute.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>A template that trains recognition under exam conditions instead: click to select, randomised choice order so you can't memorise positions, single and multi-answer support, and immediate <em>correct / wrong / missed</em> feedback. A dynamic selection limit hints at how many answers exist without revealing which.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>Familiarity with the real question format rather than picture-perfect recall &mdash; deliberately matched to the target. Also the reason it's my most-starred repo: a lot of people were quietly over-studying for recognition exams.</p>
+          </div>
+        </div>
         <div class="proj-imgs two">
           <figure><img src="img/anki-template-front.png" alt="Anki card front showing the question and a Show Choices button" loading="lazy"></figure>
           <figure><img src="img/anki-template-choices.png" alt="Multiple choice answers revealed below the question" loading="lazy"></figure>
         </div>
+        <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">JavaScript</span><span class="chip">Anki</span><span class="chip">Instructional design</span></div>
         <a class="proj-link" href="https://github.com/anki-boi/True-Anki-MCQ-Note-Template" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj wide rv" style="--d:70ms">
+      <article class="proj rv">
+        <span class="flag">AI Pipeline</span>
+        <h3>Anki MCQ Importer</h3>
+        <p class="sub">The card-making step, deleted. Semester after semester.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>Every exam block arrived as folders of hundreds of lecture slide images. Turning those into flashcards meant reading each slide, deciding what was testable, writing the question, inventing plausible distractors, and typing it all in &mdash; so the cards got made only for the subjects I had time left for.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>An Anki add-on that batch-processes a folder of images through the Gemini API into structured MCQ cards, with context carried across pages for continuity and automatic subdeck creation from parsed subtopics. Supports MCQ, cloze and basic formats via multiple prompt profiles.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>Card creation went from about a minute of thinking-and-typing per card to a batch job. Prompts persist in runtime config, so profile edits survive add-on updates &mdash; the pipeline doesn't reset itself every time it's fixed.</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div><b>~1 min &rarr; batch</b><span>Per card</span></div>
+          <div><b>3</b><span>Card formats supported</span></div>
+          <div><b>Auto</b><span>Subdeck organisation</span></div>
+        </div>
+        <div class="chips"><span class="chip">Python</span><span class="chip">Gemini API</span><span class="chip">Anki add-on</span><span class="chip">Batch pipeline</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/Anki-MCQ-Importer-AI-Batch-Generator" target="_blank" rel="noopener">View the code
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </article>
+
+      <article class="proj rv">
         <span class="flag">Product</span>
         <h3>DateCard</h3>
-        <p>A QR-based dating card for the PH market — no app, no algorithm. React + Vite + Supabase, demo-mode without credentials, MIT licensed. Idea to shipped product, end to end.</p>
-        <div class="chips"><span class="chip">React</span><span class="chip">Vite</span><span class="chip">Supabase</span><span class="chip">MIT</span></div>
+        <p class="sub">A QR-based dating card for the PH market. No app, no algorithm.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>There's no good way to show someone who you are when you meet them in public. Handing over a social handle is an all-or-nothing broadcast, and plenty of people would rather choose exactly who sees which side of them. Meanwhile dating apps insert an algorithm between two people who already met face to face.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>Build a profile, get a link and a QR code. Someone scans it, reads who you are, and <strong>applies to connect</strong>. You approve or decline &mdash; only then do they get your socials. One account, up to three profiles (serious / casual / friendship), each with its own link, QR and inbox, and public pages never link profiles to each other.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>Replaces "find me on Instagram" with an exchange you control, and it works in public with no app installed. Socials are RPC-only &mdash; they can't be scraped from the page. Giving someone a card is also just more professional than adding a stranger.</p>
+          </div>
+        </div>
         <div class="proj-imgs">
           <figure><img src="img/datecard-landing.png" alt="DateCard landing page — Your dating profile, unchained" loading="lazy"></figure>
           <figure><img src="img/datecard-dashboard.png" alt="DateCard dashboard with applications, accept/decline and a per-card QR code" loading="lazy"></figure>
           <figure><img src="img/datecard-profile.png" alt="Public DateCard profile with prompts and locked social links" loading="lazy"></figure>
         </div>
+        <div class="chips"><span class="chip">React</span><span class="chip">Vite</span><span class="chip">Supabase</span><span class="chip">RLS</span><span class="chip">MIT</span></div>
         <a class="proj-link" href="https://github.com/anki-boi/datecard" target="_blank" rel="noopener">View the code
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
@@ -554,21 +689,26 @@ footer a:hover{color:var(--gold)}
       <article class="proj rv">
         <span class="flag">Domain Knowledge</span>
         <h3>PH Pharmacy Setup Guide</h3>
-        <p>A single-page guide to standing up a community pharmacy in the Philippines — licensing, layout, and compliance. Written from the regulatory side of the counter, not the marketing side.</p>
-        <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">Regulatory</span><span class="chip">Healthcare</span></div>
+        <p class="sub">Everything I know about standing up a community pharmacy in the Philippines, ordered so you can't get lost in it.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>Setting up a pharmacy here is a maze of licensing, layout and compliance steps with no published order to them. People stall because they can't tell which phase they're actually in or what the next move is &mdash; and a goal measured in months loses momentum fast when progress is invisible.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>A single-page quest board: phases, priorities and progress tracking, so the current phase is always the obvious thing on screen. Deliberately gamified, because a long-term goal needs a visible progress loop or it dies.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>"Where do I even start?" and "what's next?" become a glance instead of research. Written from the regulatory side of the counter, not the marketing side.</p>
+          </div>
+        </div>
         <div class="proj-imgs one">
           <figure><img src="img/ph-guide.webp" alt="PH Pharmacy Setup Guide quest board with phases, priorities and progress" loading="lazy"></figure>
         </div>
-        <a class="proj-link" href="https://github.com/anki-boi/PH-Pharmacy-Setup-Guide" target="_blank" rel="noopener">View the code
-          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-      </article>
-
-      <article class="proj rv">
-        <span class="flag">Chrome Extension</span>
-        <h3>OJ.ph Cleaner</h3>
-        <p>A Manifest V3 Chrome extension that filters OnlineJobs.ph listings by salary and keyword — deep-scanning full job descriptions against a user-editable rules engine. Built to solve my own job hunt, then shipped and kept.</p>
-        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Browser extension</span></div>
-        <a class="proj-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code
+        <div class="chips"><span class="chip">HTML / CSS</span><span class="chip">Regulatory</span><span class="chip">Healthcare</span><span class="chip">Progress design</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/PH-Pharmacy-Setup-Guide" target="_blank" rel="noopener">View the guide
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
     </div>
