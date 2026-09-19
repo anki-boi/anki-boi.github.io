@@ -313,6 +313,28 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 .psi-item.problem li::before{content:"\2212";color:var(--bronze)}
 .psi-item.fix li::before{content:"+";color:var(--ink)}
 .psi-item.impact li::before{content:"\2605";color:#3d7a46;font-family:var(--sans);font-size:.85em}
+
+/* ---- The skim system -------------------------------------------------------
+   A client skimming 7 cards will not read 96 bullets. So every column gets
+   exactly ONE eye-anchor: the number that hurts (-), the distinguishing
+   mechanism (+), the headline result (*). A marker wash carries outcomes,
+   a deliberate underline carries mechanics - and underline is the scarcer
+   signal on purpose, because it is the heaviest mark on the page. */
+.psi-item li strong{color:var(--ink)}
+.mk{font-weight:600;padding:0 1px;border-radius:2px;
+  background-image:linear-gradient(transparent 58%,var(--mk-c,rgba(201,154,78,.32)) 58%)}
+.mk.pain{--mk-c:rgba(179,64,46,.22)}
+.mk.win{--mk-c:rgba(61,122,70,.22)}
+.u{font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:var(--bronze);
+  text-decoration-thickness:1.5px;text-underline-offset:3px;text-decoration-skip-ink:none}
+/* The first impact line is the answer to the card - give it full ink so it
+   outranks its own supporting bullets. */
+.psi-item.impact li:first-child{color:var(--ink)}
+/* On the dark hero the same wash reads as a warm glow, and ink-coloured
+   underline would vanish - so the hero only ever uses .mk. */
+.hero .mk{--mk-c:rgba(201,154,78,.20);background-image:linear-gradient(var(--mk-c),var(--mk-c));
+  border-radius:4px;padding:2px 6px;margin:0 -2px}
+.hero .u{color:#fff;text-decoration-color:var(--gold)}
 .psi-item.fix b{color:var(--ink)}
 .psi-item.impact b{color:#3d7a46}
 
@@ -402,7 +424,7 @@ footer a:hover{color:var(--gold)}
 
     <h1 class="big" id="heroline">Healthcare workflow automation, <em>built by a pharmacist.</em></h1>
 
-    <p class="lede">I run the operations layer of a US telehealth clinic — patient records, refills, and the prescription pipeline in <strong>Zoho CRM</strong> — and I build the browser automation that takes the manual work out of it. <strong>45+ scripts and extensions</strong> in daily production.</p>
+    <p class="lede">I run the operations layer of a US telehealth clinic — patient records, refills, and the prescription pipeline in <strong>Zoho CRM</strong> — and I build the browser automation that <span class="mk">takes the manual work out of it</span>. <strong>45+ scripts and extensions</strong> in daily production.</p>
 
     <div class="creds">
       <span>RPh &middot; Board 91.07%</span>
@@ -469,7 +491,7 @@ footer a:hover{color:var(--gold)}
         <div class="tl-item rv" style="--d:240ms">
           <div class="tl-when">2020 &ndash; 2023</div>
           <h3>Automation &amp; algorithmic systems</h3>
-          <p>15+ Expert Advisors in MQL4/MQL5 with full risk management. Headless Amazon PPC reporting pipelines in Excel VBA and n8n, cutting execution time 90% across 30+ accounts.</p>
+          <p>15+ Expert Advisors in MQL4/MQL5 with full risk management. Headless Amazon PPC reporting pipelines in Excel VBA and n8n, cutting execution time <span class="mk win">90%</span> across 30+ accounts.</p>
         </div>
       </div>
     </div>
@@ -523,7 +545,7 @@ footer a:hover{color:var(--gold)}
     <div class="sec-head">
       <div class="idx rv">03 &nbsp;/&nbsp; Selected Work</div>
       <h2 class="rv" style="--d:60ms">Built to solve real problems.</h2>
-      <p class="rv" style="--d:120ms">Production tools running against live systems — not toy demos. Each one is here because something was slow, error-prone or silently wrong, and each card reads <span class="hl">problem → fix → impact</span>. Every repository below is open.</p>
+      <p class="rv" style="--d:120ms">Production tools running against live systems — not toy demos. Each one is here because <strong>something was slow, error-prone or silently wrong</strong>, and every card is written as <span class="hl"><strong>problem &rarr; fix &rarr; impact</strong></span> &mdash; one marked line per column, if you only have a minute.</p>
     </div>
 
     <div class="projects">
@@ -536,7 +558,7 @@ footer a:hover{color:var(--gold)}
             <b>Problem</b>
             <ul>
           <li>Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so nothing is comparable</li>
-          <li>Staleness is invisible until you're pages deep: a 297-job search ran <strong>40&ndash;46 days old</strong></li>
+          <li>Staleness is invisible until you're pages deep: a 297-job search ran <strong><span class="mk pain">40&ndash;46 days old</span></strong></li>
           <li>A naive keyword filter destroys itself &mdash; <code>AI</code> as a substring matched <strong>every listing</strong></li>
           <li>Every screening decision is thrown away, so the same judgement gets paid for again tomorrow</li>
         </ul>
@@ -544,7 +566,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
-          <li>Negative keywords hide; positive keywords highlight and never hide</li>
+          <li>Negative keywords hide; positive keywords highlight and <span class="u">never hide</span></li>
           <li>A hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider</li>
           <li>Exact word-or-phrase matching, not substrings</li>
           <li>A recency window applied first, and salaries normalised at live ECB rates</li>
@@ -554,7 +576,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li>Screening effort stops scaling with market volume</li>
+          <li>Screening effort <span class="mk win">stops scaling with market volume</span></li>
           <li>Every mark on the page names its reason</li>
           <li>A filter you can't audit is one you stop trusting</li>
           <li>It refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure, and the 40 h/week assumption is printed on the card</li>
@@ -582,21 +604,21 @@ footer a:hover{color:var(--gold)}
           <li>One prescription meant re-typing the same patient data into whichever pharmacy portal the order needed</li>
           <li>Then finding its tracking number by hand and pasting it into a sheet</li>
           <li>Then writing the patient SMS from scratch</li>
-          <li>~15&ndash;20 manual actions per order &mdash; each one a chance to pick the wrong patient or the wrong vial</li>
+          <li><span class="mk pain">~15&ndash;20 manual actions per order</span> &mdash; each one a chance to pick the wrong patient or the wrong vial</li>
         </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
           <li>40 scripts that each do one job</li>
-          <li>Deliberately <em>not</em> one extension &mdash; these portals change their DOM constantly, so isolation keeps a selector fix for FedEx from breaking patient messaging</li>
+          <li>Deliberately <em>not</em> one extension &mdash; these portals change their DOM constantly, so isolation <span class="u">keeps a selector fix for FedEx from breaking patient messaging</span></li>
           <li>A shared token-based design system gives 40 injected panels one coherent look without a monolith</li>
         </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong> returned</li>
+          <li><span class="mk win"><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong></span> returned</li>
           <li>Wrong-patient and wrong-vial entries designed out</li>
           <li>A lookup returning two matches stops for a human; the questionnaire is never auto-submitted</li>
           <li>Every check the gate runs is a failure that once cost real time</li>
@@ -622,7 +644,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item problem">
             <b>Problem</b>
             <ul>
-          <li>Thousands of listings, and no way to tell which ones actually match your r&eacute;sum&eacute;</li>
+          <li>Thousands of listings, and <span class="mk pain">no way to tell which ones actually match your r&eacute;sum&eacute;</span></li>
           <li>Salaries quoted in mixed currencies, converted in your head</li>
           <li>Applications tracked in a spreadsheet that goes stale exactly when you're busiest</li>
           <li>No signal on whether a listing has already closed</li>
@@ -632,7 +654,7 @@ footer a:hover{color:var(--gold)}
             <b>Fix</b>
             <ul>
           <li>Live SSE scrape console with keyword / category / skill scoping</li>
-          <li>An ATS score for every listing &mdash; <strong>deterministic, not LLM</strong>, because recruiter first passes are keyword-and-structure based and a rule scorer can't hallucinate a match</li>
+          <li>An ATS score for every listing &mdash; <strong>deterministic, not LLM</strong>, because <span class="u">a rule scorer can't hallucinate a match</span></li>
           <li>One-click r&eacute;sum&eacute; tailoring that rewrites and reorders only, never invents facts, and falls back rather than shipping bad output</li>
           <li>A 1-page CV builder that iterates until it really is one page</li>
         </ul>
@@ -640,7 +662,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li>A multi-hour manual sweep becomes one scoped, pre-scored run</li>
+          <li>A multi-hour manual sweep becomes <span class="mk win">one scoped, pre-scored run</span></li>
           <li>Auto-run plus desktop alerts &mdash; the tracker tells you when to act instead of going stale</li>
           <li>A parse watchdog raises a structure-change alert, so a silent zero can't masquerade as &ldquo;no new jobs today&rdquo;</li>
           <li>Spec-driven: CI, pre-push gates and a 359-test suite</li>
@@ -668,14 +690,14 @@ footer a:hover{color:var(--gold)}
             <ul>
           <li>Anki's default is pure active recall &mdash; retrieving an answer from nothing</li>
           <li>That's the gold standard for retention, and the right tool when you must <em>produce</em> an answer</li>
-          <li>But the pharmacy board exam is <strong>100% multiple choice</strong> &mdash; it measures recognition, not production</li>
+          <li>But the pharmacy board exam is <span class="mk pain"><strong>100% multiple choice</strong></span> &mdash; it measures recognition, not production</li>
           <li>So drilling full recall for a recognition test spends the same study minute on a strictly harder task</li>
         </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
-          <li>Commit to a choice before anything is revealed</li>
+          <li>Commit to a choice <span class="u">before anything is revealed</span></li>
           <li>Choice order randomised on every rep, so position carries no signal</li>
           <li>Single and multi-answer, with each choice marked <em>correct</em>, <em>wrong</em> or <em>missed</em> &mdash; two different study signals</li>
           <li>A dynamic selection limit that says how many answers exist without revealing which</li>
@@ -685,7 +707,7 @@ footer a:hover{color:var(--gold)}
             <b>Impact</b>
             <ul>
           <li>Familiarity with the real question format, deliberately matched to the target</li>
-          <li>Higher yield per study minute than picture-perfect recall</li>
+          <li><span class="mk win">Higher yield per study minute</span> than picture-perfect recall</li>
           <li>My most-starred repo &mdash; a lot of people were quietly over-studying for recognition exams</li>
         </ul>
           </div>
@@ -709,7 +731,7 @@ footer a:hover{color:var(--gold)}
             <ul>
           <li>Every exam block arrived as folders of hundreds of lecture-slide images</li>
           <li>Each card meant reading the slide, deciding what was testable, writing the question, inventing plausible distractors, and typing it in</li>
-          <li>~1 minute per card &mdash; a 500-image block is <strong>8+ hours of transcription</strong> before you learn anything</li>
+          <li>~1 minute per card &mdash; a 500-image block is <span class="mk pain"><strong>8+ hours of transcription</strong></span> before you learn anything</li>
           <li>So decks got built for the subjects you had time for, usually not the ones you were worst at</li>
         </ul>
           </div>
@@ -719,13 +741,13 @@ footer a:hover{color:var(--gold)}
           <li>Batch-processes folders of images through the Gemini API into structured MCQ cards</li>
           <li>Context carried across consecutive pages, so a table split over two slides stays coherent</li>
           <li>Automatic subdeck creation from the parsed subtopic</li>
-          <li>Prompts persist in runtime config &mdash; the prompt you spent an evening tuning survives every update</li>
+          <li>Prompts persist in runtime config &mdash; the prompt you spent an evening tuning <span class="u">survives every update</span></li>
         </ul>
           </div>
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li>Card authoring goes from ~1 minute each to a batch job</li>
+          <li>Card authoring goes from ~1 minute each <span class="mk win">to a batch job</span></li>
           <li>Deck size stops being capped by typing stamina</li>
           <li>An add-on that's safe to update keeps getting fixes</li>
         </ul>
@@ -750,7 +772,7 @@ footer a:hover{color:var(--gold)}
             <b>Problem</b>
             <ul>
           <li>There's no good way to show someone who you are when you meet them in public</li>
-          <li>&ldquo;Find me on Instagram&rdquo; is an all-or-nothing broadcast &mdash; they get the last three years, not the person you just met</li>
+          <li>&ldquo;Find me on Instagram&rdquo; is an all-or-nothing broadcast &mdash; they get <span class="mk pain">the last three years, not the person you just met</span></li>
           <li>There's no way to hand over one side of yourself</li>
           <li>Plenty of people have no public social presence and won't build one just to be findable</li>
           <li>Dating apps solve discovery for <em>strangers</em> &mdash; not for someone you already met</li>
@@ -759,7 +781,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
-          <li>Scan the QR &rarr; read the profile &rarr; <strong>apply to connect</strong> &rarr; you approve or decline</li>
+          <li>Scan the QR &rarr; read the profile &rarr; <strong>apply to connect</strong> &rarr; <span class="u">you approve or decline</span></li>
           <li>Only then do they get your socials</li>
           <li>One account holds up to three profiles &mdash; serious / casual / friendship &mdash; each with its own card and inbox</li>
           <li>Socials are never in the public page payload: reachable only through an RPC that checks for an accepted application</li>
@@ -768,7 +790,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li>Replaces &ldquo;find me on Instagram&rdquo; with an exchange you control</li>
+          <li>Replaces &ldquo;find me on Instagram&rdquo; with <span class="mk win">an exchange you control</span></li>
           <li>Works in public, no app installed, no algorithm in between</li>
           <li>You choose who sees which side of you</li>
           <li>Giving someone a card is more professional than adding a stranger</li>
@@ -794,7 +816,7 @@ footer a:hover{color:var(--gold)}
             <b>Problem</b>
             <ul>
           <li>Licensing, layout, capital and compliance steps with no published order to them</li>
-          <li>You can't tell which phase you're in &mdash; a week on layout drawings while a permit you needed first sits unstarted</li>
+          <li>You can't tell which phase you're in &mdash; a week on layout drawings while <span class="mk pain">a permit you needed first sits unstarted</span></li>
           <li>&ldquo;Done&rdquo; is undefined: every step is some paperwork, so there's no moment you can stop thinking about it</li>
           <li>Progress is invisible for months &mdash; the failure that actually ends most setups</li>
         </ul>
@@ -802,7 +824,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
-          <li>Seven ordered phases, 24 entries, worked in order</li>
+          <li>Seven ordered phases, 24 entries, <span class="u">worked in order</span></li>
           <li>Every entry ticks off, and the tick is remembered</li>
           <li>A &ldquo;licensed RPh&rdquo; toggle hides the pre-license phase</li>
           <li>Progress stays local: one file, no build, no account</li>
@@ -811,7 +833,7 @@ footer a:hover{color:var(--gold)}
           <div class="psi-item impact">
             <b>Impact</b>
             <ul>
-          <li>&ldquo;Where do I start / what's next?&rdquo; becomes a glance instead of research</li>
+          <li>&ldquo;Where do I start / what's next?&rdquo; becomes <span class="mk win">a glance instead of research</span></li>
           <li>A months-long goal gets a visible progress loop &mdash; deliberately gamified</li>
           <li>Prints as a document for a partner, landlord or bank</li>
         </ul>
@@ -845,7 +867,7 @@ footer a:hover{color:var(--gold)}
           <ul>
             <li>Manage patient records, refills, and the full prescription pipeline in Zoho CRM</li>
             <li>Coordinate prescription orders with US compounding pharmacies; managed lab-order transitions between providers</li>
-            <li>Built and maintain a 45+ script Tampermonkey and Chrome extension suite — hours saved per shift, human sign-off on every action</li>
+            <li>Built and maintain a <span class="mk win">45+ script</span> Tampermonkey and Chrome extension suite — <span class="mk win">hours saved per shift</span>, human sign-off on every action</li>
             <li>Automated batch profile verification and a paste&nbsp;&rarr;&nbsp;parse&nbsp;&rarr;&nbsp;click-to-copy tracking panel; documented clinic SOPs and maintained the team&rsquo;s medical wiki</li>
           </ul>
         </div>
@@ -857,7 +879,7 @@ footer a:hover{color:var(--gold)}
           <h3>Independent Automation Engineer</h3>
           <div class="job-org">Amazon PPC &amp; algorithmic trading systems</div>
           <ul>
-            <li>Rebuilt manual reporting pipelines across 30+ e-commerce accounts as headless automation (Excel VBA, n8n), cutting execution time 90%</li>
+            <li>Rebuilt manual reporting pipelines across 30+ e-commerce accounts as headless automation (Excel VBA, n8n), cutting execution time <span class="mk win">90%</span></li>
             <li>Designed 15+ Expert Advisors in MQL4/MQL5 with full risk management; validated on 99.9%-quality tick data</li>
           </ul>
         </div>
