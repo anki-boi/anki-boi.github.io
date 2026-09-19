@@ -519,6 +519,34 @@ footer a:hover{color:var(--gold)}
 
     <div class="projects">
       <article class="proj rv">
+        <span class="flag">&#9733; If you came from OnlineJobs.ph</span>
+        <h3>OJ.ph Cleaner</h3>
+        <p class="sub">Yes &mdash; this is how your listing got read. I built the filter the job board doesn't ship to solve my own hunt, and it is still what I screen with.</p>
+        <div class="psi">
+          <div class="psi-item">
+            <b>Problem</b>
+            <p>A listing page with no way to narrow it, and nothing filterable about the two facts that matter. Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so it can't be compared. Staleness is invisible until you're pages deep (measured: a 297-job search ran <strong>40&ndash;46 days old</strong>). And a naive keyword filter destroys itself: <code>AI</code> as a substring matched <strong>every listing</strong>, quietly turning keyword hiding off.</p>
+          </div>
+          <div class="psi-item fix">
+            <b>Fix</b>
+            <p>Three outcomes instead of two: negative keywords hide, positive keywords highlight and never hide, and a hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider. Exact word/phrase matching, a recency window applied first, salaries normalised to a monthly figure at live ECB rates, and perpetual pagination &mdash; one page per scroll.</p>
+          </div>
+          <div class="psi-item impact">
+            <b>Impact</b>
+            <p>Screening effort stops scaling with market volume. Eight <em>Next</em> clicks become one continuous scroll, and every mark on the page names its reason &mdash; a filter you can't audit is one you stop trusting. It also refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure rather than inventing a month, and the 40 h/week assumption is printed on the card.</p>
+          </div>
+        </div>
+        <div class="metrics">
+          <div><b>40&ndash;46 d</b><span>Staleness found deep in results</span></div>
+          <div><b>3</b><span>Outcomes: hide / highlight / reconsider</span></div>
+          <div><b>1 req</b><span>Per scroll, throttled</span></div>
+        </div>
+        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Live FX rates</span><span class="chip">CDP test harness</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </article>
+
+      <article class="proj rv">
         <span class="flag">&#9733; Flagship &middot; In production</span>
         <h3>Clinical automation suite &mdash; 40 scripts</h3>
         <p class="sub">Tampermonkey userscripts automating the back office of a live US telehealth clinic: order entry, pharmacy-portal sessions, carrier tracking, patient-data handoffs, SMS/PDF workflows. Public mirror is identifier-scrubbed.</p>
@@ -575,33 +603,6 @@ footer a:hover{color:var(--gold)}
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj rv">
-        <span class="flag">Chrome Extension</span>
-        <h3>OJ.ph Cleaner</h3>
-        <p class="sub">The filter the job board doesn't ship. Built to solve my own hunt, then kept.</p>
-        <div class="psi">
-          <div class="psi-item">
-            <b>Problem</b>
-            <p>A listing page with no way to narrow it, and nothing filterable about the two facts that matter. Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so it can't be compared. Staleness is invisible until you're pages deep (measured: a 297-job search ran <strong>40&ndash;46 days old</strong>). And a naive keyword filter destroys itself: <code>AI</code> as a substring matched <strong>every listing</strong>, quietly turning keyword hiding off.</p>
-          </div>
-          <div class="psi-item fix">
-            <b>Fix</b>
-            <p>Three outcomes instead of two: negative keywords hide, positive keywords highlight and never hide, and a hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider. Exact word/phrase matching, a recency window applied first, salaries normalised to a monthly figure at live ECB rates, and perpetual pagination &mdash; one page per scroll.</p>
-          </div>
-          <div class="psi-item impact">
-            <b>Impact</b>
-            <p>Screening effort stops scaling with market volume. Eight <em>Next</em> clicks become one continuous scroll, and every mark on the page names its reason &mdash; a filter you can't audit is one you stop trusting. It also refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure rather than inventing a month, and the 40 h/week assumption is printed on the card.</p>
-          </div>
-        </div>
-        <div class="metrics">
-          <div><b>40&ndash;46 d</b><span>Staleness found deep in results</span></div>
-          <div><b>3</b><span>Outcomes: hide / highlight / reconsider</span></div>
-          <div><b>1 req</b><span>Per scroll, throttled</span></div>
-        </div>
-        <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Live FX rates</span><span class="chip">CDP test harness</span></div>
-        <a class="proj-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code
-          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-      </article>
 
       <article class="proj rv">
         <span class="flag">Open Source &middot; 15&#9733;</span>
