@@ -399,10 +399,11 @@ h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:20px 0 0;font-weight:400}
 .contact .sec-head p{color:rgba(255,255,255,.68)}
 .c-rows{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dark-line);
   border:1px solid var(--dark-line);border-radius:var(--r-lg);overflow:hidden;margin-top:8px}
-.c-item{background:var(--dark);padding:26px 24px;transition:background .5s var(--ease)}
+.c-item{background:var(--dark);padding:26px 24px;min-width:0;transition:background .5s var(--ease)}
 .c-item:hover{background:rgba(255,255,255,.035)}
 .c-item b{display:block;font-size:.655rem;font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:11px}
 .c-item a{font-size:.92rem;color:#fff;border-bottom:1px solid rgba(255,255,255,.22);padding-bottom:2px;
+  overflow-wrap:anywhere;
   transition:border-color .4s var(--ease),color .4s var(--ease)}
 .c-item a:hover{border-color:var(--gold);color:var(--gold)}
 @media(max-width:980px){.c-rows{grid-template-columns:repeat(2,1fr)}}
