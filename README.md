@@ -8,11 +8,15 @@ browser automation that removes the manual work from it. 45+ scripts and extensi
 
 ## What's here
 
-A single self-contained `index.html` (~74 KB) with no build step, no CDN and no external JS.
-Self-hosted [Fraunces](https://fonts.google.com/specimen/Fraunces) (display) and
-[Inter](https://fonts.google.com/specimen/Inter) (body) in `fonts/`, warm-paper and deep-ink
-palette, scroll-driven reveals with a positional backstop, and `prefers-reduced-motion` covering
-the infinite animations rather than just the entrances.
+A single self-contained `index.html` (~80 KB) with no build step, no CDN and no external JS.
+Self-hosted [Fraunces](https://fonts.google.com/specimen/Fraunces) (display),
+[Inter](https://fonts.google.com/specimen/Inter) (body) and
+[JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) (terminal/labels) in
+`fonts/`. Neon terminal-lab theme: a canvas layer of drifting ball-and-stick molecules,
+an SVG circuit-board layer with travelling current pulses, a scramble-decode hero title,
+a booting terminal card, a chemistry/automation ticker, and scroll-driven reveals with a
+positional backstop — all covered by `prefers-reduced-motion` (static molecule frame,
+no pulses, no scramble).
 
 GitHub Pages serves `main` at the domain root. Edit `index.html`, commit, push.
 
