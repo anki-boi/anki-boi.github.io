@@ -75,12 +75,10 @@ body.mouse #glow{opacity:1}
 
 /* ---- fixed FX layers ---------------------------------------- */
 #mol{position:fixed;inset:0;z-index:1;pointer-events:none}
-.fx-circuit{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.68}
+.fx-circuit{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55}
 .fx-circuit svg{width:100%;height:100%}
 .fx-circuit .pulse{stroke-dasharray:70 3200;animation:flow 9s linear infinite}
 @keyframes flow{to{stroke-dashoffset:-3270}}
-.fx-circuit .gpulse{stroke-dasharray:40 100;animation:gflow 2.6s linear infinite}
-@keyframes gflow{to{stroke-dashoffset:-140}}
 .fx-circuit .via{animation:blink 3.2s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:.15}50%{opacity:.9}}
 .fx-scan{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.6;
@@ -114,7 +112,7 @@ main,nav,footer{position:relative;z-index:5}
 .js .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .js .rv{opacity:1!important;transform:none!important;transition:none!important}
-  .fx-circuit .pulse,.fx-circuit .gpulse,.fx-circuit .via,.tick-track,.cur,.dot,.tl-item::before{animation:none!important}
+  .fx-circuit .pulse,.fx-circuit .via,.tick-track,.cur,.dot,.tl-item::before{animation:none!important}
   .card:hover,.c-item:hover,.chip:hover,.cred span:hover,.btn:hover,.tool:hover{transform:none!important}
   .tline{opacity:1!important}
 }
@@ -434,21 +432,10 @@ footer a:hover{color:var(--cyan)}
 <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-      <path d="M80 0H0V80" fill="none" stroke="rgba(10,133,173,.10)" stroke-width="3"/>
-      <path d="M80 0H0V80" fill="none" stroke="rgba(10,133,173,.30)" stroke-width="1"/>
-      <circle cx="0" cy="0" r="5" fill="rgba(10,133,173,.10)"/>
-      <circle cx="0" cy="0" r="2.2" fill="rgba(10,133,173,.6)"/>
+      <path d="M80 0H0V80" fill="none" stroke="rgba(10,105,134,.08)" stroke-width="1"/>
     </pattern>
   </defs>
   <rect width="1440" height="900" fill="url(#grid)"/>
-  <g fill="none" stroke-linecap="round">
-    <path class="gpulse" d="M-20 160 H1460" stroke="rgba(10,133,173,.42)" stroke-width="1.5"/>
-    <path class="gpulse" d="M-20 400 H1460" stroke="rgba(10,133,173,.36)" stroke-width="1.5" style="animation-delay:-1.4s"/>
-    <path class="gpulse" d="M-20 640 H1460" stroke="rgba(214,33,124,.32)" stroke-width="1.5" style="animation-delay:-.7s"/>
-    <path class="gpulse" d="M240 -20 V920" stroke="rgba(10,133,173,.36)" stroke-width="1.5" style="animation-delay:-2s"/>
-    <path class="gpulse" d="M720 -20 V920" stroke="rgba(10,133,173,.42)" stroke-width="1.5" style="animation-delay:-.4s"/>
-    <path class="gpulse" d="M1200 -20 V920" stroke="rgba(214,33,124,.32)" stroke-width="1.5" style="animation-delay:-1.8s"/>
-  </g>
   <g fill="none" stroke-linecap="square">
     <g stroke="rgba(10,105,134,.15)" stroke-width="1.5">
       <path d="M-20 140 H320 L380 200 H700 L760 140 H1460"/>
