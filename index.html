@@ -670,21 +670,21 @@ footer a:hover{color:var(--cyan)}
           <div class="psi-item problem">
             <b>Problem</b>
             <ul>
-              <li>Salary is free text &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code>, <code>TBD</code> &mdash; so nothing is comparable</li>
-              <li>Staleness is invisible until you're pages deep: a 297-job search ran <strong><span class="mk pain">40&ndash;46 days old</span></strong></li>
-              <li>A naive keyword filter destroys itself &mdash; <code>AI</code> as a substring matched <strong>every listing</strong></li>
-              <li>Every screening decision is thrown away, so the same judgement gets paid for again tomorrow</li>
-              <li>The card is not the listing: the keyword, the off-platform ask and the real hours are all in the description</li>
+              <li>The board hands you a list and no filter &mdash; pay, freshness and the kind of work aren&rsquo;t fields: they&rsquo;re free text on the card, or buried in the description you have to open</li>
+              <li>Salary is incomparable &mdash; <code>5.5$/hr</code>, <code>Php 1000/day</code>, <code>15-20 AUD per hour</code> and <code>TBD</code> sit side by side</li>
+              <li>Staleness is invisible until you&rsquo;re pages deep: a 297-job search ran <strong><span class="mk pain">40&ndash;46 days old</span></strong></li>
+              <li>The board remembers nothing &mdash; every screening judgement gets paid for again tomorrow</li>
+              <li>Screening effort scales with <strong>how much the market posted</strong>, not with how good your match is</li>
             </ul>
           </div>
           <div class="psi-item fix">
             <b>Fix</b>
             <ul>
-              <li>Negative keywords hide; positive keywords highlight and <span class="u">never hide</span></li>
-              <li>A hated keyword on an otherwise good job shows in <strong>yellow</strong> to reconsider</li>
-              <li>Exact word-or-phrase matching, not substrings</li>
-              <li>A recency window applied first, and salaries normalised at live ECB rates</li>
-              <li><code>Scan</code> opens each listing and re-decides it against its full description &mdash; two at a time, capped, and cached for 7 days so <span class="u">changing a keyword costs no requests</span></li>
+              <li>A filter the board doesn&rsquo;t ship: a recency window first, then a salary digit check, then your keywords</li>
+              <li>Negative keywords hide; positive keywords highlight and <span class="u">never hide</span> &mdash; a job with a hated keyword that still pays well shows in <strong>yellow</strong> to reconsider</li>
+              <li>Keywords are exact words or phrases, not substrings &mdash; <code>AI</code> matches <code>AI tools</code>, never <code>email</code></li>
+              <li>Salaries converted to comparable figures at live ECB rates &mdash; <span class="u">never guessed</span></li>
+              <li><code>Scan</code> opens each listing and re-decides it against its full description &mdash; two at a time, capped, cached for 7 days so <span class="u">changing a keyword costs no requests</span></li>
               <li>One page appended per scroll &mdash; eight <em>Next</em> clicks, gone</li>
             </ul>
           </div>
@@ -692,8 +692,7 @@ footer a:hover{color:var(--cyan)}
             <b>Impact</b>
             <ul>
               <li>Screening effort <span class="mk win">stops scaling with market volume</span></li>
-              <li>Every mark on the page names its reason</li>
-              <li>A filter you can't audit is one you stop trusting</li>
+              <li>Every mark on the page names its reason &mdash; a filter you can&rsquo;t audit is one you stop trusting</li>
               <li>An earlier version demoted off-platform listings and moved <strong><span class="mk pain">176 of 227</span></strong> out of High yield &mdash; a filter that had stopped filtering. Now pay decides, and a keyword only decorates</li>
               <li>It refuses to guess: a part-time hourly rate with no stated hours keeps its hourly figure, and the 40 h/week assumption is printed on the card</li>
             </ul>
