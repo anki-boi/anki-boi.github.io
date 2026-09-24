@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anki-boi.github.io/sitemap.xml
