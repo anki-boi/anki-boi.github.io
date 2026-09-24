@@ -1284,7 +1284,6 @@ footer a:hover{color:var(--cyan)}
           var t = (top + h / 2 - (y + vh / 2)) / vh;
           t = Math.max(-1, Math.min(1, t));
           el.style.transform = 'translate3d(0,' + (t * 56).toFixed(1) + 'px,0) scale(' + (1 - Math.abs(t) * .05).toFixed(4) + ')';
-          el.style.opacity = (1 - Math.abs(t) * .4).toFixed(3);
         }
       }
       requestAnimationFrame(frame);
