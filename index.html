@@ -32,7 +32,7 @@
   --cyan:#0a85ad; --cyan-dim:rgba(10,133,173,.5);
   --mag:#d6217c; --lime:#55a02e; --amber:#d97b06;
   --ink:#101b28;
-  --txt:#17222f; --mut:#4b5c72; --mut-2:#8494aa;
+  --txt:#17222f; --mut:#40526c; --mut-2:#77889f;
   --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',Consolas,Menlo,monospace;
   --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --serif:'Fraunces',Georgia,'Times New Roman',serif;
@@ -66,7 +66,7 @@ body.mouse #glow{opacity:1}
 
 /* ---- fixed FX layers ---------------------------------------- */
 #mol{position:fixed;inset:0;z-index:1;pointer-events:none}
-.fx-circuit{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.85}
+.fx-circuit{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.55}
 .fx-circuit svg{width:100%;height:100%}
 .fx-circuit .pulse{stroke-dasharray:70 3200;animation:flow 9s linear infinite}
 @keyframes flow{to{stroke-dashoffset:-3270}}
@@ -167,7 +167,7 @@ h1.big .serif{font-family:var(--serif);font-style:italic;font-weight:500;letter-
   text-shadow:0 0 22px rgba(214,33,124,.22);display:inline-block;transform:rotate(-1.2deg)}
 .scr{display:inline-block;white-space:nowrap}
 
-.hero .lede{margin-top:28px;max-width:58ch;font-size:clamp(1rem,1.35vw,1.115rem);line-height:1.72;color:rgba(23,34,47,.75);font-weight:400}
+.hero .lede{margin-top:28px;max-width:58ch;font-size:clamp(1rem,1.35vw,1.115rem);line-height:1.72;color:rgba(23,34,47,.88);font-weight:400}
 .hero .lede strong{color:var(--ink);font-weight:600}
 .mk{font-weight:600;padding:0 2px;border-radius:3px;background:rgba(10,133,173,.10);color:#086c8e}
 
@@ -256,8 +256,12 @@ section{padding:clamp(80px,11vh,134px) 0;scroll-margin-top:84px;position:relativ
 .idx::after{content:"";flex:0 0 44px;height:1px;background:var(--line);box-shadow:0 0 6px var(--cyan)}
 h2{font-size:clamp(1.95rem,4.2vw,3.05rem);margin:18px 0 0;letter-spacing:-.028em}
 h2 .serif{font-family:var(--serif);font-style:italic;font-weight:500;letter-spacing:-.01em;color:var(--mag);display:inline-block;transform:rotate(-1.2deg);text-shadow:0 0 18px rgba(214,33,124,.18)}
-.sec-head p{margin-top:18px;font-size:1.03rem;color:var(--mut);max-width:62ch;line-height:1.7}
+.sec-head p{margin-top:18px;font-size:1.03rem;color:rgba(23,34,47,.82);max-width:62ch;line-height:1.7}
 .hl{color:#086c8e;font-weight:600}
+/* faint paper halo lifts body text off the FX layers */
+.hero .lede,.sec-head p,.about-copy p,.proj .sub,.psi-item li,.tl-item p,.job li,.slist li,.pullquote,
+.contact .sec-head p,.tick-track span{
+  text-shadow:0 0 5px rgba(242,246,250,.9),0 0 16px rgba(242,246,250,.65)}
 .u{font-weight:600;color:var(--ink);text-decoration:underline;text-decoration-color:var(--cyan);text-decoration-thickness:2px;text-underline-offset:3px}
 
 /* ---- cards (shared) ---- */
@@ -393,7 +397,7 @@ h2 .serif{font-family:var(--serif);font-style:italic;font-weight:500;letter-spac
 .contact .idx{color:var(--mag)}
 .contact .idx::after{background:var(--line);box-shadow:0 0 6px var(--mag)}
 .contact h2{color:var(--ink);font-size:clamp(2.2rem,5.2vw,3.7rem);max-width:20ch}
-.contact .sec-head p{color:var(--mut)}
+.contact .sec-head p{color:rgba(23,34,47,.82)}
 .c-rows{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-2);
   border:1px solid var(--line-2);border-radius:10px;overflow:hidden;margin-top:8px}
 .c-item{background:#fff;padding:26px 24px;min-width:0;transition:background .5s var(--ease)}
