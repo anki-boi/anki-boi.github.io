@@ -1456,28 +1456,54 @@ footer a:hover{color:var(--cyan)}
       ctx.restore();
     }
 
-    /* ---- electric arcs: short-lived plasma bolts across the lab ---- */
+    /* ---- electric arcs: forked lightning, plasma bloom, flicker ---- */
     var ARC = {
-      c: { g: 'rgba(10,133,173,.30)', m: 'rgba(70,200,255,.62)', c: 'rgba(245,252,255,.96)' },
-      m: { g: 'rgba(214,33,124,.26)', m: 'rgba(255,120,190,.58)', c: 'rgba(255,240,248,.95)' }
+      c: { bloom: 'rgba(10,133,173,.14)', g: 'rgba(10,133,173,.30)', m: 'rgba(80,205,255,.60)', c: 'rgba(250,253,255,.97)' },
+      m: { bloom: 'rgba(214,33,124,.13)', g: 'rgba(214,33,124,.26)', m: 'rgba(255,130,195,.55)', c: 'rgba(255,242,249,.96)' }
     };
     var arcs = [], lastArcT = 0, lastPairT = 0, prevT = 0;
 
-    function bolt(x1, y1, x2, y2, jit, col, life){
-      var segs = [[x1, y1], [x2, y2]], depth = 0, j = jit;
-      while (depth < 3){
+    /* midpoint-displacement jagged channel */
+    function channel(x1, y1, x2, y2, jit, depth){
+      var segs = [[x1, y1], [x2, y2]], j = jit, d = 0;
+      while (d < depth){
         var next = [segs[0]];
         for (var i = 1; i < segs.length; i++){
           var ax = segs[i-1][0], ay = segs[i-1][1], bx = segs[i][0], by = segs[i][1];
-          var mx2 = (ax + bx) / 2, my2 = (ay + by) / 2;
+          var mx = (ax + bx) / 2, my = (ay + by) / 2;
           var ddx = bx - ax, ddy = by - ay;
           var len = Math.sqrt(ddx * ddx + ddy * ddy) || 1;
           var off = (Math.random() - .5) * j;
-          next.push([mx2 - ddy / len * off, my2 + ddx / len * off], segs[i]);
+          next.push([mx - ddy / len * off, my + ddx / len * off], segs[i]);
         }
-        segs = next; depth++; j *= .5;
+        segs = next; d++; j *= .5;
       }
-      arcs.push({ pts: segs, col: col, life: life, max: life });
+      return segs;
+    }
+
+    function bolt(x1, y1, x2, y2, jit, col, life){
+      var main = channel(x1, y1, x2, y2, jit, 4);
+      var mdx = x2 - x1, mdy = y2 - y1;
+      var mainLen = Math.sqrt(mdx * mdx + mdy * mdy) || 1;
+      var baseAng = Math.atan2(mdy, mdx);
+      var branches = [];
+      var forks = 2 + Math.floor(Math.random() * 3);
+      for (var i = 0; i < forks; i++){
+        var idx = 1 + Math.floor(Math.random() * (main.length - 2));
+        var sx = main[idx][0], sy = main[idx][1];
+        var side = Math.random() < .5 ? -1 : 1;
+        var ang = baseAng + side * (0.5 + Math.random() * 1.0);
+        var blen = mainLen * (0.3 + Math.random() * 0.5);
+        branches.push(channel(sx, sy, sx + Math.cos(ang) * blen, sy + Math.sin(ang) * blen, jit * .6, 3));
+      }
+      arcs.push({ main: main, branches: branches, col: col, life: life, max: life });
+    }
+
+    function strokePath(pts){
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+      ctx.stroke();
     }
 
     function drawArcs(dt){
@@ -1488,16 +1514,23 @@ footer a:hover{color:var(--cyan)}
         if (a.life <= 0){ arcs.splice(i, 1); continue; }
         var fade = a.life > a.max * .7 ? (a.max - a.life) / (a.max * .3)
                  : a.life < a.max * .15 ? a.life / (a.max * .15) : 1;
+        /* lightning shimmers: mostly dim, occasional full-bright frames */
+        var fl = Math.random() < .3 ? 1 : .5 + Math.random() * .3;
+        var col = a.col;
+
         ctx.save();
-        ctx.globalAlpha = fade * .85;
-        var lay = [[6, a.col.g], [3, a.col.m], [1.4, a.col.c]];
-        for (var k = 0; k < 3; k++){
-          ctx.strokeStyle = lay[k][1]; ctx.lineWidth = lay[k][0];
-          ctx.beginPath();
-          ctx.moveTo(a.pts[0][0], a.pts[0][1]);
-          for (var p = 1; p < a.pts.length; p++) ctx.lineTo(a.pts[p][0], a.pts[p][1]);
-          ctx.stroke();
+        /* forks sit under the main channel, thinner and dimmer */
+        ctx.globalAlpha = fade * fl * .55;
+        for (var b = 0; b < a.branches.length; b++){
+          ctx.strokeStyle = col.g; ctx.lineWidth = 2.2; strokePath(a.branches[b]);
+          ctx.strokeStyle = col.c; ctx.lineWidth = 1;   strokePath(a.branches[b]);
         }
+        /* main channel: bloom -> glow -> mid -> white-hot core */
+        ctx.globalAlpha = fade * fl;
+        ctx.strokeStyle = col.bloom; ctx.lineWidth = 14;  strokePath(a.main);
+        ctx.strokeStyle = col.g;     ctx.lineWidth = 5.5; strokePath(a.main);
+        ctx.strokeStyle = col.m;     ctx.lineWidth = 2.2; strokePath(a.main);
+        ctx.strokeStyle = col.c;     ctx.lineWidth = 1.1; strokePath(a.main);
         ctx.restore();
       }
     }
@@ -1560,9 +1593,9 @@ footer a:hover{color:var(--cyan)}
         if (arcs.length < 12){
           var x = Math.random() * W, y = Math.random() * H;
           var ang = Math.random() * Math.PI * 2;
-          var len = 60 + Math.random() * 130;
+          var len = 90 + Math.random() * 160;
           bolt(x, y, x + Math.cos(ang) * len, y + Math.sin(ang) * len,
-               26, Math.random() < .62 ? ARC.c : ARC.m, 300 + Math.random() * 200);
+               30, Math.random() < .62 ? ARC.c : ARC.m, 340 + Math.random() * 220);
         }
       }
 
