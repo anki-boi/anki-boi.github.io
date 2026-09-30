@@ -43,7 +43,7 @@
   --cyan:#0a85ad; --cyan-dim:rgba(10,133,173,.5); --cyan-tx:#086c8e;
   --mag:#cf1b76; --lime:#3f7d1e; --amber:#d97b06;
   --ink:#101b28;
-  --txt:#17222f; --mut:#40526c; --mut-2:#5f7089;
+  --txt:#17222f; --mut:#38485f; --mut-2:#485970;
   --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',Consolas,Menlo,monospace;
   --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --serif:'Fraunces',Georgia,'Times New Roman',serif;
@@ -90,7 +90,7 @@ html{caret-color:var(--cyan);scrollbar-color:rgba(10,133,173,.45) var(--bg1);scr
 main,nav,footer{position:relative;z-index:5}
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 var(--gut);position:relative}
-.skip{position:absolute;left:-9999px;top:0;background:var(--cyan);color:#04121a;padding:10px 16px;z-index:10000;font-family:var(--sans);font-size:.8rem}
+.skip{position:absolute;left:-9999px;top:0;background:var(--cyan);color:#000;padding:10px 16px;z-index:10000;font-family:var(--sans);font-size:.8rem}
 .skip:focus{left:0}
 
 /* ============================================================
@@ -1170,6 +1170,44 @@ footer a:hover{color:var(--cyan-tx)}
     }
 
     var mols = [];
+
+    /* The molecules are decoration, so they are not allowed to sit behind text —
+       a reader (2026-09-30) reported the moving graphics "overlapping them". They
+       already dodged the cursor, so this extends that same dodge to the boxes that
+       actually carry words. Rects are kept in DOCUMENT space, so scrolling moves a
+       molecule past a zone without anything being recomputed; the list is rebuilt
+       only when the layout changes (resize, a lazy image landing, a fold opening).
+       A reader's standing complaint about legibility is worth this much: the light
+       panels and the gradient wash stay exactly as they were. */
+    var ZONES = [];
+    function inZone(x, y){
+      for (var z = 0; z < ZONES.length; z++){
+        var zn = ZONES[z];
+        if (x < zn.l - 44 || x > zn.rt + 44) continue;
+        var zt = zn.fix ? zn.t : zn.t - scrollY;
+        var zb = zn.fix ? zn.b : zn.b - scrollY;
+        if (y > zt - 44 && y < zb + 44) return true;
+      }
+      return false;
+    }
+    function collectZones(){
+      ZONES.length = 0;
+      var nodes = document.querySelectorAll('main *, nav *, footer *');
+      for (var i = 0; i < nodes.length; i++){
+        var el = nodes[i], hasText = false;
+        for (var c = el.firstChild; c; c = c.nextSibling){
+          if (c.nodeType === 3 && c.textContent.trim().length > 1){ hasText = true; break; }
+        }
+        if (!hasText) continue;
+        var r = el.getBoundingClientRect();
+        if (r.width < 6 || r.height < 6) continue;
+        var inNav = !!el.closest('nav');   // fixed, so its rect is already viewport-space
+        ZONES.push({ l: r.left, rt: r.right,
+                     t: inNav ? r.top : r.top + scrollY,
+                     b: inNav ? r.bottom : r.bottom + scrollY,
+                     fix: inNav });
+      }
+    }
     var cursor = { x: -9999, y: -9999 };
     window.addEventListener('pointermove', function(e){ cursor.x = e.clientX; cursor.y = e.clientY; }, { passive: true });
     document.addEventListener('mouseleave', function(){ cursor.x = -9999; cursor.y = -9999; });
@@ -1181,9 +1219,14 @@ footer a:hover{color:var(--cyan-tx)}
       var count = Math.min(14, Math.max(6, Math.floor(W / 150)));
       for (var i = 0; i < count; i++){
         var s = SPECS[i % SPECS.length];
+        /* spawn clear of the text, or the first frame snaps the molecule out of a
+           paragraph it was sitting in */
+        var px, py, tries = 0;
+        do { px = Math.random() * W; py = Math.random() * H; tries++; }
+        while (tries < 12 && inZone(px, py));
         mols.push({
           spec: s,
-          x: Math.random() * W, y: Math.random() * H,
+          x: px, y: py,
           s: .45 + Math.random() * .95,
           rot: Math.random() * Math.PI * 2,
           vx: 0, vy: 0, vr: 0,
@@ -1299,6 +1342,31 @@ footer a:hover{color:var(--cyan-tx)}
           var f = (1 - d / 180) * .8;
           m.ix += dx / d * f; m.iy += dy / d * f;
         }
+        /* ...and they never settle behind text: shove the body clear of the box's
+           nearest edge and kill the velocity component heading back in. A soft
+           push only reaches equilibrium somewhere inside the box, which is why
+           the earlier version still left ink on the words. */
+        var zpad = 26 * m.s + 14 * m.d;
+        var bx = m.x + mx * m.d * .045;
+        var byd = m.y + my * m.d * .045 + scrollY;
+        for (var z = 0; z < ZONES.length; z++){
+          var zn = ZONES[z];
+          var zt = zn.fix ? zn.t + scrollY : zn.t;
+          var zb = zn.fix ? zn.b + scrollY : zn.b;
+          if (bx < zn.l - zpad || bx > zn.rt + zpad) continue;
+          if (byd < zt - zpad || byd > zb + zpad) continue;
+          var dl = bx - (zn.l - zpad), dr = (zn.rt + zpad) - bx;
+          var dt2 = byd - (zt - zpad), db = (zb + zpad) - byd;
+          if (Math.min(dl, dr) < Math.min(dt2, db)){
+            if (dl < dr){ m.x -= dl; if (m.vx > 0) m.vx = -m.vx * .5; }
+            else { m.x += dr; if (m.vx < 0) m.vx = -m.vx * .5; }
+            bx = m.x + mx * m.d * .045;
+          } else {
+            if (dt2 < db){ m.y -= dt2; if (m.vy > 0) m.vy = -m.vy * .5; }
+            else { m.y += db; if (m.vy < 0) m.vy = -m.vy * .5; }
+            byd = m.y + my * m.d * .045 + scrollY;
+          }
+        }
       }
 
       /* elastic collisions — molecules bounce instead of passing through */
@@ -1337,9 +1405,14 @@ footer a:hover{color:var(--cyan-tx)}
     function drawMolStatic(){
       for (var i = 0; i < mols.length; i++) drawMol(mols[i], 0);
     }
-    function onResize(){ resize(); if (reduce) drawMolStatic(); }
+    function onResize(){ resize(); collectZones(); if (reduce) drawMolStatic(); }
+    collectZones();   // before resize(), so seed() can spawn clear of the text
     resize();
+    collectZones();
     window.addEventListener('resize', onResize);
+    window.addEventListener('load', collectZones);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(collectZones);
+    if (window.ResizeObserver) new ResizeObserver(collectZones).observe(document.body);
     if (reduce) { drawMolStatic(); }
     else { requestAnimationFrame(frame); }
   })();
