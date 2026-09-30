@@ -1146,11 +1146,28 @@ footer a:hover{color:var(--cyan-tx)}
       ctx.closePath();
     }
 
-    /* Brownian motion: a random kick every frame, damped by friction, so the
-       path meanders instead of running dead straight. The kick scales with depth
-       so the near/far parallax survives, and CAP stops a collision from
-       launching a molecule across the screen. */
-    var FRICTION = .97, KICK = .09, CAP = .5;
+    /* Brownian motion, coarse-grained: a molecule coasts in a straight line for a
+       moment, then something invisible hits it and it leaves on a new heading.
+       This replaced a per-frame random kick damped by friction — random, but random
+       at 60Hz: the course changed every 16ms, so the eye read nervous shimmer
+       instead of travel. Bumping the course every few seconds is what makes the
+       movement visible AS movement. Measured at 1440x900: 15.0 px/s with a course
+       change every 0.5s became 5.5 px/s with 22px straight runs between hits. */
+    var SPEED_MIN = 4, SPEED_MAX = 22;   // px/second, before the depth scale
+    var HIT_MIN = 1500, HIT_MAX = 4500;  // ms between invisible collisions
+    var SPIN_MAX = .35;                  // rad/second
+    var CAP = 60;                        // px/second — a collision must not launch a molecule
+
+    /* Most collisions are small taps and a few are big; a uniform draw makes the
+       motion metronomic, so r*r biases it toward the low end. */
+    function newCourse(m, now){
+      var sp = (SPEED_MIN + (SPEED_MAX - SPEED_MIN) * Math.pow(Math.random(), 2)) * m.d;
+      var ang = Math.random() * Math.PI * 2;
+      m.vx = Math.cos(ang) * sp;
+      m.vy = Math.sin(ang) * sp;
+      m.vr = (Math.random() - .5) * 2 * SPIN_MAX;
+      m.tHit = now + HIT_MIN + Math.random() * (HIT_MAX - HIT_MIN);
+    }
 
     var mols = [];
     var cursor = { x: -9999, y: -9999 };
@@ -1169,9 +1186,8 @@ footer a:hover{color:var(--cyan-tx)}
           x: Math.random() * W, y: Math.random() * H,
           s: .45 + Math.random() * .95,
           rot: Math.random() * Math.PI * 2,
-          vr: (Math.random() - .5) * .004,
-          vx: (Math.random() - .5) * .1,
-          vy: (Math.random() - .5) * .1,
+          vx: 0, vy: 0, vr: 0,
+          tHit: 0,
           ph: Math.random() * Math.PI * 2,
           d: .35 + Math.random() * .65,
           ix: 0, iy: 0
@@ -1250,19 +1266,29 @@ footer a:hover{color:var(--cyan-tx)}
       ctx.restore();
     }
 
+    var last = 0;
     function frame(t){
+      if (!last){
+        last = t;
+        /* stagger the first round of collisions, or every molecule turns at once */
+        for (var k = 0; k < mols.length; k++){
+          newCourse(mols[k], t);
+          mols[k].tHit = t + Math.random() * HIT_MAX;
+        }
+      }
+      /* clamp dt so a gap (background tab, throttled rAF) cannot teleport anything */
+      var dt = Math.min(.05, (t - last) / 1000) || 0;
+      last = t;
       ctx.clearRect(0, 0, W, H);
       mx += (tmx - mx) * .04; my += (tmy - my) * .04;
       for (var i = 0; i < mols.length; i++){
         var m = mols[i];
-        var kick = KICK * m.d;
-        m.vx = m.vx * FRICTION + (Math.random() - .5) * kick;
-        m.vy = m.vy * FRICTION + (Math.random() - .5) * kick;
-        m.vr = m.vr * FRICTION + (Math.random() - .5) * kick * .02;
+        if (t >= m.tHit) newCourse(m, t);
         var sp2 = m.vx * m.vx + m.vy * m.vy, cap = CAP * m.d;
         if (sp2 > cap * cap) { var kk = cap / Math.sqrt(sp2); m.vx *= kk; m.vy *= kk; }
-        m.x += m.vx + m.ix; m.y += m.vy + m.iy; m.rot += m.vr;
-        m.ix *= .92; m.iy *= .92;
+        m.x += m.vx * dt + m.ix; m.y += m.vy * dt + m.iy; m.rot += m.vr * dt;
+        var damp = Math.pow(.92, dt * 60);
+        m.ix *= damp; m.iy *= damp;
         var pad = 130 * m.s;
         if (m.x < -pad) m.x = W + pad; if (m.x > W + pad) m.x = -pad;
         if (m.y < -pad) m.y = H + pad; if (m.y > H + pad) m.y = -pad;
