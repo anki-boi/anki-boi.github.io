@@ -361,9 +361,18 @@ h2 .serif{font-family:var(--serif);font-style:italic;font-weight:500;letter-spac
   .fold[open]>summary::after{transform:rotate(-135deg);margin-top:4px}
   .fold[open]>summary+*{margin-top:22px}
   .tools{gap:18px}
+  /* The toolbox is a vocabulary list, not six cards. Six boxes stacked down a
+     phone is ~1,100px of chrome wrapped around ~90 words, so on a narrow screen
+     the chips become flowing text and the daily drivers stay bold. Same markup,
+     same vocabulary — the boxes were the only thing carrying information. */
+  .chips{display:block;margin-top:9px;line-height:1.85}
+  .chip{display:inline;border:0;background:none;padding:0;font-size:.95rem;color:var(--mut)}
+  .chip.hot{background:none;border:0;color:var(--ink)}
+  .chip:not(:last-child)::after{content:" · ";color:var(--mut-2);font-weight:400}
+  /* Buttons stack full-width instead of wrapping raggedly. */
+  .ctas{display:grid;grid-template-columns:1fr;margin-top:30px}
   .glance a{padding:11px 0}
   .tags{margin-top:20px}
-  .ctas{margin-top:30px}
   .job{padding:26px 0}
   .other{margin-top:30px;padding-top:20px}
   .c-rows{margin-top:26px}
@@ -400,7 +409,7 @@ h2 .serif{font-family:var(--serif);font-style:italic;font-weight:500;letter-spac
 .contact .wrap{position:relative;z-index:2}
 .contact h2{color:var(--ink);font-size:clamp(2.2rem,5.2vw,3.7rem);max-width:20ch}
 .contact .sec-head p{color:rgba(23,34,47,.82)}
-.c-rows{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-2);
+.c-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line-2);
   border:1px solid var(--line-2);border-radius:10px;overflow:hidden;margin-top:34px}
 .c-item{background:#fff;padding:26px 24px;min-width:0}
 .c-item b{display:block;font-family:var(--sans);font-size:.75rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mut-2);margin-bottom:11px}
@@ -437,6 +446,23 @@ footer{background:var(--bg1);color:var(--mut);padding:30px 0 34px;border-top:1px
 footer .wrap{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;font-family:var(--sans);font-size:.75rem;letter-spacing:.05em}
 footer a{color:var(--mut);transition:color .16s var(--ease)}
 footer a:hover{color:var(--cyan-tx)}
+
+/* Coarse pointers get real tap targets. The contact links, the "view the code"
+   links and the other-work links are inline text with a border-bottom underline —
+   20-21px tall, under the 24px WCAG 2.5.8 floor and a thumb-miss on a phone.
+   Padding the anchors would drag their underline away from the text, so the hit
+   area is stretched instead: on a contact card the whole cell becomes the target,
+   on a list row the whole row does. Gated on width as well as pointer so a narrow
+   window gets the same treatment. */
+@media (pointer:coarse),(max-width:640px){
+  .c-item{position:relative}
+  .c-item a::before{content:"";position:absolute;inset:0}
+  .other li{position:relative}
+  .other a::before{content:"";position:absolute;inset:-6px 0}
+  .proj-link{min-height:44px}
+  .nav-cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px}
+  .nav-menu summary{width:44px;height:44px}
+}
 </style>
 </head>
 <body>
@@ -551,6 +577,9 @@ footer a:hover{color:var(--cyan-tx)}
         <a class="btn btn-g" href="#projects">See the work
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
         </a>
+        <a class="btn btn-g" href="cv.pdf" target="_blank" rel="noopener">R&eacute;sum&eacute; (PDF)
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg>
+        </a>
       </div>
     </div>
 
@@ -574,18 +603,14 @@ footer a:hover{color:var(--cyan-tx)}
     <span>Aspirin &middot; <b>C&#8329;H&#8328;O&#8324;</b></span>
     <span>Glucose &middot; <b>C&#8326;H&#8321;&#8304;O&#8326;</b></span>
     <span>Manual work &middot; <b>detected &rarr; removing</b></span>
-    <span>Board &middot; <b>91.07%</b></span>
     <span>Human sign-off &middot; <b>always</b></span>
     <span>Benzene &middot; <b>C&#8326;H&#8326;</b></span>
-    <span>7 portals &middot; <b>zero shared failure domains</b></span>
     <span>Caffeine &middot; <b>C&#8328;H&#8321;&#8304;N&#8324;O&#8322;</b></span>
     <span>Aspirin &middot; <b>C&#8329;H&#8328;O&#8324;</b></span>
     <span>Glucose &middot; <b>C&#8326;H&#8321;&#8304;O&#8326;</b></span>
     <span>Manual work &middot; <b>detected &rarr; removing</b></span>
-    <span>Board &middot; <b>91.07%</b></span>
     <span>Human sign-off &middot; <b>always</b></span>
     <span>Benzene &middot; <b>C&#8326;H&#8326;</b></span>
-    <span>7 portals &middot; <b>zero shared failure domains</b></span>
   </div>
 </div>
 
@@ -617,7 +642,7 @@ footer a:hover{color:var(--cyan-tx)}
           <div class="tl-item rv">
             <div class="tl-when">Now</div>
             <h3>Medical Ops &amp; Process Automation Specialist <span style="font-weight:400">(contract)</span></h3>
-            <p>Colorado Medical Solutions — US peptide/GLP-1 telehealth clinic. Full prescription pipeline in Zoho CRM, compounding-pharmacy coordination, and the automation suite that removes the repetitive admin: <span class="mk win">~6 min &rarr; ~40 s per order</span>, human sign-off on every action, by design.</p>
+            <p>Colorado Medical Solutions — US peptide/GLP-1 telehealth clinic. Full prescription pipeline in Zoho CRM, compounding-pharmacy coordination, and the automation suite that removes the repetitive admin.</p>
           </div>
           <div class="tl-item rv" style="--d:80ms">
             <div class="tl-when">2021 &ndash; 2025</div>
@@ -627,7 +652,7 @@ footer a:hover{color:var(--cyan-tx)}
           <div class="tl-item rv" style="--d:160ms">
             <div class="tl-when">2020 &ndash; 2023</div>
             <h3>Automation &amp; algorithmic systems</h3>
-            <p>15+ Expert Advisors in MQL4/MQL5 with full risk management. Automation support under a senior consultant — manual e-commerce reporting rebuilt as Excel VBA and n8n pipelines.</p>
+            <p>Automation support under a senior consultant — manual e-commerce reporting rebuilt as Excel VBA and n8n pipelines.</p>
           </div>
         </div>
       </details>
@@ -684,15 +709,15 @@ footer a:hover{color:var(--cyan-tx)}
     </div>
 
     <div class="glance">
+      <a class="rv" href="#proj-clinical">
+        <span class="g-what">Clinical automation suite</span>
+        <span class="g-change">Scripts running a live clinic&rsquo;s back office, each one isolated so a fix for one portal can&rsquo;t break another.</span>
+        <span class="g-num">~6 min &rarr; ~40 s per order</span>
+      </a>
       <a class="rv" href="#proj-ojph">
         <span class="g-what">OJ.ph Cleaner</span>
         <span class="g-change">A filter for a job board that ships none &mdash; screening effort stops scaling with how much the market posted.</span>
         <span class="g-num">3 outcomes &middot; hide / highlight / reconsider</span>
-      </a>
-      <a class="rv" href="#proj-clinical">
-        <span class="g-what">Clinical automation suite</span>
-        <span class="g-change">40 published scripts running a live clinic&rsquo;s back office, each one isolated so a fix for one portal can&rsquo;t break another.</span>
-        <span class="g-num">~6 min &rarr; ~40 s per order</span>
       </a>
       <a class="rv" href="#proj-jobhunter">
         <span class="g-what">Job Hunter Dashboard</span>
@@ -702,11 +727,51 @@ footer a:hover{color:var(--cyan-tx)}
     </div>
 
     <div class="projects">
+      <article class="proj card rv" id="proj-clinical">
+        <h3>Clinical automation suite &mdash; 45+ scripts &amp; extensions</h3>
+        <p class="sub">Tampermonkey userscripts automating the back office of a live telehealth clinic: order entry, pharmacy-portal sessions, carrier tracking, patient-data handoffs, SMS/PDF workflows. 40 ship in the public mirror &mdash; the rest carry client identifiers, so they stay private.</p>
+        <details class="fold" open>
+          <summary aria-label="Problem, fix and impact — clinical automation suite">Problem &rarr; fix &rarr; impact</summary>
+          <div class="psi">
+            <div class="psi-item problem">
+              <b>Problem</b>
+              <ul>
+                <li>One prescription meant re-typing the same patient data into whichever pharmacy portal the order needed</li>
+                <li>Then finding its tracking number by hand and pasting it into a sheet</li>
+                <li>Then writing the patient SMS from scratch</li>
+                <li><span class="mk pain">~15&ndash;20 manual actions per order</span> &mdash; each one a chance to pick the wrong patient or the wrong vial</li>
+              </ul>
+            </div>
+            <div class="psi-item fix">
+              <b>Fix</b>
+              <ul>
+                <li>Each script does one job</li>
+                <li>Deliberately <em>not</em> one extension &mdash; these portals change their DOM constantly, so isolation <span class="u">keeps a selector fix for FedEx from breaking patient messaging</span></li>
+                <li>A shared token-based design system gives 40 injected panels one coherent look without a monolith</li>
+              </ul>
+            </div>
+            <div class="psi-item impact">
+              <b>Impact</b>
+              <ul>
+                <li><span class="mk win"><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong></span> returned</li>
+                <li>Wrong-patient and wrong-vial entries designed out</li>
+                <li>A lookup returning two matches stops for a human; the questionnaire is never auto-submitted</li>
+                <li>Every check the gate runs is a failure that once cost real time</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+        <p class="metrics"><b>7 pharmacy portals</b> across <b>4 vendors</b> &middot; every script isolated, so one portal&rsquo;s selector change can&rsquo;t reach the others</p>
+        <div class="chips"><span class="chip">JavaScript</span><span class="chip">Tampermonkey</span><span class="chip">Chrome DevTools Protocol</span><span class="chip">Zoho CRM</span><span class="chip">Design tokens</span></div>
+        <a class="proj-link" href="https://github.com/anki-boi/userscript-showcase" target="_blank" rel="noopener">View the code &amp; the problem log
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+      </article>
+
       <article class="proj card rv" id="proj-ojph">
         <h3>OJ.ph Cleaner</h3>
         <p class="sub">Yes &mdash; this is how your listing got read. I built the filter the job board doesn't ship to solve my own hunt, and it is still what I screen with.</p>
         <details class="fold" open>
-          <summary>Problem &rarr; fix &rarr; impact</summary>
+          <summary aria-label="Problem, fix and impact — OJ.ph Cleaner">Problem &rarr; fix &rarr; impact</summary>
           <div class="psi">
             <div class="psi-item problem">
               <b>Problem</b>
@@ -741,9 +806,9 @@ footer a:hover{color:var(--cyan-tx)}
           </div>
         </details>
         <div class="proj-imgs" tabindex="0" role="group" aria-label="OJ.ph Cleaner screenshots">
-          <figure><img src="img/ojph-list.webp" width="1200" height="750" alt="OnlineJobs.ph listings with salaries normalised to a monthly figure, unwanted listings hidden, and a status panel showing hidden, keyword and high-yield counts" loading="lazy"></figure>
-          <figure><img src="img/ojph-settings.webp" width="1200" height="750" alt="The in-page settings panel open over the live list: recency window, separate negative and positive keyword lists, salary goals and the deep-scan toggles" loading="lazy"></figure>
-          <figure><img src="img/ojph-card.webp" width="1200" height="750" alt="A single listing showing the keyword badge, the converted hourly figure, an at-or-above-your-goal line, and the site's own posted rate underneath" loading="lazy"></figure>
+          <figure><img src="img/ojph-list.webp" width="1000" height="625" alt="OnlineJobs.ph listings with salaries normalised to a monthly figure, unwanted listings hidden, and a status panel showing hidden, keyword and high-yield counts" loading="lazy"></figure>
+          <figure><img src="img/ojph-settings.webp" width="1000" height="625" alt="The in-page settings panel open over the live list: recency window, separate negative and positive keyword lists, salary goals and the deep-scan toggles" loading="lazy"></figure>
+          <figure><img src="img/ojph-card.webp" width="1000" height="625" alt="A single listing showing the keyword badge, the converted hourly figure, an at-or-above-your-goal line, and the site's own posted rate underneath" loading="lazy"></figure>
         </div>
         <p class="metrics"><b>40&ndash;46 days</b> of staleness found deep in results &middot; <b>3 outcomes</b> &mdash; hide, highlight, reconsider &middot; one throttled request per scroll, cached for 7 days so changing a keyword costs nothing</p>
         <div class="chips"><span class="chip">Chrome MV3</span><span class="chip">JavaScript</span><span class="chip">Live FX rates</span><span class="chip">CDP test harness</span></div>
@@ -751,51 +816,11 @@ footer a:hover{color:var(--cyan-tx)}
           <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </article>
 
-      <article class="proj card rv" id="proj-clinical">
-        <h3>Clinical automation suite &mdash; 45+ scripts &amp; extensions</h3>
-        <p class="sub">Tampermonkey userscripts automating the back office of a live telehealth clinic: order entry, pharmacy-portal sessions, carrier tracking, patient-data handoffs, SMS/PDF workflows. 40 ship in the public mirror &mdash; the rest carry client identifiers, so they stay private.</p>
-        <details class="fold" open>
-          <summary>Problem &rarr; fix &rarr; impact</summary>
-          <div class="psi">
-            <div class="psi-item problem">
-              <b>Problem</b>
-              <ul>
-                <li>One prescription meant re-typing the same patient data into whichever pharmacy portal the order needed</li>
-                <li>Then finding its tracking number by hand and pasting it into a sheet</li>
-                <li>Then writing the patient SMS from scratch</li>
-                <li><span class="mk pain">~15&ndash;20 manual actions per order</span> &mdash; each one a chance to pick the wrong patient or the wrong vial</li>
-              </ul>
-            </div>
-            <div class="psi-item fix">
-              <b>Fix</b>
-              <ul>
-                <li>40 published scripts that each do one job</li>
-                <li>Deliberately <em>not</em> one extension &mdash; these portals change their DOM constantly, so isolation <span class="u">keeps a selector fix for FedEx from breaking patient messaging</span></li>
-                <li>A shared token-based design system gives 40 injected panels one coherent look without a monolith</li>
-              </ul>
-            </div>
-            <div class="psi-item impact">
-              <b>Impact</b>
-              <ul>
-                <li><span class="mk win"><strong>~6 min &rarr; ~40 s per order</strong>, roughly <strong>40&ndash;60 hours a month</strong></span> returned</li>
-                <li>Wrong-patient and wrong-vial entries designed out</li>
-                <li>A lookup returning two matches stops for a human; the questionnaire is never auto-submitted</li>
-                <li>Every check the gate runs is a failure that once cost real time</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-        <p class="metrics"><b>40 scripts published</b> in daily production &middot; <b>~6 min &rarr; ~40 s per order</b>, roughly <b>40&ndash;60 hours a month</b> returned &middot; every script isolated, so one portal&rsquo;s selector change can&rsquo;t reach the others</p>
-        <div class="chips"><span class="chip">JavaScript</span><span class="chip">Tampermonkey</span><span class="chip">Chrome DevTools Protocol</span><span class="chip">Zoho CRM</span><span class="chip">Design tokens</span></div>
-        <a class="proj-link" href="https://github.com/anki-boi/userscript-showcase" target="_blank" rel="noopener">View the code &amp; the problem log
-          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-      </article>
-
       <article class="proj card rv" id="proj-jobhunter">
         <h3>Job Hunter Dashboard</h3>
         <p class="sub">A local job-tracking dashboard for OnlineJobs.ph &mdash; built while I was the one doing the job hunt.</p>
         <details class="fold" open>
-          <summary>Problem &rarr; fix &rarr; impact</summary>
+          <summary aria-label="Problem, fix and impact — Job Hunter Dashboard">Problem &rarr; fix &rarr; impact</summary>
           <div class="psi">
             <div class="psi-item problem">
               <b>Problem</b>
@@ -827,9 +852,9 @@ footer a:hover{color:var(--cyan-tx)}
           </div>
         </details>
         <div class="proj-imgs" tabindex="0" role="group" aria-label="Job Hunter Dashboard screenshots">
-          <figure><img src="img/jobhunter-live-console.webp" width="2100" height="1350" alt="Live scrape console streaming results" loading="lazy"></figure>
-          <figure><img src="img/jobhunter-detail-modal.webp" width="2100" height="1350" alt="Job detail modal with ATS score and resume tailoring" loading="lazy"></figure>
-          <figure><img src="img/jobhunter-dashboard.webp" width="2100" height="1350" alt="Dashboard with filters and job table" loading="lazy"></figure>
+          <figure><img src="img/jobhunter-live-console.webp" width="1000" height="643" alt="The live scrape console streaming scored listings as they arrive, with the category and skill scope set above it" loading="lazy"></figure>
+          <figure><img src="img/jobhunter-detail-modal.webp" width="1000" height="643" alt="A listing's detail modal showing its deterministic ATS score against the résumé, the matched and missing skills, and the résumé-tailoring action" loading="lazy"></figure>
+          <figure><img src="img/jobhunter-dashboard.webp" width="1000" height="643" alt="The dashboard table of tracked jobs with filters, statuses and the scheduled-scrape panel" loading="lazy"></figure>
         </div>
         <p class="metrics"><b>359 tests</b>, CI and pre-push gates &middot; ATS scores are <b>deterministic, never LLM-generated</b> &middot; a parse watchdog turns a silent zero into an alert</p>
         <div class="chips"><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">SQLite</span><span class="chip">SSE</span><span class="chip">pytest</span></div>
@@ -841,7 +866,7 @@ footer a:hover{color:var(--cyan-tx)}
         <h3>Anki MCQ Importer</h3>
         <p class="sub">The card-making step, deleted. Semester after semester.</p>
         <details class="fold" open>
-          <summary>Problem &rarr; fix &rarr; impact</summary>
+          <summary aria-label="Problem, fix and impact — Anki MCQ Importer">Problem &rarr; fix &rarr; impact</summary>
           <div class="psi">
             <div class="psi-item problem">
               <b>Problem</b>
@@ -944,7 +969,7 @@ footer a:hover{color:var(--cyan-tx)}
   <div class="wrap">
     <div class="sec-head">
       <h2 class="rv">How I <span class="serif">work.</span></h2>
-      <p class="rv">The four things every client asks before they commit.</p>
+      <p class="rv">The things every client asks before they commit.</p>
     </div>
 
     <dl class="spec">
@@ -963,6 +988,10 @@ footer a:hover{color:var(--cyan-tx)}
       <div class="rv">
         <dt>When something breaks</dt>
         <dd>It fails loudly, never silently &mdash; a changed page structure raises an alert instead of quietly reporting zero. Anything ambiguous <b>stops and waits for a human</b>; the automation is never allowed to guess with your data.</dd>
+      </div>
+      <div class="rv">
+        <dt>References</dt>
+        <dd>Available on request.</dd>
       </div>
     </dl>
   </div>
@@ -987,6 +1016,7 @@ footer a:hover{color:var(--cyan-tx)}
       <div class="c-item"><b>GitHub</b><a href="https://github.com/anki-boi" target="_blank" rel="noopener">github.com/anki-boi</a></div>
       <div class="c-item"><b>LinkedIn</b><a href="https://www.linkedin.com/in/donjeysonmd" target="_blank" rel="noopener">linkedin.com/in/donjeysonmd</a></div>
       <div class="c-item"><b>OnlineJobs.ph</b><a href="https://www.onlinejobs.ph/jobseekers/info/1595582" target="_blank" rel="noopener">onlinejobs.ph &middot; id 1595582</a></div>
+      <div class="c-item"><b>R&eacute;sum&eacute;</b><a href="cv.pdf" target="_blank" rel="noopener">PDF &middot; one page</a></div>
     </div>
 
     <div class="ctas">

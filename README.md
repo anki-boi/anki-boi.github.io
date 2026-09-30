@@ -27,13 +27,33 @@ Nothing is hidden: the metrics line above each fold carries the number.
 
 GitHub Pages serves `main` at the domain root. Edit `index.html`, commit, push.
 
+## The CV
+
+`cv.pdf` at the site root is `resume-kb.typ` from `Dropbox\Resumes\!Clinical-Data-Automation
+Master Resume` compiled a second time, with one switch:
+
+```
+typst compile --font-path fonts --input web=1 resume-kb.typ /c/Users/PC/repos/anki-boi.github.io/cv.pdf
+```
+
+`web=1` drops the phone number from the header. The deliverable PDF keeps it; the published
+copy does not, because this is a public, scrapable, permanent URL and the page already
+obfuscates its own email address. Do not hand-edit `cv.pdf` — rebuild it, or the two copies
+of the same source start disagreeing.
+
+`check-truth.py` in the Resumes folder gates it (present, 1 page, no `+63`, still linked, and
+a drift WARN against the KB master). Run it after touching either file.
+
 ```
 python -m http.server 8899 --bind 127.0.0.1   # then open http://127.0.0.1:8899
 ```
 
 `fonts/` and `img/` are committed deliberately — a push that forgets the fonts silently falls back
-to Georgia and 404s both preloads. The `jobhunter-*` screenshots are `.webp`; the `.png` originals
-were superseded and removed.
+to Georgia and 404s both preloads. Every screenshot is `.webp` at 1000px wide (the `.png`
+originals were superseded and removed, and the `jobhunter-*` shots were 2100px for a slot that
+renders at ~340 CSS px — 590KB of images became 262KB with no visible change).
+The `width`/`height` attributes are the true intrinsic size; they are what stops the lazy images
+from shifting the layout as they arrive.
 
 ## Content rules
 
@@ -48,8 +68,9 @@ public only if it survived verification. Concretely, this page does not claim:
   credential: **HIPAA Privacy & Security trained**. Do not upgrade it to CHP/CHPS unless the exam
   certificate exists.
 
-Also deliberately absent until the owner supplies them: a `/cv.pdf` download, a client testimonial
-or reference line, and a written response-time commitment. Do not invent these.
+Also deliberately absent: a client testimonial, and a written response-time commitment. Do not
+invent these. `/cv.pdf` used to be on this list; the owner reversed that on 2026-09-30 and it now
+ships (see **The CV** above).
 
 **Geography rule.** The employer's location appears only in the Experience section, where the fact
 lives (Colorado Medical Solutions, and the US compounding pharmacies the orders go to). Positioning,
