@@ -8,22 +8,19 @@ browser automation that removes the manual work from it. 45+ scripts and extensi
 
 ## What's here
 
-A single self-contained `index.html` (~80 KB) with no build step, no CDN and no external JS.
-Self-hosted [Fraunces](https://fonts.google.com/specimen/Fraunces) (display),
+A single `index.html` (~250 KB) with no build step. Self-hosted
+[Fraunces](https://fonts.google.com/specimen/Fraunces) (display),
 [Inter](https://fonts.google.com/specimen/Inter) (body) and
 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains Mono) (terminal/labels) in
-`fonts/`. Light lab theme: a canvas layer of drifting ball-and-stick molecules and an SVG
-circuit-board layer with travelling current pulses, both stripped back to decoration and skipped
-entirely on coarse pointers and narrow viewports. Motion is one `@starting-style` entry that
-lands in 0.28s; content is visible by default, so a throttled rAF or a JS failure cannot hide
-the page. Hover effects are gated behind `@media (hover: hover)`, everything is covered by
-`prefers-reduced-motion` (static molecule frame, no pulses, no transitions), and the whole page
-still renders complete with JS disabled.
+`fonts/`. Warm dark theme with a gold accent, chosen to sit with the portrait. Motion comes from
+GSAP + ScrollTrigger and Lenis (jsDelivr / unpkg), and Three.js draws the hero portrait as
+particles and the contact-section core. Everything respects `prefers-reduced-motion`.
 
-Long-form blocks — each project's problem / fix / impact and the About career timeline — are
-wrapped in `<details class="fold" open>`. Desktop keeps them open; on phones they start collapsed
-and open with one tap, which is what keeps the mobile page at ~12,000 px instead of ~25,000 px.
-Nothing is hidden: the metrics line above each fold carries the number.
+The "Automation samples" panel draws five real systems step by step (order entry, pharmacy
+routing, the unified menu, the PDF filler, Job Hunter). Each diagram was traced from the code on
+2026-10-04, including where a person has to step in, so it can be explained as it actually runs.
+`img/hero.png`, `img/hero-mobile.png` and `img/about.png` are composed from one transparent
+cutout by `portfolio-ref/_shot/make-hero-proto.py`.
 
 GitHub Pages serves `main` at the domain root. Edit `index.html`, commit, push.
 
