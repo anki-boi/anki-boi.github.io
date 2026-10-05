@@ -269,10 +269,49 @@
     /* ============================================================
        MOBILE TIER (html.mol3d.mob): touch screens and narrow windows
        ============================================================ */
-    html.mol3d.mob .hud { width: min(400px, calc(100vw - 32px)); padding: 16px 18px 18px; }
-    html.mol3d.mob .ch[data-ch="5"] .hud { width: calc(100vw - 32px); padding: 20px 20px 22px; }
-    html.mol3d.mob:not(.engine-on) .ch[data-ch="1"] .hud { transform: translate(16px, 52vh); }
+    /* chapter labels become one bottom panel; the atom it names keeps a short leader line */
+    html.mol3d.mob .hud, html.mol3d.mob .ch[data-ch="5"] .hud {
+      left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); top: auto;
+      bottom: calc(16px + env(safe-area-inset-bottom)); width: auto; max-height: 46vh; overflow: hidden;
+      padding: 16px 18px 18px; background: color-mix(in srgb, var(--bg0) 90%, transparent);
+      -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+      box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+    }
+    html.mol3d.mob .hud .kick { margin-bottom: 10px; }
+    html.mol3d.mob .hud h2 { font-size: clamp(1.4rem, 6.2vw, 1.75rem); margin-bottom: 10px; }
+    html.mol3d.mob .hud p.body { font-size: 15px; line-height: 1.55; }
+    html.mol3d.mob .ch[data-ch="5"] .hud { padding: 20px; }
+    html.mol3d.mob .ch[data-ch="5"] .hud .name { font-size: clamp(2.2rem, 10.5vw, 3rem); margin-bottom: 8px; }
+    html.mol3d.mob .hud .tag { font-size: clamp(1.1rem, 4.6vw, 1.3rem); }
+    html.mol3d.mob .hud .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+    html.mol3d.mob .hud .row .btn { min-height: 52px; justify-content: center; padding: 12px 8px; gap: 8px; letter-spacing: 0.08em; white-space: nowrap; }
+    html.mol3d.mob:not(.engine-on) .ch[data-ch="1"] .hud { transform: none; }
     html.mol3d.mob .minimap { display: none; }
+    @media (orientation: landscape) and (max-height: 540px) {
+      html.mol3d.mob .hud, html.mol3d.mob .ch[data-ch="5"] .hud { right: auto; width: min(420px, 48vw); bottom: calc(12px + env(safe-area-inset-bottom)); max-height: calc(100vh - 96px); }
+      html.mol3d.mob .ch[data-ch="5"] .hud .name { font-size: 2.2rem; }
+    }
+
+    /* the progress strip: five chapter atoms down the right edge, tap one to fly there */
+    .strip { display: none; }
+    html.mol3d.mob.engine-on .strip {
+      display: flex; flex-direction: column; position: fixed; z-index: 30;
+      right: max(0px, env(safe-area-inset-right)); top: calc(env(safe-area-inset-top) + 86px);
+      transition: opacity .3s ease;
+    }
+    .strip .st-rail { position: absolute; left: 50%; top: 22px; bottom: 22px; width: 1px; margin-left: -0.5px; background: var(--line-strong); }
+    .strip .st-rail i { position: absolute; inset: 0; background: var(--gold); transform-origin: 50% 0; transform: scaleY(0); }
+    .strip button {
+      position: relative; width: 44px; height: 44px; padding: 0; margin: 0; border: 0; background: transparent;
+      display: grid; place-items: center; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
+    .strip button span {
+      width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--gold); background: var(--bg0);
+      transition: transform .25s var(--ease), background-color .25s ease, box-shadow .25s ease;
+    }
+    .strip button.done span { background: color-mix(in srgb, var(--gold) 45%, var(--bg0)); }
+    .strip button[aria-current] span { background: var(--gold); transform: scale(1.45); box-shadow: 0 0 10px rgba(255, 181, 71, 0.7); }
+    .strip button:focus-visible { outline: 2px solid var(--ink); outline-offset: -6px; }
   </style>
 </head>
 
@@ -1034,7 +1073,13 @@
       vh = innerHeight;
       arrive = lis.map((li) => li.getBoundingClientRect().top + scrollY);
       panels.forEach((p, i) => { p._w = p.offsetWidth; p._h = p.offsetHeight; });
+      if (MOB) {
+        // the bottom panel's resting top edge, and the scroll points where one panel hands to the next
+        panels.forEach((p) => { p._top = innerHeight - (parseFloat(getComputedStyle(p).bottom) || 0) - p._h; });
+        sw = [0, 1, 2].map((i) => arrive[i] + (arrive[i + 1] - arrive[i]) * 0.5).concat(arrive[4] - 0.3 * vh);
+      }
     }
+    let sw = [];
     const smoother = (s) => s * s * s * (s * (s * 6 - 15) + 10);
     function scrollToT(y) {
       if (y <= arrive[0]) return chW[0] / NW;
@@ -1112,6 +1157,16 @@
     mmSvg.appendChild(frame);
     mm.appendChild(mmSvg);
     const names = ['Seven portals', 'The script', 'The system', 'The agents', 'Sign-off'];
+    let strip = null, stripBtns = [], stripFill = null;
+    if (MOB) {
+      strip = document.createElement('nav'); strip.className = 'strip'; strip.setAttribute('aria-label', 'Chapters');
+      strip.innerHTML = '<span class="st-rail" aria-hidden="true"><i></i></span>' +
+        names.map((n, i) => `<button type="button" aria-label="Go to atom 0${i + 1}: ${n}"><span></span></button>`).join('');
+      document.body.appendChild(strip);
+      stripFill = strip.querySelector('.st-rail i');
+      stripBtns = [...strip.querySelectorAll('button')];
+      stripBtns.forEach((b, i) => b.addEventListener('click', () => jump(i)));
+    }
     const mmBtns = M.chapters.map((id, i) => {
       const b = document.createElement('button'); const [x, y] = map2[id];
       b.type = 'button'; b.style.left = ((x - (mx0 - pad)) / vbW * 100) + '%'; b.style.top = ((y - (my0 - pad)) / vbH * 100) + '%';
@@ -1212,8 +1267,9 @@
       root.classList.toggle('is-hover-atom', !!hv);
 
       renderer.render(scene, camera);
-      updateHud(scr, y);
-      updateMap(y, pull);
+      lastScr = scr;
+      if (MOB) { updateHudMob(scr, y); updateStrip(y); }
+      else { updateHud(scr, y); updateMap(y, pull); }
       if (firstFrame) { firstFrame = false; root.classList.add('engine-on'); }
 
       // adaptive quality: watch the first two seconds of frames
@@ -1304,6 +1360,46 @@
       }
       return c;
     }
+    /* mobile: one bottom panel at a time, a quick crossfade at each hand over point */
+    function updateHudMob(scr, y) {
+      const footTop = document.getElementById('signoff').getBoundingClientRect().top;
+      panels.forEach((p, i) => {
+        const vin = i === 0 ? 1 : smoothstep(sw[i - 1] + 0.01 * vh, sw[i - 1] + 0.13 * vh, y);
+        const vout = i === 4 ? smoothstep(H * 0.35, H * 0.8, footTop) : 1 - smoothstep(sw[i] - 0.13 * vh, sw[i] - 0.01 * vh, y);
+        const vis = vin * vout, L = lead[i];
+        if (vis < 0.01) {
+          if (p.style.visibility !== 'hidden') { p.style.visibility = 'hidden'; p.style.opacity = 0; L.g.style.opacity = 0; }
+          return;
+        }
+        const slide = (1 - vis) * 14;
+        p.style.visibility = 'visible'; p.style.opacity = vis.toFixed(3);
+        p.style.transform = `translate3d(0, ${slide.toFixed(1)}px, 0)`;
+        const s = scr[i], top = p._top + slide;
+        if (!s.ok || s.y > top - 36 || s.y < 40 || s.x < 8 || s.x > W - 8) { L.g.style.opacity = 0; return; }
+        // leader: from the atom's ring down to the panel's top edge
+        const ex = Math.max(30, Math.min(W - 30, s.x)), ey = top;
+        const dx = ex - s.x, dy = ey - 10 - s.y, dl = Math.hypot(dx, dy) || 1;
+        const sx = s.x + dx / dl * 17, sy = s.y + dy / dl * 17;
+        L.pl.setAttribute('points', `${sx.toFixed(1)},${sy.toFixed(1)} ${ex.toFixed(1)},${(ey - 10).toFixed(1)} ${ex.toFixed(1)},${ey.toFixed(1)}`);
+        L.ring.setAttribute('cx', s.x.toFixed(1)); L.ring.setAttribute('cy', s.y.toFixed(1));
+        L.dot.setAttribute('cx', ex.toFixed(1)); L.dot.setAttribute('cy', ey.toFixed(1));
+        L.g.style.opacity = (vis * vis).toFixed(3);
+      });
+    }
+    let stripCur = -1, lastScr = [];
+    function updateStrip(y) {
+      let cur = 0; sw.forEach((v, i) => { if (y >= v) cur = i + 1; });
+      let prog = 1;
+      for (let i = 0; i < 4; i++) if (y < arrive[i + 1]) { prog = (i + clamp01((y - arrive[i]) / (arrive[i + 1] - arrive[i]))) / 4; break; }
+      stripFill.style.transform = `scaleY(${prog.toFixed(4)})`;
+      if (cur !== stripCur) {
+        stripCur = cur;
+        stripBtns.forEach((b, i) => { b.classList.toggle('done', i < cur); if (i === cur) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+      }
+      const footTop = document.getElementById('signoff').getBoundingClientRect().top;
+      strip.style.opacity = smoothstep(H * 0.55, H * 0.95, footTop).toFixed(2);
+    }
+
     function updateHud(scr, y) {
       hudTick++;
       if (hudTick % 6 === 5 || !bright.length) projectBright();
@@ -1391,7 +1487,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
     setQuality(forceQ === 'low' ? 'low' : 'full');
     window.__mol = { N, nMol, tier: MOB ? 'mobile' : 'desktop', drawn: () => geo.drawRange.count === Infinity ? N : Math.min(N, geo.drawRange.count), atoms: A.length, bonds: B.length, quality: () => quality, setQuality, arrive: () => arrive, ev, jump,
-      dbg: () => ({ flash: +uniforms.uFlash.value.toFixed(2), wave: +uniforms.uWave.value.toFixed(2), pull: +uniforms.uPull.value.toFixed(2), holdT: +holdT.toFixed(2), picks: lead.map((l) => l.pick) }),
+      dbg: () => ({ flash: +uniforms.uFlash.value.toFixed(2), wave: +uniforms.uWave.value.toFixed(2), pull: +uniforms.uPull.value.toFixed(2), holdT: +holdT.toFixed(2), picks: lead.map((l) => l.pick), scr: lastScr.map((s) => [Math.round(s.x), Math.round(s.y), s.ok]) }),
       freeze(t) { frozen = t == null ? null : +t; },
       snap() { const y = scrollY; tCur = scrollToT(y); const t = evTarget(y); for (let i = 1; i < 5; i++) ev[i] = t[i]; } };
     run();
