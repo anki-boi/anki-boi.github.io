@@ -1301,17 +1301,10 @@
       else { updateHud(scr, y); updateMap(y, pull); }
       if (firstFrame) { firstFrame = false; root.classList.add('engine-on'); }
 
-      // adaptive quality: watch the first two seconds of frames
+      // adaptive quality is for phones only: desktop always draws the full version
+      // (owner's call), and only ?q=low turns it down by hand
       frames++;
-      if (MOB) { if (!forceQ) adaptMobile(dt); }
-      else if (!forceQ && quality === 'full' && frames > 12 && sampleT.length < 90) {
-        sampleT.push(dt);
-        if (sampleT.length === 90 || (time > 2.4 && sampleT.length > 20)) {
-          const s = [...sampleT].sort((a, b) => a - b), med = s[Math.floor(s.length / 2)];
-          sampleT.length = 90;
-          if (med > 0.024) setQuality('low');
-        }
-      }
+      if (MOB && !forceQ) adaptMobile(dt);
     }
 
     /* mobile: a slow phone drops to half the particles; if that still runs worse than
