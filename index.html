@@ -652,15 +652,79 @@
     }
     function normalAt(x, y) { const u = x * Math.cos(PHI) - y * Math.sin(PHI); const th = (u - u0) / ROLL; return new THREE.Vector3(-Math.sin(th), 0, Math.cos(th)); }
     for (const a of A) a.p = lift(a.x, a.y, a.z);
+    const cen = new THREE.Vector3(); for (const a of A) cen.add(a.p); cen.multiplyScalar(1 / A.length);
+    // graph distance from atom 01, for the wave that runs down the chain once it is complete
+    { const H1 = M.chapters[0]; for (const a of A) a.gd = -1; A[H1].gd = 0; let q = [H1];
+      while (q.length) { const nq = []; for (const i of q) for (const n of A[i].nb) if (A[n].gd < 0) { A[n].gd = A[i].gd + 1; nq.push(n); } q = nq; } }
+
+    /* ---------- camera rail ----------
+       One waypoint per atom on the route, smoothed so the zigzag cancels out. The
+       camera rides beside the chain, a little above it, looking ahead along it. */
+    const Y = new THREE.Vector3(0, 1, 0);
+    const R0 = M.route.map((i) => A[i].p.clone());
+    const Rs = R0.map((p, i) => { if (i === 0 || i === R0.length - 1) return p.clone(); return p.clone().multiplyScalar(0.5).add(R0[i - 1].clone().add(R0[i + 1]).multiplyScalar(0.25)); });
+    const chapterK = [1.35, 1.0, 1.75, 1.85, 1.0];
+    const camPts = [], lookPts = [];
+    Rs.forEach((p, i) => {
+      const prev = Rs[Math.max(0, i - 1)], next = Rs[Math.min(Rs.length - 1, i + 1)];
+      const T = next.clone().sub(prev).normalize();
+      const a = A[M.route[i]], Nn = normalAt(a.x, a.y);
+      const side = new THREE.Vector3().crossVectors(T, Y).normalize();
+      let k = 1; M.chIdx.forEach((ci, c) => { k += (chapterK[c] - 1) * Math.exp(-((i - ci) ** 2) / 3); });
+      if (i === 0) { camPts.push(p.clone().addScaledVector(Nn, 2.2).addScaledVector(T, -2.3).addScaledVector(Y, 0.55)); lookPts.push(p.clone().addScaledVector(T, 0.55).addScaledVector(Y, 0.05)); return; }
+      camPts.push(p.clone().addScaledVector(Nn, 1.85 * k).addScaledVector(T, -1.45 * k).addScaledVector(Y, 0.75 * k));
+      lookPts.push(p.clone().addScaledVector(T, 0.9).addScaledVector(Y, 0.15 * k).addScaledVector(side, -0.5 * k));
+    });
+    /* the pull back: up and away from atom 05 to an oblique view down the whole chain, so
+       atom 05's end sits large in the foreground and atom 01's end recedes into bokeh */
+    const P5 = A[M.chapters[4]].p, P1 = A[M.chapters[0]].p;
+    const reveal = { back: 2.0, side: 5.5, up: 2.0, look: 0.45, lookUp: -1.4, lookSide: -1.5, focus: 0.25, ap: 30, rot: 0.14, orbit: 0.06 };
+    const camEnd = new THREE.Vector3(), lookEnd = new THREE.Vector3(), focusEnd = new THREE.Vector3();
+    function revealPose() {
+      const D = P1.clone().sub(P5).setY(0).normalize();
+      const S = new THREE.Vector3().crossVectors(D, Y).normalize(); if (S.z < 0) S.negate();
+      camEnd.copy(P5).addScaledVector(D, -reveal.back).addScaledVector(S, reveal.side).addScaledVector(Y, reveal.up);
+      lookEnd.copy(P5).lerp(P1, reveal.look).addScaledVector(Y, reveal.lookUp).addScaledVector(S, reveal.lookSide);
+      focusEnd.copy(P5).lerp(P1, reveal.focus);
+      if (reveal.rot) camEnd.sub(lookEnd).applyAxisAngle(Y, reveal.rot).add(lookEnd);
+    }
+    revealPose();
+    const nRail = camPts.length;
+    let camCurve, lookCurve;
+    function buildCurves() {
+      camPts.length = nRail; lookPts.length = nRail;
+      const lastC = camPts[nRail - 1], lastL = lookPts[nRail - 1];
+      camPts.push(lastC.clone().lerp(camEnd, 0.18).add(new THREE.Vector3(0, 0.9, 0)), lastC.clone().lerp(camEnd, 0.55).add(new THREE.Vector3(0, 0.9, 0)), camEnd.clone());
+      lookPts.push(lastL.clone().lerp(lookEnd, 0.25), lastL.clone().lerp(lookEnd, 0.7), lookEnd.clone());
+      camCurve = new THREE.CatmullRomCurve3(camPts, false, 'centripetal');
+      lookCurve = new THREE.CatmullRomCurve3(lookPts, false, 'centripetal');
+    }
+    buildCurves();
+    const NW = camPts.length - 1;
+    const chW = [...M.chIdx.slice(0, 4), NW];          // waypoint index per chapter (05 is the pulled back view)
+
+    /* atom 01's seven unbonded atoms: placed in the opening shot's frame at chosen depths,
+       some close and soft, some far, so the free atoms fill the frame around the heavy atom */
+    { const cam0 = new THREE.PerspectiveCamera(48, innerWidth / Math.max(1, innerHeight), 0.05, 400);
+      cam0.position.copy(camPts[0]); cam0.lookAt(lookPts[0]); cam0.updateMatrixWorld();
+      const fwd0 = lookPts[0].clone().sub(camPts[0]).normalize();
+      const spots = [[-0.86, -0.35, 1.3], [0.8, -0.58, 1.6], [0.45, 0.7, 2.4], [0.18, -0.8, 3.2], [0.7, 0.1, 5.0], [-0.15, 0.78, 6.0], [-0.38, -0.12, 7.5]];
+      const sats = A.filter((a) => a.sat), u = new THREE.Vector3();
+      sats.forEach((a, k) => {
+        const [nx, ny, d] = spots[k];
+        u.set(nx, ny, 0.5).unproject(cam0).sub(camPts[0]).normalize();
+        const tgt = camPts[0].clone().addScaledVector(u, d / Math.max(0.2, u.dot(fwd0)));
+        a.scatV = [tgt.x - a.p.x, tgt.y - a.p.y, tgt.z - a.p.z];
+      }); }
 
     /* ---------- particles ---------- */
     const EL = {
-      X: { r: 0.26, n: 5200, c: GOLD, warm: 0.35 },
+      X: { r: 0.25, n: 4200, c: GOLD, warm: 0.35 },
       C: { r: 0.135, n: 760, c: GOLD, warm: 0.1 },
       N: { r: 0.14, n: 800, c: WHITE, warm: 0 },
       O: { r: 0.145, n: 820, c: HOT, warm: 0.05 },
       H: { r: 0.07, n: 140, c: WHITE, warm: 0 },
-      S: { r: 0.11, n: 420, c: GOLD, warm: 0.4 }
+      S: { r: 0.11, n: 640, c: GOLD, warm: 0.4 }
     };
     const P = [];   // per-particle records pushed into flat arrays later
     const push = (px, py, pz, bx, by, bz, sx, sy, sz, kind, size, seed, w, ev, delay, dim, ch, col, inten) =>
@@ -672,11 +736,19 @@
     for (const a of A) {
       const e = EL[a.el]; let R = e.r, n = e.n;
       if (a.ch) { R *= a.ch === 1 ? 1 : 1.45; n = Math.round(n * (a.ch === 1 ? 1 : 2.6)); }
-      const kind = a.sat ? 3 : 0, seedA = rand();
+      const kind = a.sat ? 3 : 0, seedA = rand(); a.seed = seedA;
       const base = a.sat && rand() < 0.4 ? WHITE : e.c;
+      const heavy = a.el === 'X';
       for (let j = 0; j < n; j++) {
         const q = rand(); let r, size, inten;
-        if (q < 0.55) { r = R * Math.cbrt(rand()); size = 0.0085; inten = 0.34; }
+        if (heavy) {
+          // a crisp sphere: a dense limb that draws the edge, a filled body, a white hot core, a thin halo
+          if (q < 0.12) { r = R * (0.95 + 0.05 * Math.sqrt(rand())); size = 0.011; inten = 0.13; }
+          else if (q < 0.67) { r = R * Math.cbrt(rand()); size = 0.0145; inten = 0.075; }
+          else if (q < 0.92) { r = R * 0.6 * Math.pow(rand(), 1.6); size = 0.013; inten = 0.2; }
+          else { r = R * (1.04 + rand() * rand() * 1.3); size = 0.013; inten = 0.035; }
+        }
+        else if (q < 0.55) { r = R * Math.cbrt(rand()); size = 0.0085; inten = 0.34; }
         else if (q < 0.9) { r = R * 0.42 * Math.sqrt(rand()); size = 0.0095; inten = 0.5; }
         else { r = R * (1 + rand() * 0.6); size = 0.008; inten = 0.07; }
         const [ux, uy, uz] = unit();
@@ -684,13 +756,18 @@
         if (a.el === 'C' && rand() < 0.06) tmpC.copy(WHITE);
         if (a.el === 'C' && rand() < 0.05) tmpC.copy(HOT);
         if (a.ch && a.ch !== 1) inten *= 0.85;
-        if (a.el === 'X') inten *= 1.2;
-        push(a.p.x + ux * r, a.p.y + uy * r, a.p.z + uz * r, 0, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2],
-             kind, size * (0.75 + rand() * 0.6), rand(), seedA, a.ev, a.delay, a.dim, a.ch, tmpC, inten);
+        if (heavy) inten *= 1.2;
+        // chapter number in the integer part, how close to the atom's centre in the fraction
+        const core = Math.max(0, 1 - r / (R * 0.5));
+        push(a.p.x + ux * r, a.p.y + uy * r, a.p.z + uz * r, a.gd, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2],
+             kind, size * (0.75 + rand() * 0.6) * (a.sat ? 1.4 : 1), rand(), seedA, a.ev, a.delay, a.dim, a.ch + core * 0.38, tmpC, inten);
       }
+      // the heavy atom gets a solid lit sphere under its particles; chapter atoms a white hot core
+      if (heavy) push(a.p.x, a.p.y, a.p.z, a.gd, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2], 4, R * 2, rand(), seedA, a.ev, a.delay, a.dim, a.ch, tmpC.copy(GOLD).lerp(WHITE, 0.12), 0.55);
+      else if (a.ch) push(a.p.x, a.p.y, a.p.z, a.gd, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2], 4, R * 0.95, rand(), seedA, a.ev, a.delay, a.dim, a.ch, tmpC.copy(e.c).lerp(WHITE, 0.6), 0.32);
       // a soft glow around the ball, a few wide particles at its centre
       for (let j = 0; j < 3; j++) {
-        push(a.p.x, a.p.y, a.p.z, 0, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2],
+        push(a.p.x, a.p.y, a.p.z, a.gd, 0, 0, a.scatV[0], a.scatV[1], a.scatV[2],
              kind, R * (1.6 + j * 1.1), rand(), seedA, a.ev, a.delay, a.dim, a.ch, base, 0.1 / (1 + j));
       }
     }
@@ -702,7 +779,9 @@
       const nx = -dy / dl, ny = dx / dl;
       const len = a1.p.distanceTo(a2.p);
       const col = tmpC.copy(EL[a1.el].c).lerp(EL[a2.el].c, 0.5).lerp(GOLD, 0.35);
-      const ev = b.ev, dim = 0;
+      // the bond stream's slot for "brightness before forming" carries the graph distance of
+      // its first atom from atom 01, and in the fraction whether the stream runs away from it
+      const ev = b.ev, dim = Math.max(0, a1.gd) + (a2.gd > a1.gd ? 0.5 : 0);
       for (const o of offs) {
         lift(a1.x + nx * o, a1.y + ny * o, a1.z, pa); lift(a2.x + nx * o, a2.y + ny * o, a2.z, pb);
         // shorten so streams start at the atoms' surfaces
@@ -718,8 +797,7 @@
     }
     const nMol = P.length / STRIDE;
 
-    // centroid and far field
-    const cen = new THREE.Vector3(); for (const a of A) cen.add(a.p); cen.multiplyScalar(1 / A.length);
+    // far field
     const dustCol = GOLD.clone().lerp(WHITE, 0.25);
     for (let m = 0; m < 46; m++) {
       // a distant small molecule: a ring with a short chain, random orientation
@@ -736,7 +814,7 @@
       for (const v of V) for (let j = 0; j < 22; j++) { const [x, y, z] = unit(); const r = 0.12 * sc * Math.cbrt(rand()); push(v.x + x * r, v.y + y * r, v.z + z * r, 0, 0, 0, 0, 0, 0, 2, 0.014, rand(), 0, 0, 0, 1, 0, dustCol, inten); }
       for (const [i, k] of edges) for (let j = 0; j < 12; j++) { const t = rand(); const v = V[i].clone().lerp(V[k], t); push(v.x, v.y, v.z, 0, 0, 0, 0, 0, 0, 2, 0.01, rand(), 0, 0, 0, 1, 0, dustCol, inten * 0.7); }
     }
-    for (let j = 0; j < 3200; j++) {
+    for (let j = 0; j < 1400; j++) {
       const [x, y, z] = unit(); const r = 8 + Math.pow(rand(), 0.6) * 70;
       push(cen.x + x * r * 1.3, cen.y + y * r * 0.6, cen.z + z * r, 0, 0, 0, 0, 0, 0, 2, 0.008 + rand() * 0.012, rand(), 0, 0, 0, 1, 0, rand() < 0.2 ? HOT : dustCol, 0.1 + rand() * 0.25);
     }
@@ -745,6 +823,8 @@
     const N = P.length / STRIDE;
     const order = new Uint32Array(N); for (let i = 0; i < N; i++) order[i] = i;
     for (let i = N - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); const t = order[i]; order[i] = order[j]; order[j] = t; }
+    // the solid sphere sprites go first, so the low tier (which draws half) keeps them all
+    for (let k = 0, front = 0; k < N; k++) if (P[order[k] * STRIDE + 9] === 4) { const t = order[front]; order[front++] = order[k]; order[k] = t; }
     const pos = new Float32Array(N * 3), bpos = new Float32Array(N * 3), scat = new Float32Array(N * 3), aP = new Float32Array(N * 4), aF = new Float32Array(N * 4), col = new Float32Array(N * 3);
     for (let k = 0; k < N; k++) {
       const s = order[k] * STRIDE;
@@ -765,12 +845,13 @@
       uTime: { value: 0 }, uScale: { value: 1 }, uFocus: { value: 3 }, uAperture: { value: 10 },
       uFog: { value: 0.55 }, uEv: { value: [1, 0, 0, 0, 0] }, uH1: { value: A[M.chapters[0]].p.clone() },
       uPtr: { value: new THREE.Vector2(9, 9) }, uPtrAmt: { value: 0 }, uAspect: { value: 1 },
-      uHover: { value: 0 }, uHoverAmt: { value: 0 }, uBoost: { value: 1 }, uPull: { value: 0 }
+      uHover: { value: 0 }, uHoverAmt: { value: 0 }, uBoost: { value: 1 }, uPull: { value: 0 },
+      uFlash: { value: 0 }, uWave: { value: 0 }, uWaveT: { value: 0 }, uMaxPt: { value: 56 }, uSprite: { value: 1 }
     };
     const mat = new THREE.ShaderMaterial({
       uniforms, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
       vertexShader: /* glsl */`
-        uniform float uTime, uScale, uFocus, uAperture, uFog, uPtrAmt, uAspect, uHover, uHoverAmt, uBoost, uPull;
+        uniform float uTime, uScale, uFocus, uAperture, uFog, uPtrAmt, uAspect, uHover, uHoverAmt, uBoost, uPull, uFlash, uWave, uWaveT;
         uniform float uEv[5];
         uniform vec3 uH1;
         uniform vec2 uPtr;
@@ -779,7 +860,14 @@
         attribute vec4 aF;   // event, delay, brightness before forming, chapter
         varying vec3 vCol;
         varying float vSoft;
+        varying float vShape;
+        uniform float uMaxPt, uSprite;
         vec3 rotY(vec3 v, float a) { float c = cos(a), s = sin(a); return vec3(c * v.x + s * v.z, v.y, -s * v.x + c * v.z); }
+        // the pulse: crests every 9 bonds, travelling 4 bonds a second outward from atom 01
+        float wave(float gd) {
+          float front = uWaveT * 4.0;
+          return pow(0.5 + 0.5 * cos(6.2832 * (gd / 9.0 - uWaveT * 0.4444)), 4.0) * smoothstep(front + 0.8, front - 0.8, gd);
+        }
         float backOut(float x) { float t = x - 1.0; return 1.0 + 2.70158 * t * t * t + 1.70158 * t * t; }
         void main() {
           float kind = aP.x;
@@ -787,6 +875,11 @@
           float f = clamp((ev - aF.y) / 0.3, 0.0, 1.0);
           vec3 p = position;
           float inten = 1.0;
+          float chN = floor(aF.w + 0.01);
+          float core = clamp((aF.w + 0.01 - chN - 0.01) / 0.38, 0.0, 1.0);
+          float isCh = step(0.5, chN);
+          float one = isCh * step(chN, 1.5);
+          float flash = 0.0;
           if (kind > 0.5 && kind < 1.5) {
             // bond stream: particles drift slowly from one atom to the other
             float fa = fract(aP.w + uTime * 0.035);
@@ -795,17 +888,26 @@
             inten = smoothstep(reach + 0.015, reach - 0.015, edge);
             inten *= 1.0 + 2.2 * (1.0 - f) * smoothstep(0.08, 0.0, abs(edge - reach));
             inten *= (0.7 + 0.6 * smoothstep(0.5, 0.0, edge)) * (1.0 + 1.6 * uPull);
+            // once the molecule is complete a pulse runs down every bond, outward from atom 01
+            float gd = floor(aF.z + 0.01) + fa * (fract(aF.z + 0.01) > 0.25 ? 1.0 : -1.0);
+            inten *= 1.0 + uWave * 3.2 * wave(gd);
+            inten *= 1.0 + uFlash * 3.0 * step(gd, 1.05);
           } else if (kind < 0.5 || kind > 2.5) {
             float e = backOut(f), s = aP.w;
             vec3 wob = vec3(sin(uTime * 0.5 + s * 31.0), sin(uTime * 0.37 + s * 17.0), sin(uTime * 0.43 + s * 9.0)) * 0.13 * (1.0 - f);
-            if (kind > 2.5) {
+            if (kind > 2.5 && kind < 3.5) {
               vec3 rel = position - uH1 + aScatter;
-              vec3 drift = uH1 + rotY(rel, uTime * 0.09 * (0.5 + s) + s * 6.2832);
+              vec3 drift = uH1 + rotY(rel, 0.2 * sin(uTime * 0.06 * (0.6 + s)));
               p = mix(drift, position, e) + wob;
             } else {
               p = position + aScatter * (1.0 - e) + wob;
             }
             inten = mix(aF.z, 1.0, f);
+            // in the reveal the five chapter atoms burn brighter than the rest; atom 01 flashes as it docks
+            inten *= 1.0 + uPull * (isCh * 1.2 - (1.0 - isCh) * 0.15);
+            float sat = step(2.5, kind) * step(kind, 3.5);
+            inten *= (1.0 + uFlash * 6.0 * max(one, sat)) * (1.0 + uWave * 1.4 * wave(aB.x));
+            flash = uFlash * max(one, sat);
             p += vec3(sin(uTime * 1.3 + aP.z * 50.0), cos(uTime * 1.1 + aP.z * 70.0), sin(uTime * 0.9 + aP.z * 90.0)) * 0.003;
           }
           vec4 mv = modelViewMatrix * vec4(p, 1.0);
@@ -819,8 +921,8 @@
             cp = projectionMatrix * mv;
           }
           inten *= 1.0 + pg * 1.5;
-          if (aF.w > 0.5 && abs(aF.w - uHover) < 0.5) inten *= 1.0 + uHoverAmt * 0.9;
-          float px = aP.y * uScale / max(dist, 0.05);
+          if (isCh > 0.5 && abs(chN - uHover) < 0.5) inten *= 1.0 + uHoverAmt * 0.9;
+          float px = aP.y * uScale / max(dist, 0.05) * (1.0 + flash * 1.3);
           float coc = min(2.0, abs(dist - uFocus) / uFocus) * uAperture;
           float sz = px + coc;
           inten *= pow(px / sz, 1.45);
@@ -829,19 +931,31 @@
           else inten *= 0.85 + 1.2 * uPull;
           inten *= smoothstep(0.12, 0.7, dist);
           if (sz < 1.4) { inten *= sz * sz / 1.96; sz = 1.4; }
-          sz = min(sz, 56.0);
+          sz = min(sz, kind > 3.5 ? uMaxPt : 56.0);
+          vShape = step(3.5, kind);
+          inten *= mix(1.0, uSprite, vShape);   // the low tier boosts for its halved particles; the sprites are not halved
           inten *= 0.82 + 0.18 * sin(uTime * 1.7 + aP.z * 40.0);
           vCol = aCol * inten * uBoost;
+          // white hot cores on the chapter atoms
+          vCol += vec3(1.0, 0.93, 0.84) * core * core * isCh * inten * uBoost * (0.12 + 0.45 * uPull + 0.9 * uFlash * one);
           gl_PointSize = sz;
           gl_Position = inten < 0.0015 ? vec4(2.0, 2.0, 2.0, 1.0) : cp;
         }`,
       fragmentShader: /* glsl */`
         varying vec3 vCol;
         varying float vSoft;
+        varying float vShape;
         void main() {
           vec2 c = gl_PointCoord * 2.0 - 1.0;
           float d = dot(c, c);
           if (d > 1.0) discard;
+          if (vShape > 0.5) {
+            // a lit sphere: limb darkened body, a hard rim (softened by defocus), a white hot centre
+            float mu = sqrt(1.0 - d);
+            float rim = smoothstep(1.0, 0.9 - 0.85 * vSoft, d);
+            gl_FragColor = vec4((vCol * (0.42 + 0.58 * mu) + vec3(1.0, 0.93, 0.84) * vCol.r * pow(mu, 9.0) * 1.4) * rim, 1.0);
+            return;
+          }
           float glow = exp(-d * 4.0);
           float disc = smoothstep(1.0, 0.55, d) * 0.6 + glow * 0.15;
           gl_FragColor = vec4(vCol * mix(glow, disc, vSoft), 1.0);
@@ -854,6 +968,7 @@
     const host = document.getElementById('molCanvas');
     const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'high-performance' });
     if (!renderer.getContext()) throw new Error('no webgl');
+    { const gl = renderer.getContext(), r = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE); uniforms.uMaxPt.value = Math.max(56, Math.min(480, (r && r[1]) || 56)); }
     renderer.setClearColor(new THREE.Color(css.getPropertyValue('--bg0').trim() || '#0d0b09'), 1);
     host.appendChild(renderer.domElement);
     const scene = new THREE.Scene(); scene.add(points);
@@ -870,43 +985,10 @@
     }
     function setQuality(q) {
       quality = q;
-      if (q === 'low') { geo.setDrawRange(0, Math.floor(N / 2)); uniforms.uBoost.value = 1.7; dpr = 1; }
-      else { geo.setDrawRange(0, N); uniforms.uBoost.value = 1; dpr = Math.min(window.devicePixelRatio || 1, 1.5); }
+      if (q === 'low') { geo.setDrawRange(0, Math.floor(N / 2)); uniforms.uBoost.value = 1.7; uniforms.uSprite.value = 1 / 1.7; dpr = 1; }
+      else { geo.setDrawRange(0, N); uniforms.uBoost.value = 1; uniforms.uSprite.value = 1; dpr = Math.min(window.devicePixelRatio || 1, 1.5); }
       resize();
     }
-
-    /* ---------- camera rail ----------
-       One waypoint per atom on the route, smoothed so the zigzag cancels out. The
-       camera rides beside the chain, a little above it, looking ahead along it. */
-    const Y = new THREE.Vector3(0, 1, 0);
-    const R0 = M.route.map((i) => A[i].p.clone());
-    const Rs = R0.map((p, i) => { if (i === 0 || i === R0.length - 1) return p.clone(); return p.clone().multiplyScalar(0.5).add(R0[i - 1].clone().add(R0[i + 1]).multiplyScalar(0.25)); });
-    const chapterK = [1.35, 1.0, 1.75, 1.85, 1.0];
-    const camPts = [], lookPts = [], mapIdx = [];
-    Rs.forEach((p, i) => {
-      const prev = Rs[Math.max(0, i - 1)], next = Rs[Math.min(Rs.length - 1, i + 1)];
-      const T = next.clone().sub(prev).normalize();
-      const a = A[M.route[i]], Nn = normalAt(a.x, a.y);
-      const side = new THREE.Vector3().crossVectors(T, Y).normalize();
-      let k = 1; M.chIdx.forEach((ci, c) => { k += (chapterK[c] - 1) * Math.exp(-((i - ci) ** 2) / 3); });
-      camPts.push(p.clone().addScaledVector(Nn, 1.85 * k).addScaledVector(T, -1.45 * k).addScaledVector(Y, 0.75 * k).addScaledVector(side, 0.0));
-      lookPts.push(p.clone().addScaledVector(T, 0.9).addScaledVector(Y, 0.15 * k).addScaledVector(side, -0.5 * k));
-      mapIdx.push(i);
-    });
-    // the pull back: out and up to a face-on view of the whole molecule
-    const box = new THREE.Box3(); for (const a of A) box.expandByPoint(a.p);
-    const size = box.getSize(new THREE.Vector3());
-    const axis = A[M.chapters[4]].p.clone().sub(A[M.chapters[0]].p).setY(0).normalize();
-    const Nmid = new THREE.Vector3(0, 0, 1);          // the sheet's normal at the middle of the roll
-    const camEnd = cen.clone().addScaledVector(Nmid, 12.5).addScaledVector(axis, 12.5).addScaledVector(Y, 3.6);
-    const lookEnd = cen.clone().addScaledVector(axis, 1.6).addScaledVector(Y, -2.6);
-    const lastC = camPts[camPts.length - 1], lastL = lookPts[lookPts.length - 1];
-    camPts.push(lastC.clone().lerp(camEnd, 0.18).add(new THREE.Vector3(0, 1.4, 0)), lastC.clone().lerp(camEnd, 0.55).add(new THREE.Vector3(0, 1.6, 0)), camEnd);
-    lookPts.push(lastL.clone().lerp(lookEnd, 0.25), lastL.clone().lerp(lookEnd, 0.7), lookEnd);
-    const camCurve = new THREE.CatmullRomCurve3(camPts, false, 'centripetal');
-    const lookCurve = new THREE.CatmullRomCurve3(lookPts, false, 'centripetal');
-    const NW = camPts.length - 1;
-    const chW = [...M.chIdx.slice(0, 4), NW];          // waypoint index per chapter (05 is the pulled back view)
 
     /* ---------- scroll ---------- */
     const lis = [...document.querySelectorAll('#story .ch')];
@@ -1022,7 +1104,7 @@
     { const t0 = evTarget(scrollY); for (let i = 1; i < 5; i++) ev[i] = t0[i]; }
     const v = new THREE.Vector3(), cp = new THREE.Vector3(), lp = new THREE.Vector3(), q1 = new THREE.Vector3(), q2 = new THREE.Vector3();
     const chapterPos = M.chapters.map((id) => A[id].p);
-    let hoverAmt = 0, ptrAmt = 0, roll = 0;
+    let hoverAmt = 0, ptrAmt = 0, roll = 0, holdT = 0, dockT = -1, waveAmt = 0;
 
     function tick(now) {
       raf = requestAnimationFrame(tick);
@@ -1038,6 +1120,14 @@
 
       // camera
       camCurve.getPoint(tCur, cp); lookCurve.getPoint(tCur, lp);
+      // the reveal holds: a slow eased orbit about the molecule, a few degrees a second
+      const pullW = smoother(clamp01((tCur * NW - (NW - 1)) / 1));
+      holdT = pullW > 0.01 ? holdT + dt * pullW : 0;
+      if (pullW > 0.01) {
+        const th = pullW * reveal.orbit * Math.sin(holdT * 0.25);
+        v.copy(cp).sub(lookEnd).applyAxisAngle(Y, th);
+        cp.copy(lookEnd).add(v).addScaledVector(Y, pullW * 0.35 * Math.sin(holdT * 0.13));
+      }
       camera.position.copy(cp);
       // banking: lean into the turn the rail is taking
       const e1 = Math.max(0, tCur - 0.01), e2 = Math.min(1, tCur + 0.01);
@@ -1058,9 +1148,15 @@
       // focus on the atom being flown over; in the pull back, on the molecule's middle
       { const wi = Math.min(Rs.length - 1, tCur * NW), k = Math.floor(wi), fr = wi - k;
         v.copy(Rs[k]).lerp(Rs[Math.min(Rs.length - 1, k + 1)], fr); }
-      uniforms.uFocus.value = cp.distanceTo(v) * (1 - pull) + cp.distanceTo(cen) * pull;
-      uniforms.uAperture.value = (7 - 5 * pull) * dpr; uniforms.uPull.value = pull;
-      uniforms.uFog.value = 0.5 - 0.3 * pull;
+      uniforms.uFocus.value = cp.distanceTo(v) * (1 - pull) + cp.distanceTo(focusEnd) * pull;
+      uniforms.uAperture.value = (7 + (reveal.ap - 7) * pull) * dpr; uniforms.uPull.value = pull;
+      uniforms.uFog.value = 0.5 - 0.15 * pull;
+      // the seven atoms dock: a flash at atom 01, then the pulse starts down the chain
+      if (ev[4] >= 0.8) { if (dockT < 0) dockT = time; } else if (ev[4] < 0.6) dockT = -1;
+      const sd = dockT < 0 ? -1 : time - dockT;
+      uniforms.uFlash.value = sd < 0 ? 0 : sd < 0.18 ? sd / 0.18 : Math.exp(-(sd - 0.18) * 1.5);
+      waveAmt += ((sd > 0 ? 1 : 0) - waveAmt) * (1 - Math.exp(-dt * 1.5));
+      uniforms.uWave.value = waveAmt * (0.35 + 0.65 * pull); uniforms.uWaveT.value = Math.max(0, sd);
       uniforms.uBoost.value = (quality === "low" ? 1.7 : 1) * 1.15 * (1 + 0.8 * pull);
       uniforms.uTime.value = time;
       ptrAmt += ((ptrIn ? 1 : 0) - ptrAmt) * (1 - Math.exp(-dt * 3));
@@ -1094,7 +1190,51 @@
     }
 
     const lerpK = (k, dt) => 1 - Math.exp(-dt * k);
+    // label slots around the anchor atom: right or left of it, above, level or below
+    const SLOTS = [[1, 0], [1, 1], [1, 2], [-1, 0], [-1, 1], [-1, 2]];
+    function slot(k, s, pw, ph) {
+      const [sd, h] = SLOTS[k];
+      let tx = sd > 0 ? s.x + 120 : s.x - 120 - pw;
+      let ty = h === 0 ? s.y - ph - 70 : h === 1 ? s.y - ph * 0.5 - 30 : s.y + 70;
+      ty = Math.max(96, Math.min(H - ph - 150, ty));
+      tx = Math.max(32, Math.min(W - pw - 32, tx));
+      return [tx, ty, sd];
+    }
+    // the bright atoms on screen, refreshed a few times a second: [x, y, radius px, weight]
+    const brightIds = A.filter((a) => a.el !== 'H').map((a) => a.id);
+    let bright = [], hudTick = 0;
+    const bv = new THREE.Vector3(), brel = new THREE.Vector3();
+    function projectBright() {
+      bright.length = 0;
+      const k = H / (2 * Math.tan(camera.fov * Math.PI / 360));
+      for (const id of brightIds) {
+        const a = A[id];
+        bv.copy(a.p);
+        if (a.sat) {   // where the shader has the drifting atom
+          const f = clamp01((ev[4] - a.delay) / 0.3), t = f - 1, e = 1 + 2.70158 * t * t * t + 1.70158 * t * t;
+          brel.set(a.p.x - P1.x + a.scatV[0], a.p.y - P1.y + a.scatV[1], a.p.z - P1.z + a.scatV[2]).applyAxisAngle(Y, 0.2 * Math.sin(time * 0.06 * (0.6 + a.seed)));
+          bv.copy(brel.add(P1)).lerp(a.p, e);
+        }
+        const d = camera.position.distanceTo(bv);
+        bv.project(camera);
+        if (bv.z > 1 || bv.z < -1 || d < 0.3) continue;
+        const r = Math.max(14, (a.el === 'X' ? 0.4 : a.ch ? 0.3 : 0.2) / d * k);
+        const w = (a.ch || a.el === 'X' ? 3 : a.sat ? 1.4 : 1) * Math.min(1, 2.5 / d) * (a.ev && ev[a.ev] < a.delay ? 0.5 : 1);
+        bright.push((bv.x * 0.5 + 0.5) * W, (-bv.y * 0.5 + 0.5) * H, r, w);
+      }
+    }
+    function slotCost([tx, ty], pw, ph) {
+      let c = 0; const x0 = tx - 14, y0 = ty - 14, x1 = tx + pw + 14, y1 = ty + ph + 14;
+      for (let j = 0; j < bright.length; j += 4) {
+        const bx = bright[j], by = bright[j + 1], r = bright[j + 2];
+        const ox = Math.max(0, Math.min(x1, bx + r) - Math.max(x0, bx - r)), oy = Math.max(0, Math.min(y1, by + r) - Math.max(y0, by - r));
+        if (ox && oy) c += bright[j + 3] * ox * oy / (4 * r * r);
+      }
+      return c;
+    }
     function updateHud(scr, y) {
+      hudTick++;
+      if (hudTick % 6 === 5 || !bright.length) projectBright();
       const footTop = document.getElementById('signoff').getBoundingClientRect().top;
       panels.forEach((p, i) => {
         const d = (y - arrive[i]) / vh;
@@ -1105,16 +1245,21 @@
         const s = scr[i], L = lead[i];
         if (vis < 0.01 || !s.ok) {
           if (p.style.visibility !== 'hidden') { p.style.visibility = 'hidden'; p.style.opacity = 0; L.g.style.opacity = 0; }
-          L.x = null; return;
+          L.x = null; L.pick = null; return;
         }
         const pw = p._w, ph = p._h;
         let tx, ty, side = 1;
         if (i === 4) { tx = Math.max(40, W * 0.06); ty = H - ph - Math.max(48, H * 0.08); side = s.x > tx + pw ? -1 : 1; }
         else {
-          tx = s.x + 120; ty = s.y - ph - 70;
-          if (tx + pw > W - 40) { tx = s.x - 120 - pw; side = -1; }
-          ty = Math.max(96, Math.min(H - ph - 150, ty));
-          tx = Math.max(32, Math.min(W - pw - 32, tx));
+          // pick the side and height that cover the least of the bright atoms, and only
+          // move off the current choice when another is clearly better
+          if (L.pick == null || hudTick % 6 === i) {
+            const sc = SLOTS.map((_, k) => slotCost(slot(k, s, pw, ph), pw, ph) + (k === 0 ? 0 : 0.04));
+            let best = 0; for (let k = 1; k < sc.length; k++) if (sc[k] < sc[best]) best = k;
+            if (L.pick == null) L.pick = best;
+            else if (best !== L.pick && sc[best] < sc[L.pick] * 0.7 - 0.05 && time - (L.since || 0) > 0.8) { L.pick = best; L.since = time; }
+          }
+          [tx, ty, side] = slot(L.pick, s, pw, ph);
         }
         if (L.x === null) { L.x = tx; L.y = ty; }
         L.x += (tx - L.x) * 0.16; L.y += (ty - L.y) * 0.16;
@@ -1174,6 +1319,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
     setQuality(forceQ === 'low' ? 'low' : 'full');
     window.__mol = { N, nMol, atoms: A.length, bonds: B.length, quality: () => quality, setQuality, arrive: () => arrive, ev, jump,
+      dbg: () => ({ flash: +uniforms.uFlash.value.toFixed(2), wave: +uniforms.uWave.value.toFixed(2), pull: +uniforms.uPull.value.toFixed(2), holdT: +holdT.toFixed(2), picks: lead.map((l) => l.pick) }),
       snap() { const y = scrollY; tCur = scrollToT(y); const t = evTarget(y); for (let i = 1; i < 5; i++) ev[i] = t[i]; } };
     run();
   }
