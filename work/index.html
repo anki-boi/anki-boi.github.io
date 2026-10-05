@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-  Jeyson Dagondon: portfolio (single standalone file, no builder, no build step)
+  Jeyson Dagondon: portfolio at /work/ (single standalone file, no builder, no build step)
   ==========================================================================
   Layout and interaction engine adapted from a reference build; the copy, palette,
   fonts, diagrams, data and links here are Jeyson's own. Every claim on this page
   is checked against Dropbox/Resumes/!CAREER-TRUTH.md by check-truth.py.
 
+  Theme: warm dark (warm near-black and gold, chosen to sit with the portrait),
+  shared with the landing page at / through ../assets/tokens.css. That file is the
+  ONLY place colours are defined; this page does not redefine them. Names kept from
+  the reference build: --bone is the INK, --amber is the ACCENT (gold).
+  Libraries are self-hosted in ../assets/vendor/ (no CDN).
+
   EDIT THESE FOUR PLACES
   ----------------------
-  1. window.PHOTOS         : hero / about / casual images (img/ folder)
-  2. :root                 : the whole palette. --amber is the accent, --bone the ink.
-  3. the ALL-DARK, WARM block at the END of <style>: one warm-dark palette for the
-     whole page, hero included.
-  4. const tools / NAME / TAGLINE in the main script: stack tiles and hero text.
+  1. window.PHOTOS         : hero / about images (../img/ folder)
+  2. ../assets/tokens.css  : the whole warm dark palette, shared with the landing page.
+  3. #typed in the hero    : the hero lede (the typewriter reads it from the markup).
+  4. const tools in the main script: stack tiles.
 -->
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0d0b09" />
   <title>Jeyson Dagondon · AI-Native Workflow Automation, RPh</title>
-  <meta name="description" content="AI-native workflow automation built by a pharmacist: 45+ userscripts and Manifest V3 extensions running the back office of a live telehealth clinic." />
+  <meta name="description" content="AI-native workflow automation built by a pharmacist: userscripts and Manifest V3 extensions running the back office of a live telehealth clinic." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Jeyson Dagondon" />
-  <meta property="og:url" content="https://anki-boi.github.io/" />
+  <meta property="og:url" content="https://anki-boi.github.io/work/" />
   <meta property="og:title" content="Jeyson Dagondon · AI-Native Workflow Automation, RPh" />
   <meta property="og:description" content="AI-native workflow automation, built by a pharmacist: Zoho CRM, browser automation and agent tooling, with a human signing off every action." />
   <meta property="og:image" content="https://anki-boi.github.io/img/og-card.png" />
@@ -34,50 +39,33 @@
   <meta name="twitter:title" content="Jeyson Dagondon · AI-Native Workflow Automation, RPh" />
   <meta name="twitter:description" content="AI-native workflow automation, built by a pharmacist: Zoho CRM, browser automation and agent tooling, with a human signing off every action." />
   <meta name="twitter:image" content="https://anki-boi.github.io/img/og-card.png" />
-  <link rel="canonical" href="https://anki-boi.github.io/" />
-  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <link rel="canonical" href="https://anki-boi.github.io/work/" />
+  <link rel="apple-touch-icon" href="../img/apple-touch-icon.png" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d0b09'/%3E%3Cpolygon points='32,10 51,21 51,43 32,54 13,43 13,21' fill='none' stroke='%23ffb547' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f5f1eb'/%3E%3C/svg%3E" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jeyson Dagondon","jobTitle":"AI-Native Workflow Automation Specialist","description":"Registered Pharmacist (RPh, board 91.07%) and automation builder","url":"https://anki-boi.github.io","sameAs":["https://github.com/anki-boi","https://www.linkedin.com/in/donjeysonmd","https://www.onlinejobs.ph/jobseekers/info/1595582"],"alumniOf":{"@type":"CollegeOrUniversity","name":"Liceo de Cagayan University"},"hasCredential":[{"@type":"EducationalOccupationalCredential","name":"Registered Pharmacist (RPh)"},{"@type":"EducationalOccupationalCredential","name":"HIPAA Privacy & Security training"}],"knowsAbout":["Browser automation","Chrome extensions","Tampermonkey","Zoho CRM","Python","Healthcare operations","HIPAA privacy and security","AI agent orchestration","Local LLM serving","Pharmacy"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jeyson Dagondon","jobTitle":"AI-Native Workflow Automation Specialist","description":"Registered Pharmacist (RPh, board 91.07%) and automation builder","url":"https://anki-boi.github.io/work/","sameAs":["https://github.com/anki-boi","https://www.linkedin.com/in/donjeysonmd","https://www.onlinejobs.ph/jobseekers/info/1595582"],"alumniOf":{"@type":"CollegeOrUniversity","name":"Liceo de Cagayan University"},"hasCredential":[{"@type":"EducationalOccupationalCredential","name":"Registered Pharmacist (RPh)"},{"@type":"EducationalOccupationalCredential","name":"HIPAA Privacy & Security training"}],"knowsAbout":["Browser automation","Chrome extensions","Tampermonkey","Zoho CRM","Python","Healthcare operations","HIPAA privacy and security","AI agent orchestration","Local LLM serving","Pharmacy"]}</script>
 
-  <!-- Self-hosted: the same three woff2 files anki-boi.github.io ships (copied to fonts/).
+  <!-- Self-hosted: the shared woff2 files in /fonts/ (same files the landing page uses).
        Fraunces here is roman-only variable 300-900, so the page's italic accents are
        synthesised. Add a Fraunces italic woff2 if you want them real. -->
-  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="../fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
   <style>
-    @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:swap}
-    @font-face{font-family:'Inter';src:url('fonts/inter-latin.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap}
-    @font-face{font-family:'JetBrains Mono';src:url('fonts/jetbrains-mono-latin.woff2') format('font/woff2');font-weight:400 700;font-display:swap}
+    @font-face{font-family:'Fraunces';src:url('../fonts/fraunces-latin.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:swap}
+    @font-face{font-family:'Inter';src:url('../fonts/inter-latin.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap}
+    @font-face{font-family:'JetBrains Mono';src:url('../fonts/jetbrains-mono-latin.woff2') format('woff2');font-weight:400 700;font-display:swap}
   </style>
+
+  <!-- The warm dark palette, type families and easing live in the shared tokens file. -->
+  <link rel="stylesheet" href="../assets/tokens.css" />
 
   <style>
     /* ============================================================
-       DESIGN TOKENS
+       DESIGN TOKENS: all of them come from ../assets/tokens.css (warm
+       dark palette, shared with the landing page). This page only uses
+       them; it never redefines a colour. Names kept from the reference
+       build: --bone is the INK, --amber is the ACCENT (gold).
        ============================================================ */
-    /* ── THEME ─ the whole look is these lines. Names kept from the reference build
-       so nothing else had to be renamed: --bone is the INK, --amber is the ACCENT.
-       Values are anki-boi.github.io's. Colour literals elsewhere in this file are
-       color-mix() on these tokens, so they follow whatever you put here. ── */
-    :root {
-      --bg: #f2f6fa;
-      --bg-warm: #eaf1f8;
-      --ink-50: #ffffff;
-      --ink-100: #ffffff;
-      --bone: #17222f;
-      --muted: #38485f;
-      --line: rgba(10, 133, 173, 0.22);
-      --line-strong: rgba(10, 133, 173, 0.42);
-      --amber: #0a85ad;
-      --amber-deep: #086c8e;
-      --amber-soft: rgba(10, 133, 173, 0.12);
-      --sage: #3f7d1e;
-      --mag: #cf1b76;
-      --display: 'Fraunces', Georgia, 'Times New Roman', serif;
-      --sans: 'Inter', system-ui, -apple-system, sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, monospace;
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);   /* strong ease-out for UI response */
-    }
 
     *, *::before, *::after { box-sizing: border-box; }
     * { border-color: var(--line); }
@@ -379,7 +367,7 @@
       font-size: 10px;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: color-mix(in srgb, var(--bone) 50%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
     }
     @media (min-width: 700px) { .live-indicator { display: inline-flex; } }
     .pulse-dot {
@@ -697,6 +685,14 @@
     .hero-proof li { position: relative; }
     .hero-proof li + li::before { content: '·'; position: absolute; left: -16px; color: color-mix(in srgb, var(--amber) 60%, transparent); }
     .hero-proof b { color: var(--bone); font-weight: 500; }
+    .hero-tz {
+      margin: 14px 0 0; max-width: 44em;
+      font-family: var(--mono); font-size: 11.5px; line-height: 1.6; letter-spacing: 0.03em;
+      color: color-mix(in srgb, var(--bone) 66%, transparent);
+      opacity: 0; transition: opacity 700ms var(--ease-out) 450ms;
+    }
+    .hero-tz b { color: var(--amber); font-weight: 500; margin-right: 6px; }
+    .hero-actions.in ~ .hero-tz { opacity: 1; }
     @media (max-width: 767px) { .hero-proof { gap: 6px 22px; font-size: 11px; margin-top: 28px; } }
 
     /* Frame ticks at the four corners of the viewport */
@@ -794,7 +790,7 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 10px;
-      color: color-mix(in srgb, var(--bone) 45%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
       font-family: var(--mono);
       font-size: 10px;
       letter-spacing: 0.22em;
@@ -873,6 +869,8 @@
     .strip.cool { background-color: var(--bg); }
     /* Force the host page's body dark too in case our <style> survives the embed */
     html, body { background-color: var(--bg); }
+    html { overflow-x: clip; }
+    .contact { overflow-x: clip; }
 
     /* ============================================================
        SECTION SHELL
@@ -1047,7 +1045,7 @@
       aspect-ratio: 4 / 3;
       border-radius: 2px;
       border: 1px solid var(--line);
-      background: color-mix(in srgb, var(--ink) 6%, transparent);
+      background: transparent;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -1067,7 +1065,7 @@
       font-size: 9.5px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: color-mix(in srgb, var(--bone) 30%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
     }
     .tile-mark {
       width: 40px;
@@ -1144,7 +1142,7 @@
       font-family: var(--mono); font-size: 12px; color: color-mix(in srgb, var(--bone) 62%, transparent);
     }
     .wf-toolbar .wf-name { color: var(--bone); }
-    .wf-toolbar .wf-name span { color: color-mix(in srgb, var(--bone) 45%, transparent); }
+    .wf-toolbar .wf-name span { color: color-mix(in srgb, var(--bone) 56%, transparent); }
     .wf-toolbar .wf-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .wf-pub { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(127,209,155,0.35); color: #A8D9B8; }
     .wf-pub i { width: 7px; height: 7px; border-radius: 999px; background: var(--live); }
@@ -1162,9 +1160,9 @@
     .wf-top { display: flex; align-items: center; gap: 12px; }
     .wf-icon { flex: none; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 9px; color: var(--amber); background: color-mix(in srgb, var(--amber) 8%, transparent); border: 1px solid color-mix(in srgb, var(--amber) 28%, transparent); }
     .wf-icon svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-    .wf-kind { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 45%, transparent); }
+    .wf-kind { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 56%, transparent); }
     .wf-when { display: block; margin-top: 3px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.02em; text-transform: none; color: color-mix(in srgb, var(--bone) 58%, transparent); }
-    .wf-status { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 45%, transparent); white-space: nowrap; }
+    .wf-status { margin-left: auto; display: inline-flex; align-items: center; gap: 7px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); white-space: nowrap; }
     .wf-status i { width: 8px; height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--bone) 20%, transparent); transition: background-color 250ms ease; }
     .wf-node[data-state="done"] .wf-status { color: color-mix(in srgb, var(--amber) 85%, transparent); }
     .wf-node[data-state="done"] .wf-status i { background: var(--amber); }
@@ -1182,20 +1180,21 @@
     .wf-bar { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, var(--amber-deep), var(--amber)); transform-origin: left center; transform: scaleX(0); transition: transform 700ms var(--ease-out); }
     .wf-node[data-state="running"] .wf-bar, .wf-node[data-state="done"] .wf-bar { transform: scaleX(1); }
     .wf-ghost { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: color-mix(in srgb, var(--amber) 16%, transparent); }
-    .wf-axis { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 38%, transparent); }
+    .wf-axis { display: flex; justify-content: space-between; margin-top: 6px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); }
 
     .wf-wire { position: relative; height: 112px; }
     .wf-wire::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: color-mix(in srgb, var(--bone) 10%, transparent); }
     .wf-fill { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--amber); transform-origin: top center; transform: scaleY(0); }
     .wf-sig { position: absolute; left: 50%; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 999px; background: color-mix(in srgb, var(--amber) 12%, white); box-shadow: 0 0 12px var(--amber), 0 0 26px color-mix(in srgb, var(--amber) 50%, transparent); opacity: 0; }
-    .wf-plus { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg-warm); display: grid; place-items: center; color: color-mix(in srgb, var(--bone) 45%, transparent); font-family: var(--mono); font-size: 13px; line-height: 1; }
-    .wf-carry { position: absolute; left: calc(50% + 22px); top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 45%, transparent); white-space: nowrap; transition: color 250ms ease; }
+    .wf-plus { position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg-warm); display: grid; place-items: center; color: color-mix(in srgb, var(--bone) 56%, transparent); font-family: var(--mono); font-size: 13px; line-height: 1; }
+    .wf-carry { position: absolute; left: calc(50% + 22px); top: 50%; transform: translateY(-50%); font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); white-space: nowrap; transition: color 250ms ease; }
     .wf-carry b { font-weight: 500; color: color-mix(in srgb, var(--amber) 55%, transparent); transition: color 250ms ease; }
     .wf-wire.lit .wf-carry { color: color-mix(in srgb, var(--bone) 75%, transparent); }
     .wf-wire.lit .wf-carry b { color: var(--amber); }
 
     .wf-node.is-output { border-style: dashed; background: var(--ink-100); }
     .wf-node.is-output .btn-primary { margin-top: 18px; }
+    .wf-node.is-output .wf-alt { display: inline-block; margin: 18px 0 0 18px; }
     @media (max-width: 560px) {
       .wf-canvas { margin-top: 48px; }
       .wf-node { padding: 18px 16px 16px; }
@@ -1218,7 +1217,7 @@
       font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 72%, transparent);
     }
     .stack-head + .work-sub { margin-top: 56px; }
-    .work-sub .n { color: color-mix(in srgb, var(--bone) 40%, transparent); letter-spacing: 0.08em; }
+    .work-sub .n { color: color-mix(in srgb, var(--bone) 56%, transparent); letter-spacing: 0.08em; }
     .work-sub + .work-grid { margin-top: 0; }
 
     /* ── Workflow samples: a tool window with one real-shaped automation per
@@ -1257,7 +1256,7 @@
     .ws-points { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
     .ws-points li { position: relative; padding-left: 18px; font-size: 14px; line-height: 1.5; color: color-mix(in srgb, var(--bone) 76%, transparent); }
     .ws-points li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 8px; height: 1px; background: var(--c); }
-    .ws-kind { margin-top: auto; padding-top: 22px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 50%, transparent); }
+    .ws-kind { margin-top: auto; padding-top: 22px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); }
 
     /* CRM canvas: vertical builder with a router split */
     .gh { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 470px; }
@@ -1285,7 +1284,7 @@
     .gh-branch { display: flex; flex-direction: column; align-items: center; }
     .gh-branch .gh-node { width: 100%; max-width: 210px; }
     .gh-pill { font-family: var(--mono); font-size: 11px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line-strong); color: color-mix(in srgb, var(--bone) 65%, transparent); background: var(--ink-50); white-space: nowrap; }
-    .gh-end { margin-top: 10px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 38%, transparent); }
+    .gh-end { margin-top: 10px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); }
 
     /* Pipeline canvas: numbered step cards joined by "+" */
     .zp { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 360px; }
@@ -1300,7 +1299,7 @@
     .zp-line { position: relative; width: 2px; height: 34px; background: color-mix(in srgb, var(--bone) 14%, transparent); }
     .zp-line::after { content: ''; position: absolute; inset: 0; background: var(--c); transform: scaleY(0); transform-origin: top; transition: transform 300ms var(--ease-out); }
     .zp-line.is-lit::after { transform: scaleY(1); }
-    .zp-line i { position: absolute; top: 50%; left: 50%; z-index: 1; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 999px; display: grid; place-items: center; font-style: normal; font-family: var(--mono); font-size: 12px; line-height: 1; color: color-mix(in srgb, var(--bone) 50%, transparent); background: var(--ink-50); border: 1px solid var(--line-strong); }
+    .zp-line i { position: absolute; top: 50%; left: 50%; z-index: 1; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 999px; display: grid; place-items: center; font-style: normal; font-family: var(--mono); font-size: 12px; line-height: 1; color: color-mix(in srgb, var(--bone) 56%, transparent); background: var(--ink-50); border: 1px solid var(--line-strong); }
 
     /* Make + n8n canvases (SVG, drawn at 1:1 and scrolled on narrow screens) */
     .sv { display: block; flex: none; overflow: visible; }
@@ -1350,7 +1349,7 @@
     .cb-status.is-live::before { content: ''; width: 6px; height: 6px; border-radius: 999px; background: #7FD19B; }
     .cb-stats { display: flex; flex-wrap: wrap; gap: 14px 32px; margin: 26px 0 0; }
     .cb-stats b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1; letter-spacing: -0.02em; color: var(--bone); }
-    .cb-stats span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 50%, transparent); }
+    .cb-stats span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 56%, transparent); }
 
     @media (prefers-reduced-motion: reduce) {
       .ws-panel { animation: none; }
@@ -1360,7 +1359,7 @@
 
     /* ── Per-card figures: each card draws its own project ─────────── */
     .viz { margin: 24px 0 0; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: color-mix(in srgb, var(--bone) 1.5%, transparent); }
-    .viz-cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-bottom: 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 45%, transparent); }
+    .viz-cap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-bottom: 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 56%, transparent); }
     @media (min-width: 900px) {
       .cb-grid .cb--wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center; }
       .cb--wide .cb-text { display: flex; flex-direction: column; justify-content: space-between; gap: 8px; height: 100%; }
@@ -1370,6 +1369,28 @@
     }
     .cb-meter { display: block !important; width: 100%; max-width: 120px; height: 3px; margin-top: 8px !important; border-radius: 99px; background: color-mix(in srgb, var(--bone) 10%, transparent); overflow: hidden; }
     .cb-meter i { display: block; width: var(--v); height: 100%; background: #7FD19B; }
+
+    /* Words-only case study (order desk): problem / fix / status */
+    .cb-case { margin: 0; display: grid; gap: 14px; max-width: 60ch; }
+    .cb-case div { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: baseline; }
+    .cb-case dt { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--amber); }
+    .cb-case dd { margin: 0; font-size: 14px; line-height: 1.6; color: color-mix(in srgb, var(--bone) 72%, transparent); }
+    @media (max-width: 420px) { .cb-case div { grid-template-columns: 1fr; gap: 4px; } }
+    .cb-private { margin: 16px 0 0; font-family: var(--mono); font-size: 11.5px; line-height: 1.5; color: color-mix(in srgb, var(--bone) 62%, transparent); }
+    /* Screenshot slot (PH guide): true 1000x643 intrinsic size, so it never shifts the layout */
+    .cb-shot { display: block; margin-top: 24px; border: 1px solid var(--line-strong); border-radius: 10px; overflow: hidden; box-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.7); }
+    .cb-shot img { width: 100%; height: auto; transition: transform 600ms var(--ease-out); }
+    @media (hover: hover) and (pointer: fine) { .cb-shot:hover img { transform: scale(1.02); } }
+    .cb-links { display: flex; flex-wrap: wrap; gap: 0 22px; }
+
+    /* Other work: one line per repo */
+    .other-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+    .other-list a { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto; gap: 6px 24px; align-items: baseline; padding: 18px 4px; border-bottom: 1px solid var(--line); transition: background-color 200ms ease; }
+    .other-list b { font-family: var(--display); font-weight: 400; font-size: 1.2rem; color: var(--bone); }
+    .other-list span { font-size: 14px; line-height: 1.55; color: color-mix(in srgb, var(--bone) 70%, transparent); }
+    .other-list i { font-style: normal; color: var(--amber); }
+    @media (hover: hover) and (pointer: fine) { .other-list a:hover { background: color-mix(in srgb, var(--amber) 5%, transparent); } }
+    @media (max-width: 700px) { .other-list a { grid-template-columns: minmax(0, 1fr) auto; } .other-list span { grid-column: 1 / -1; grid-row: 2; } }
 
     /* Audit: 59 sub-accounts, swept */
     .map-grid { position: relative; display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; overflow: hidden; }
@@ -1399,7 +1420,7 @@
     .q-pips i:nth-child(2) { animation-delay: .3s; } .q-pips i:nth-child(3) { animation-delay: .6s; }
     .q-pips i:nth-child(4) { animation-delay: .9s; } .q-pips i:nth-child(5) { animation-delay: 1.2s; }
     @keyframes viz-pip { 0%, 6% { background: transparent; } 12%, 78% { background: var(--amber); border-color: transparent; } 88%, 100% { background: transparent; } }
-    .q-arrow { color: color-mix(in srgb, var(--bone) 35%, transparent); font-family: var(--mono); }
+    .q-arrow { color: color-mix(in srgb, var(--bone) 56%, transparent); font-family: var(--mono); }
     .q-chip, .q-fork span { font-family: var(--mono); font-size: 11px; padding: 4px 9px; border-radius: 6px; border: 1px solid var(--line-strong); color: color-mix(in srgb, var(--bone) 72%, transparent); white-space: nowrap; }
     .q-chip { color: var(--amber); border-color: color-mix(in srgb, var(--amber) 40%, transparent); }
     .q-fork { display: grid; gap: 6px; padding-left: 12px; border-left: 1px solid var(--line-strong); }
@@ -1420,7 +1441,7 @@
     .tg-bubble b { font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #A8D9B8; }
     .tg-bubble i { height: 6px; border-radius: 9px; background: color-mix(in srgb, var(--bone) 16%, transparent); } .tg-bubble i + i { width: 70%; }
     .tg-state { display: grid; margin-top: 10px; font-family: var(--mono); font-size: 11px; }
-    .tg-state span { grid-area: 1 / 1; } .tg-state .on { color: #A8D9B8; animation: viz-on 6s infinite; } .tg-state .off { color: color-mix(in srgb, var(--bone) 45%, transparent); animation: viz-off 6s infinite; }
+    .tg-state span { grid-area: 1 / 1; } .tg-state .on { color: #A8D9B8; animation: viz-on 6s infinite; } .tg-state .off { color: color-mix(in srgb, var(--bone) 56%, transparent); animation: viz-off 6s infinite; }
     @keyframes viz-on { 0%, 20% { opacity: 0; transform: translateY(4px); } 26%, 56% { opacity: 1; transform: none; } 62%, 100% { opacity: 0; } }
     @keyframes viz-off { 0%, 18% { opacity: 1; } 22%, 58% { opacity: 0; } 64%, 100% { opacity: 1; } }
 
@@ -1433,7 +1454,7 @@
     .st { position: relative; z-index: 1; display: grid; justify-items: center; gap: 4px; }
     .st b { width: 30px; height: 30px; margin-bottom: 6px; border-radius: 99px; display: grid; place-items: center; font-size: 12px; color: transparent; background: var(--bg-warm); border: 1px solid var(--line-strong); }
     .st span { font-family: var(--mono); font-size: 11.5px; color: var(--bone); }
-    .st small { font-size: 11.5px; color: color-mix(in srgb, var(--bone) 50%, transparent); }
+    .st small { font-size: 11.5px; color: color-mix(in srgb, var(--bone) 56%, transparent); }
     @media (max-width: 420px) { .st small { font-size: 10.5px; } }
     .st:nth-child(1) b { animation: viz-st1 4.8s infinite; } .st:nth-child(2) b { animation: viz-st2 4.8s infinite; }
     .st:nth-child(3) b { animation: viz-st3 4.8s infinite; } .st:nth-child(4) b { animation: viz-st4 4.8s infinite; }
@@ -1469,8 +1490,8 @@
     /* 04 Debug: steps struck out of a zap */
     .trim { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: t; }
     .trim li { position: relative; counter-increment: t; display: flex; gap: 10px; align-items: center; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line); font-size: 12.5px; color: color-mix(in srgb, var(--bone) 78%, transparent); }
-    .trim li::before { content: counter(t); font-family: var(--mono); font-size: 10.5px; color: color-mix(in srgb, var(--bone) 40%, transparent); }
-    .trim li.cut { color: color-mix(in srgb, var(--bone) 35%, transparent); border-style: dashed; }
+    .trim li::before { content: counter(t); font-family: var(--mono); font-size: 10.5px; color: color-mix(in srgb, var(--bone) 56%, transparent); }
+    .trim li.cut { color: color-mix(in srgb, var(--bone) 56%, transparent); border-style: dashed; }
     .trim li.cut::after { content: ''; position: absolute; left: 30px; right: 10px; top: 50%; height: 1px; background: var(--amber); transform-origin: left; animation: viz-strike 4s var(--ease-out) infinite; }
     .trim li.cut:nth-child(4)::after { animation-delay: .5s; }
     @keyframes viz-strike { 0%, 10% { transform: scaleX(0); } 35%, 90% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
@@ -1495,17 +1516,17 @@
     .ph-cap { position: absolute; left: 10px; right: 10px; bottom: 14px; display: grid; gap: 4px; }
     .ph-cap i { height: 4px; border-radius: 9px; background: color-mix(in srgb, var(--bone) 75%, transparent); animation: viz-cap 2.4s steps(1) infinite; } .ph-cap i + i { width: 70%; animation-delay: 1.2s; }
     @keyframes viz-cap { 50% { opacity: .25; } }
-    .ph-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 45%, transparent); counter-reset: p; }
-    .ph-steps li { counter-increment: p; animation: viz-step 4.2s infinite; } .ph-steps li::before { content: counter(p) '  '; color: color-mix(in srgb, var(--bone) 30%, transparent); }
+    .ph-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; font-family: var(--mono); font-size: 11px; color: color-mix(in srgb, var(--bone) 56%, transparent); counter-reset: p; }
+    .ph-steps li { counter-increment: p; animation: viz-step 4.2s infinite; } .ph-steps li::before { content: counter(p) '  '; color: color-mix(in srgb, var(--bone) 56%, transparent); }
     .ph-steps li:nth-child(2) { animation-delay: .45s; } .ph-steps li:nth-child(3) { animation-delay: .9s; } .ph-steps li:nth-child(4) { animation-delay: 1.35s; } .ph-steps li:nth-child(5) { animation-delay: 1.8s; } .ph-steps li:nth-child(6) { animation-delay: 2.25s; }
-    @keyframes viz-step { 0%, 6% { color: color-mix(in srgb, var(--bone) 45%, transparent); } 10%, 80% { color: var(--amber); } 90%, 100% { color: color-mix(in srgb, var(--bone) 45%, transparent); } }
+    @keyframes viz-step { 0%, 6% { color: color-mix(in srgb, var(--bone) 56%, transparent); } 10%, 80% { color: var(--amber); } 90%, 100% { color: color-mix(in srgb, var(--bone) 56%, transparent); } }
 
     /* 07 Dashboard: a sheet becoming charts */
     .viz-dash { display: flex; align-items: center; gap: 16px; }
     .dash-src .viz-cap { margin-bottom: 8px; }
     .sheet { display: grid; grid-template-columns: repeat(4, 14px); gap: 2px; }
     .sheet i { height: 9px; background: rgba(127,209,155,0.18); border-radius: 1px; } .sheet i:nth-child(-n+4) { background: rgba(127,209,155,0.45); }
-    .dash-arrow { color: color-mix(in srgb, var(--bone) 35%, transparent); font-family: var(--mono); }
+    .dash-arrow { color: color-mix(in srgb, var(--bone) 56%, transparent); font-family: var(--mono); }
     .dash { flex: 1; min-width: 0; display: grid; gap: 10px; padding: 12px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--ink-50); }
     .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .kpis i { height: 26px; border-radius: 5px; border: 1px solid var(--line); background: linear-gradient(90deg, color-mix(in srgb, var(--amber) 35%, transparent) 0 34%, transparent 34%) left 8px top 8px / 60% 4px no-repeat, linear-gradient(color-mix(in srgb, var(--bone) 14%, transparent), color-mix(in srgb, var(--bone) 14%, transparent)) left 8px bottom 7px / 40% 3px no-repeat; }
@@ -1549,7 +1570,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: color-mix(in srgb, var(--ink) 5%, transparent);
+      background: transparent;
       transform-style: preserve-3d;
       /* transform is driven by GSAP (scroll lift + cursor tilt) */
       transition: background-color 250ms ease, border-color 200ms ease;
@@ -1584,7 +1605,7 @@
       font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: color-mix(in srgb, var(--bone) 35%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
     }
     .card-title {
       font-family: var(--display);
@@ -1697,7 +1718,7 @@
       border: 1px solid var(--line);
       overflow: hidden;
       position: relative;
-      background: color-mix(in srgb, var(--ink) 6%, transparent);
+      background: transparent;
     }
     @media (min-width: 768px) { .strip-card { width: 300px; } }
     .strip-card img {
@@ -1763,7 +1784,7 @@
       background: none;
       border: 0;
       border-bottom: 1px solid var(--line);
-      color: color-mix(in srgb, var(--bone) 50%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
       cursor: pointer;
       font: inherit;
       transition: color 200ms ease, background-color 200ms ease;
@@ -1821,7 +1842,7 @@
     .svc-ba { display: grid; gap: 10px; font-size: 14.5px; line-height: 1.55; }
     .svc-ba div { display: grid; grid-template-columns: 64px 1fr; gap: 12px; align-items: baseline; }
     .svc-ba b { font-family: var(--mono); font-size: 10.5px; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; }
-    .svc-ba .before { color: color-mix(in srgb, var(--bone) 45%, transparent); }
+    .svc-ba .before { color: color-mix(in srgb, var(--bone) 56%, transparent); }
     .svc-ba .before span { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--amber) 45%, transparent); }
     .svc-ba .after { color: color-mix(in srgb, var(--bone) 90%, transparent); }
     .svc-ba .after b { color: var(--amber); }
@@ -1868,7 +1889,7 @@
 
     .svc-cols { display: grid; gap: 24px; }
     @media (min-width: 640px) { .svc-cols { grid-template-columns: 1.3fr 1fr; gap: 32px; } }
-    .svc-sub { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 40%, transparent); margin-bottom: 12px; display: block; }
+    .svc-sub { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 56%, transparent); margin-bottom: 12px; display: block; }
     .svc-get { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 14.5px; color: color-mix(in srgb, var(--bone) 82%, transparent); }
     .svc-get li { display: grid; grid-template-columns: 16px 1fr; gap: 10px; }
     .svc-get li::before { content: '→'; color: var(--amber); font-family: var(--mono); font-size: 12px; padding-top: 2px; }
@@ -1914,10 +1935,11 @@
     @media (min-width: 768px) { .engage > div { padding: 36px 40px; } }
     .engage-price { background: linear-gradient(160deg, color-mix(in srgb, var(--amber) 9%, transparent), transparent 60%); }
     .engage-num { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-    .engage-num b { font-family: var(--display); font-weight: 400; font-size: clamp(3.2rem, 6vw, 4.6rem); line-height: 1; color: var(--bone); letter-spacing: -0.03em; }
+    .engage-num b { font-family: var(--display); font-weight: 400; font-size: clamp(1.9rem, 3.4vw, 2.7rem); line-height: 1.05; color: var(--bone); letter-spacing: -0.02em; }
+    .engage-cta { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
     .engage-num span { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); }
     .engage-price p { margin-top: 18px; font-size: 15px; line-height: 1.6; color: color-mix(in srgb, var(--bone) 75%, transparent); max-width: 44ch; }
-    .engage-min { display: inline-block; margin-top: 18px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 45%, transparent); }
+    .engage-min { display: inline-block; margin-top: 18px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: color-mix(in srgb, var(--bone) 56%, transparent); }
     .engage-trust .svc-get b { color: var(--bone); font-weight: 500; }
     .svc-cta-row { margin-top: 56px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
     .svc-cta-row p { font-family: var(--display); font-style: italic; font-size: clamp(1.25rem, 2.2vw, 1.6rem); color: color-mix(in srgb, var(--bone) 85%, transparent); }
@@ -1976,6 +1998,9 @@
       transition: border-color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out);
     }
     .contact-cta:hover { border-color: var(--amber); background: color-mix(in srgb, var(--amber) 5%, transparent); }
+    .contact-actions { margin-top: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+    .contact-actions .contact-cta { margin-top: 0; }
+    .contact-alt { font-size: 14px; overflow-wrap: anywhere; }
     .contact-cta .arrow-up-right { width: 16px; height: 16px; stroke: var(--amber); }
     /* Contact block: copy left, reply panel right */
     .book {
@@ -2023,7 +2048,7 @@
       font-size: 10.5px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: color-mix(in srgb, var(--bone) 40%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
       display: block;
       margin-bottom: 8px;
     }
@@ -2069,7 +2094,7 @@
       border-top: 1px solid var(--line);
       font-family: var(--mono);
       font-size: 11px;
-      color: color-mix(in srgb, var(--bone) 40%, transparent);
+      color: color-mix(in srgb, var(--bone) 56%, transparent);
     }
 
     /* ============================================================
@@ -2101,26 +2126,7 @@
     ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--bone) 10%, transparent); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--amber) 40%, transparent); }
   
-    /* ── HERO STAYS DARK ─ the photo, its scrim and its text are a cinematic panel.
-       Re-declaring the same tokens inside .hero flips every color-mix() above back
-       to dark-mode values for that subtree only. Delete this block for an all-light page. ── */
-    .hero, .hero * {
-      --bg: #0a0c0f;
-      --bg-warm: #0e1114;
-      --ink-50: #141416;
-      --ink-100: #1A1A1C;
-      --bone: #F5F1EB;
-      --muted: #8B857A;
-      --line: rgba(245, 241, 235, 0.10);
-      --line-strong: rgba(245, 241, 235, 0.22);
-      --amber: #FFB547;
-      --amber-deep: #E89A2A;
-      --amber-soft: rgba(255, 181, 71, 0.12);
-      --sage: #7A8B7F;
-    }
-    .hero { background: #0a0c0f; }
-  
-    /* ── contact reply panel (replaces the booking widget's white 640px frame) ── */
+    /* ── contact call panel (replaces the reference build's white 640px widget frame) ── */
     .book-frame {
       min-height: 0;
       background: color-mix(in srgb, var(--amber) 6%, transparent);
@@ -2138,25 +2144,6 @@
     .book-reply b { font-family: var(--display); font-weight: 400; font-size: clamp(3.5rem, 7vw, 5.5rem); line-height: 0.9; letter-spacing: -0.03em; color: var(--bone); }
     .book-reply-t { font-size: 15px; line-height: 1.5; color: color-mix(in srgb, var(--bone) 65%, transparent); max-width: 32ch; }
   
-    /* ── ALL-DARK, WARM: one palette for the whole page, hero included: warm near-black
-       and gold to sit with the portrait's skin tones. Same token names, so every
-       color-mix() above follows. ── */
-    :root, .hero, .hero * {
-      --bg: #0d0b09;
-      --bg-warm: #13100c;
-      --ink-50: #17130f;
-      --ink-100: #1c1813;
-      --bone: #f5f1eb;
-      --muted: #9a9184;
-      --line: rgba(255, 181, 71, 0.12);
-      --line-strong: rgba(255, 181, 71, 0.26);
-      --amber: #ffb547;
-      --amber-deep: #e89a2a;
-      --amber-soft: rgba(255, 181, 71, 0.12);
-      --sage: #8fa07f;
-    }
-    .hero { background: #0d0b09; }
-    html, body { background: var(--bg); color: var(--bone); }
     /* about portrait is a transparent cutout: give it a warm backdrop, and make the
        image 20% taller than the frame so the +-8% scroll drift never shows a gap */
     .about-photo { background: radial-gradient(120% 90% at 50% 100%, color-mix(in srgb, var(--amber) 14%, transparent), transparent 70%); }
@@ -2180,6 +2167,22 @@
       } catch (e) {}
     })();
   </script>
+  <!-- Without JavaScript: show everything the entrance animations would have revealed,
+       give the real cursor back, and stack the tab panels instead of hiding them. -->
+  <noscript>
+    <style>
+      body.has-cursor, body.has-cursor * { cursor: auto !important; }
+      .cursor { display: none !important; }
+      .hero-sub, .hero-actions, .hero-proof, .hero-tz, .hero-photo-img, .scroll-cue {
+        opacity: 1 !important; transform: none !important; filter: none !important;
+      }
+      .caret { display: none; }
+      .svc-panel[hidden] { display: flex !important; border-top: 1px solid var(--line); }
+      .ws-panel[hidden] { display: block !important; border-top: 1px solid var(--line); }
+      .nojs-list { margin: 0; padding: 0 0 0 1.1em; display: grid; gap: 14px; font-size: 15px; line-height: 1.6; color: var(--bone); }
+      .nojs-list b { font-weight: 600; }
+    </style>
+  </noscript>
 </head>
 
 <body class="has-cursor">
@@ -2189,12 +2192,12 @@
        ============================================================= -->
   <script>
     window.PHOTOS = {
-      // No portrait yet: img/hero.png is a generated stand-in (make-images.py).
-      // Drop a real portrait in and change only these four lines.
-      hero:    'img/hero.png',
-      about:   'img/about.png',
-      casual1: 'img/hero.png',
-      casual2: 'img/hero.png'
+      // Transparent cutouts composed by portfolio-ref/_shot/make-hero-proto.py.
+      // Paths are relative to /work/.
+      hero:    '../img/hero.png',
+      about:   '../img/about.png',
+      casual1: '../img/hero.png',
+      casual2: '../img/hero.png'
     };
   </script>
 
@@ -2219,8 +2222,8 @@
        ============================================================= -->
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a class="logo-mark" href="#top" data-cursor-label="top">
-        <span class="logo-mono" aria-label="Jeyson Dagondon">J<i>D</i></span>
+      <a class="logo-mark" href="/" aria-label="Jeyson Dagondon, home" data-cursor-label="home">
+        <span class="logo-mono" aria-hidden="true">J<i>D</i></span>
         <span class="live-indicator">
           <span class="pulse-dot"></span>
           Open to contract work
@@ -2228,6 +2231,7 @@
       </a>
 
       <nav class="nav-links" aria-label="Sections">
+        <a class="nav-link" href="/" data-cursor-label="home">Home</a>
         <a class="nav-link" href="#services" data-cursor-label="services">Services</a>
         <a class="nav-link" href="#work" data-cursor-label="work">Work</a>
         <a class="nav-link" href="#about" data-cursor-label="about">About</a>
@@ -2235,9 +2239,9 @@
         <a class="nav-link" href="#contact" data-cursor-label="contact">Contact</a>
       </nav>
 
-      <a class="magnetic" href="#book" data-magnetic data-cursor-label="book a call">
+      <a class="magnetic" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-magnetic data-cursor-label="book a call">
         <span class="magnetic-inner nav-cta">
-          Hire me
+          Book a call
           <svg class="arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
       </a>
@@ -2251,14 +2255,14 @@
     <!-- Backdrop photo (click target for easter egg) -->
     <div class="hero-photo" id="heroPhoto" data-cursor="image" aria-label="Portrait panel, click 3× for a surprise">
       <span class="hero-photo-img" id="heroPhotoImg">
-        <img id="img-hero" alt="Jeyson Dagondon" src="img/hero.png" srcset="img/hero-mobile.png 1200w, img/hero.png 2560w" sizes="100vw" fetchpriority="high" />
+        <img id="img-hero" alt="Jeyson Dagondon" src="../img/hero.png" srcset="../img/hero-mobile.png 1200w, ../img/hero.png 2560w" sizes="100vw" width="2560" height="1600" fetchpriority="high" />
       </span>
       <span class="hero-photo-tint"></span>
       <span class="hero-photo-scrim"></span>
       <span class="burst" id="burst" aria-hidden="true"></span>
     </div>
 
-    <!-- Amber cursor-follow blob -->
+    <!-- Accent cursor-follow blob -->
     <div class="hero-bg"><div class="hero-blob" id="heroBlob"></div></div>
 
     <!-- Frame ticks at viewport corners -->
@@ -2284,29 +2288,32 @@
       </div>
 
       <h1 class="display hero-headline">
-        <span class="hero-name" id="heroName"></span>
+        <span class="hero-name" id="heroName">Jeyson Dagondon</span>
         <span class="hero-sub" id="heroSub">automates the back office<span class="stop">.</span></span>
       </h1>
 
+      <!-- The hero lede. The typewriter reads it from here, so it is also what shows without JavaScript. -->
       <p class="typewriter">
-        <span id="typed"></span><span class="caret">▋</span>
+        <span id="typed">45+ userscripts and Manifest V3 extensions running the back office of a live telehealth clinic: records, refills and the prescription pipeline in Zoho CRM, with a human signing off every action.</span><span class="caret" aria-hidden="true">▋</span>
       </p>
 
       <div class="hero-actions" id="heroActions">
-        <a class="btn-primary" href="#book" data-cursor-label="book a call">
-          Hire me
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a class="btn-primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-cursor-label="book a call">
+          Book a call
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
+        <a class="text-link" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Email me</a>
         <a class="text-link" href="#work" data-cursor-label="see work">See the work</a>
-        <a class="text-link" href="cv.pdf" target="_blank" rel="noopener" data-cursor-label="résumé">Résumé (PDF)</a>
+        <a class="text-link" href="../cv.pdf" target="_blank" rel="noopener" data-cursor-label="résumé">Résumé (PDF)</a>
       </div>
 
       <ul class="hero-proof" aria-label="Track record">
-        <li><b>45+</b> scripts &amp; extensions in production</li>
+        <li><b>40</b> scripts published</li>
         <li><b>7</b> pharmacy portals automated</li>
         <li><b>91.07%</b> pharmacy board rating</li>
         <li><b>RPh</b> licensed pharmacist, PH</li>
       </ul>
+      <p class="hero-tz"><b>UTC+8</b> Cagayan de Oro keeps the same clock as Perth and runs 1.5 to 2 hours behind Brisbane, Sydney and Melbourne.</p>
     </div>
 
     <!-- Bottom strip: scroll cue (left) + photo meta (right) -->
@@ -2336,7 +2343,7 @@
       <div class="body-11">
         <div class="svc-head">
           <h2 class="display about-h" data-split>What I build for you.</h2>
-          <p>Proven in <strong>a live telehealth clinic</strong> and <strong>my own job hunt</strong>, and open to any automation job. Four kinds of systems, one goal: the busywork runs itself, and a human signs off every action. Pick one to see how it runs.</p>
+          <p>Proven in <strong>a live telehealth clinic</strong> and in <strong>tools I build and publish myself</strong>, and open to any automation work. Four kinds of systems, one goal: the busywork runs itself, and a human signs off every action. Pick one to see how it runs.</p>
         </div>
 
         <div class="svc" id="svc">
@@ -2386,8 +2393,8 @@
                 </div>
                 <div class="svc-proof">
                   <span class="svc-sub">Running today</span>
-                  <a href="#cb-ojph"><small>Clinic script suite</small>~6 min → ~40 s per order</a>
-                  <a href="#cb-suite"><small>Unified menu</small>602 old templates merged into one bank</a>
+                  <a href="#cb-suite"><small>Clinic script suite</small>~6 min → ~40 s per order</a>
+                  <a href="#ws"><small>Unified menu</small>602 old templates merged into one bank</a>
                 </div>
               </div>
               <div class="svc-foot"><div class="svc-tools"><span class="tag-mono">Zoho</span><span class="tag-mono">Node</span><span class="tag-mono">Userscripts</span><span class="tag-mono">MCP</span></div></div>
@@ -2423,8 +2430,8 @@
                 </div>
                 <div class="svc-proof">
                   <span class="svc-sub">Running today</span>
-                  <a href="#ws"><small>Clinic script suite</small>7 pharmacy portals across 4 vendors</a>
-                  <a href="#ws"><small>OJ.ph Cleaner</small>Filters a job board that ships none</a>
+                  <a href="#cb-suite"><small>Clinic script suite</small>7 pharmacy portals across 4 vendors</a>
+                  <a href="#cb-ojph"><small>OJ.ph Cleaner</small>Filters a job board that ships no filters of its own</a>
                 </div>
               </div>
               <div class="svc-foot"><div class="svc-tools"><span class="tag-mono">MV3</span><span class="tag-mono">CDP</span><span class="tag-mono">Tampermonkey</span><span class="tag-mono">IndexedDB</span><span class="tag-mono">Tests</span></div></div>
@@ -2460,8 +2467,8 @@
                 </div>
                 <div class="svc-proof">
                   <span class="svc-sub">Running today</span>
-                  <a href="#cb-agents"><small>Job Hunter</small>One-click résumé tailoring that never invents a fact</a>
-                  <a href="#cb-jobhunter"><small>Anki MCQ Importer</small>Folders of lecture slides into exam cards, in batch</a>
+                  <a href="#cb-agents"><small>Agent stack</small>Maintains the clinic suite, and stops rather than guesses</a>
+                  <a href="#cb-anki"><small>Anki MCQ Importer</small>Folders of lecture slides into exam cards, in batch</a>
                 </div>
               </div>
               <div class="svc-foot"><div class="svc-tools"><span class="tag-mono">Local LLMs</span><span class="tag-mono">FastAPI</span><span class="tag-mono">Hermes</span><span class="tag-mono">MCP</span></div></div>
@@ -2497,8 +2504,8 @@
                 </div>
                 <div class="svc-proof">
                   <span class="svc-sub">Running today</span>
-                  <a href="#cb-suite"><small>Job Hunter</small>Every listing scored against the résumé</a>
-                  <a href="#cb-jobhunter"><small>Job Hunter</small>359 tests behind a deterministic ATS score</a>
+                  <a href="#cb-zoho"><small>Zoho order desk</small>One approval card per order task, in final testing</a>
+                  <a href="#other-work"><small>Job Hunter Dashboard</small>359 tests behind a deterministic score</a>
                 </div>
               </div>
               <div class="svc-foot"><div class="svc-tools"><span class="tag-mono">Python</span><span class="tag-mono">FastAPI</span><span class="tag-mono">SQLite</span><span class="tag-mono">SSE</span></div></div>
@@ -2517,14 +2524,20 @@
         <div class="engage">
           <div class="engage-price">
             <span class="svc-sub">How the work is priced</span>
-            <div class="engage-num"><b>$15/hr</b><span>· $2,000/mo full-time</span></div>
-            <p>Hourly, or full-time by the month. A new automation, a fix, a script that stopped working, or a review of what you already have. You keep every script either way.</p>
-            <span class="engage-min">First audit of one workflow is free</span>
+            <div class="engage-num"><b>Scoped per engagement.</b></div>
+            <p>Pricing is scoped per engagement. Book a 30 minute call to talk through the workflow: a new automation, a fix, a script that stopped working, or a review of what you already have. You keep every script either way.</p>
+            <div class="engage-cta">
+              <a class="btn-primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-cursor-label="book a call">
+                Book a call
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a class="text-link" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Or email me</a>
+            </div>
           </div>
           <div class="engage-trust">
             <span class="svc-sub">Working with me from the Philippines</span>
             <ul class="svc-get">
-              <li><span><b>Flexible timezone coverage.</b> I overlap your working hours, from Cagayan de Oro City, Philippines.</span></li>
+              <li><span><b>Your business day, fully covered.</b> I am based in Cagayan de Oro on UTC+8: the same clock as Perth, and 1.5 to 2 hours behind Brisbane, Sydney and Melbourne depending on daylight saving. That is full overlap with any Australian business day, and my mornings overlap US Pacific afternoons.</span></li>
               <li><span><b>Built to stay online.</b> Dual-ISP internet and backup power sources, so a brownout never reaches your deadline.</span></li>
               <li><span><b>Everything in writing.</b> Scope before I start, notes on what changed when I finish, tests behind it.</span></li>
             </ul>
@@ -2533,10 +2546,11 @@
 
         <div class="svc-cta-row">
           <p>Tell me what's eating your week.</p>
-          <a class="btn-primary" href="#book" data-cursor-label="book a call">
-            Hire me
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <a class="btn-primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-cursor-label="book a call">
+            Book a call
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
+          <a class="text-link" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Email me</a>
         </div>
       </div>
     </div>
@@ -2556,22 +2570,23 @@
       <div class="body-11">
         <div class="stack-head">
           <h2 class="display about-h" data-split>Built and running.</h2>
-          <p>Things I've shipped: mostly quiet plumbing that runs every day in a live clinic. Production tools first, then the automations themselves, drawn the way each system actually behaves.</p>
+          <p>Things I've shipped: the clinic's back office first, then the tools I publish, then the automations themselves, drawn the way each system actually behaves.</p>
         </div>
 
-        <!-- ── Client builds ───────────────────────────────────────────── -->
-        <div class="work-sub"><span>Production tools</span><span class="n">4 projects</span></div>
+        <!-- ── Selected projects, in the owner's order: clinic suite, order desk, Anki
+             importer, PH pharmacy guide, OJ.ph Cleaner; the agent stack closes the set ── -->
+        <div class="work-sub"><span>Selected projects</span><span class="n">6 projects</span></div>
         <div class="cb-grid">
-          <!-- Audit: wide split, the 59 sub-accounts drawn as a map being swept -->
+          <!-- 1. Flagship: wide split, the published mirror drawn as a map being swept -->
           <article class="card cb cb--wide" id="cb-suite">
             <div class="cb-text">
               <div>
-                <div class="cb-head"><span class="card-num">Telehealth clinic · contract · 2026-now</span><span class="cb-status">In production</span></div>
+                <div class="cb-head"><span class="card-num">Telehealth clinic · contract · 2026 to now</span><span class="cb-status">In production</span></div>
                 <h3 class="card-title">45+ scripts and <em>extensions</em>, running a clinic's back office.</h3>
                 <p class="card-body">Tampermonkey userscripts and Manifest V3 extensions covering order entry, pharmacy-portal sessions, carrier tracking, address validation and patient-data handoffs. Each one is isolated, so a fix for one portal cannot break another.</p>
               </div>
               <div>
-                <div class="cb-stats"><div><b>45+</b><span>scripts &amp; extensions</span></div><div><b>40</b><span>published</span></div><div><b>7</b><span>pharmacy portals</span></div></div>
+                <div class="cb-stats"><div><b>~40 s</b><span>per order, down from ~6 min</span></div><div><b>40</b><span>published</span></div><div><b>7</b><span>pharmacy portals</span></div></div>
                 <div class="card-tags"><span class="tag-mono">MV3</span><span class="tag-mono">Userscripts</span><span class="tag-mono">Zoho</span><span class="tag-mono">CDP</span></div>
                 <a class="code-link" href="https://github.com/anki-boi/userscript-showcase" target="_blank" rel="noopener">View the code ↗</a>
               </div>
@@ -2583,12 +2598,80 @@
             </figure>
           </article>
 
-          <!-- Hiring: the reminder ladder, with a pulse riding toward the interview -->
+          <!-- 2. Zoho order desk: words only, code private -->
+          <article class="card cb" id="cb-zoho">
+            <div>
+              <div class="cb-head"><span class="card-num">Telehealth clinic · contract · 2026</span><span class="cb-status">Final testing</span></div>
+              <h3 class="card-title">A Zoho order desk that <em>checks every order</em> before it moves.</h3>
+              <dl class="cb-case">
+                <div><dt>Problem</dt><dd>Every order task in the CRM meant opening the record, confirming payment and paperwork, looking up allergies, working out which pharmacy can ship to that state, and only then keying the order into a portal.</dd></div>
+                <div><dt>Fix</dt><dd>A local desk reads the task queue from Zoho CRM and turns each task into one approval card: the payment check, the allergies and the record they came from, the pharmacy and the rule that picked it, and the exact note and follow-up it will write. Nothing is written until a person approves, and the portal order is filled in but never submitted by the desk.</dd></div>
+                <div><dt>Status</dt><dd>The major parts are built and it is in final testing, being hardened before it goes into production use.</dd></div>
+              </dl>
+            </div>
+            <div>
+              <figure class="viz viz-steps" aria-hidden="true">
+                <div class="viz-cap"><span>One task, one card</span><span>a person approves</span></div>
+                <div class="steps">
+                  <div class="st"><b>✓</b><span>Task</span><small>Zoho CRM</small></div>
+                  <div class="st"><b>✓</b><span>Check</span><small>Paid, allergies</small></div>
+                  <div class="st"><b>✓</b><span>Route</span><small>Rules</small></div>
+                  <div class="st"><b>✓</b><span>Approve</span><small>Human</small></div>
+                </div>
+              </figure>
+              <div class="card-tags"><span class="tag-mono">Zoho CRM</span><span class="tag-mono">MCP</span><span class="tag-mono">Node</span></div>
+              <p class="cb-private">The code stays private because it touches a live clinic.</p>
+            </div>
+          </article>
+
+          <!-- 3. Anki MCQ Importer -->
+          <article class="card cb" id="cb-anki">
+            <div>
+              <div class="cb-head"><span class="card-num">Open source · Anki add-on</span><span class="cb-status is-live">Open source</span></div>
+              <h3 class="card-title">Anki MCQ Importer: <em>lecture slides to exam cards</em>.</h3>
+              <p class="card-body">An Anki add-on that turns folders of lecture-slide images into MCQ, cloze or basic cards in batch, across six AI providers, with key rotation, retries and a transactional import.</p>
+            </div>
+            <div>
+              <figure class="viz viz-stack" aria-hidden="true">
+                <div class="viz-cap"><span>Slides in</span><span>cards out</span></div>
+                <div class="stack">
+                  <div class="layer"><span>Images</span><i class="logic"><i></i><i></i><i></i></i></div>
+                  <div class="layer"><span>Model</span><i class="logic"><i></i><i></i><i></i></i></div>
+                  <div class="layer"><span>Cards</span><i class="logic"><i></i><i></i><i></i></i></div>
+                </div>
+              </figure>
+              <div class="cb-stats"><div><b>6</b><span>AI providers</span></div><div><b>1</b><span>transaction per import</span></div></div>
+              <div class="card-tags"><span class="tag-mono">Python</span><span class="tag-mono">Anki</span><span class="tag-mono">LLMs</span></div>
+              <a class="code-link" href="https://github.com/anki-boi/Anki-MCQ-Importer-AI-Batch-Generator" target="_blank" rel="noopener">View the code ↗</a>
+            </div>
+          </article>
+
+          <!-- 4. PH Pharmacy Setup Guide: the one project with a live demo -->
+          <article class="card cb" id="cb-phguide">
+            <div>
+              <div class="cb-head"><span class="card-num">Open source · live demo</span><span class="cb-status is-live">Live</span></div>
+              <h3 class="card-title">A guide to <em>opening a pharmacy</em> in the Philippines.</h3>
+              <p class="card-body">Opening a community pharmacy here means licences, permits, capital and layout rules with no published order, so a step done out of sequence stalls the launch. The guide sets it out as seven ordered phases and 24 entries you tick off, with progress saved on your own device: no account, no server, no analytics.</p>
+            </div>
+            <div>
+              <a class="cb-shot" href="https://anki-boi.github.io/PH-Pharmacy-Setup-Guide/" target="_blank" rel="noopener" data-cursor="image">
+                <img src="../img/ph-guide.webp" width="1000" height="643" loading="lazy" decoding="async" alt="The PH Pharmacy Setup Guide on desktop: a progress meter, the seven phases in a sidebar, and the first entries ticked off." />
+              </a>
+              <div class="cb-stats"><div><b>7</b><span>ordered phases</span></div><div><b>24</b><span>entries</span></div><div><b>1</b><span>file, no build</span></div></div>
+              <div class="card-tags"><span class="tag-mono">HTML</span><span class="tag-mono">CSS</span><span class="tag-mono">JS</span></div>
+              <span class="cb-links">
+                <a class="code-link" href="https://anki-boi.github.io/PH-Pharmacy-Setup-Guide/" target="_blank" rel="noopener">Open the guide ↗</a>
+                <a class="code-link" href="https://github.com/anki-boi/PH-Pharmacy-Setup-Guide" target="_blank" rel="noopener">View the code ↗</a>
+              </span>
+            </div>
+          </article>
+
+          <!-- 5. OJ.ph Cleaner: a board countless Filipinos depend on, cleaned up locally -->
           <article class="card cb" id="cb-ojph">
             <div>
-              <div class="cb-head"><span class="card-num">OnlineJobs.ph · 2026</span><span class="cb-status is-live">Personal</span></div>
-              <h3 class="card-title">A job board filter that <em>keeps up with the board</em>.</h3>
-              <p class="card-body">OnlineJobs.ph ships no filters worth using. The extension hides stale, unpaid and blocked listings as the page loads, lets pay decide the tier, and can read every post in full before ranking the board by pay. Screening effort stops scaling with how much the market posted.</p>
+              <div class="cb-head"><span class="card-num">OnlineJobs.ph · Chrome extension · 2026</span><span class="cb-status is-live">Open source</span></div>
+              <h3 class="card-title">A cleaner board for a site <em>countless Filipinos rely on</em>.</h3>
+              <p class="card-body">OnlineJobs.ph is where countless Filipinos look for remote work, yet the board buries pay in free text and keeps stale posts in the results. The extension filters those listings out as the page loads and converts every salary into one comparable figure, all on your own machine: no account, no server, no analytics.</p>
             </div>
             <div>
               <figure class="viz viz-ladder" aria-hidden="true">
@@ -2597,34 +2680,11 @@
               </figure>
               <div class="cb-stats"><div><b>0.16</b><span>extension version</span></div><div><b>18</b><span>test files, plus a live Chrome harness</span><span class="cb-meter" style="--v:73%"><i></i></span></div></div>
               <div class="card-tags"><span class="tag-mono">MV3</span><span class="tag-mono">Live FX rates</span><span class="tag-mono">IndexedDB</span></div>
-                <a class="code-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code ↗</a>
+              <a class="code-link" href="https://github.com/anki-boi/ojph-cleaner" target="_blank" rel="noopener">View the code ↗</a>
             </div>
           </article>
 
-          <!-- Wedding staffing: the five-answer qualifier and its two exits -->
-          <article class="card cb" id="cb-jobhunter">
-            <div>
-              <div class="cb-head"><span class="card-num">Job hunting · 2026</span><span class="cb-status">Local</span></div>
-              <h3 class="card-title">A <em>local job tracker</em> that scores every listing.</h3>
-              <p class="card-body">FastAPI + SQLite dashboard that scrapes OnlineJobs.ph, scores every listing against the résumé with a deterministic ATS rubric, and alerts you when something new lands. 359 tests behind it, so a change cannot quietly move a score.</p>
-            </div>
-            <div>
-              <figure class="viz viz-qual" aria-hidden="true">
-                <div class="viz-cap"><span>Deterministic score</span><span>résumé-matched</span></div>
-                <div class="qual">
-                  <span class="q-pips"><i></i><i></i><i></i><i></i><i></i></span>
-                  <span class="q-arrow">→</span>
-                  <span class="q-chip">Score</span>
-                  <span class="q-fork"><span class="q-yes">Interested</span><span class="q-no">Applied</span></span>
-                </div>
-              </figure>
-              <div class="cb-stats"><div><b>0</b><span>LLM calls in the score</span></div><div><b>359</b><span>tests, CI and pre-push gates</span></div><div><b>1</b><span>local database</span></div></div>
-              <div class="card-tags"><span class="tag-mono">Python</span><span class="tag-mono">FastAPI</span><span class="tag-mono">SSE</span><span class="tag-mono">SQLite</span></div>
-                <a class="code-link" href="https://github.com/anki-boi/onlinejobs.ph-suite" target="_blank" rel="noopener">View the code ↗</a>
-            </div>
-          </article>
-
-          <!-- Messaging: wide and mirrored, one record that really sends -->
+          <!-- The AI-native receipt: wide and mirrored, closes the set -->
           <article class="card cb cb--wide cb--flip" id="cb-agents">
             <div class="cb-text">
               <div>
@@ -2633,7 +2693,7 @@
                 <p class="card-body">Hermes orchestrates pi and DeepSeek coding harnesses, with skills, persistent memory and a gate, plus models served on my own machine. The same stack maintains every script in the suite, and it is told to stop rather than guess.</p>
               </div>
               <div>
-                <div class="cb-stats"><div><b>45+</b><span>scripts it maintains</span></div><div><b>1</b><span>human signing off every action</span></div></div>
+                <div class="cb-stats"><div><b>1</b><span>machine serving the models</span></div><div><b>1</b><span>human signing off every action</span></div></div>
                 <div class="card-tags"><span class="tag-mono">Local LLMs</span><span class="tag-mono">llama.cpp</span><span class="tag-mono">MCP</span></div>
               </div>
             </div>
@@ -2844,53 +2904,12 @@
           </div>
         </div>
 
-        <!-- ── More shipped systems (original cards, now with their pipeline) ── -->
-        <div class="work-sub"><span>More things that run</span><span class="n">7</span></div>
+        <!-- ── More from the clinic suite and before it ── -->
+        <div class="work-sub"><span>More things that run</span><span class="n">4</span></div>
         <div class="work-grid">
-          <article class="card span-4 card--steps">
+          <article class="card span-3 card--mono">
             <div>
-              <span class="card-num">01 / Pipeline</span>
-              <h3 class="card-title">Order queues <em>that route</em> themselves to the right pharmacy.</h3>
-              <p class="card-body">Prototype: every overdue order task checked for payment, paperwork and allergies, routed by state and drug form, then handed to a person as one approval card.</p>
-            </div>
-            <div>
-              <figure class="viz viz-steps" aria-hidden="true">
-                <div class="viz-cap"><span>One query, one desk</span><span>Routing, blocks and messages from one query</span></div>
-                <div class="steps">
-                  <div class="st"><b>✓</b><span>Task</span><small>Zoho CRM</small></div>
-                  <div class="st"><b>✓</b><span>Route</span><small>Rules</small></div>
-                  <div class="st"><b>✓</b><span>Draft</span><small>Order block</small></div>
-                  <div class="st"><b>✓</b><span>Approve</span><small>Human</small></div>
-                </div>
-              </figure>
-              <div class="card-tags"><span class="tag-mono">Zoho</span><span class="tag-mono">Node</span><span class="tag-mono">MCP</span></div>
-            </div>
-            <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-          </article>
-
-          <article class="card span-2">
-            <div>
-              <span class="card-num">02 / AI batch</span>
-              <h3 class="card-title">Anki MCQ Importer <em>slides to exam cards</em>.</h3>
-              <p class="card-body">An Anki add-on that turns folders of lecture-slide images into MCQ, cloze or basic cards in batch, across six AI providers, with key rotation, retries and a transactional import.</p>
-            </div>
-            <div>
-              <figure class="viz viz-stack" aria-hidden="true">
-                <div class="viz-cap"><span>~1 min per card</span><span>to a batch job</span></div>
-                <div class="stack">
-                  <div class="layer"><span>Images</span><i class="logic"><i></i><i></i><i></i></i></div>
-                  <div class="layer"><span>Model</span><i class="logic"><i></i><i></i><i></i></i></div>
-                  <div class="layer"><span>Cards</span><i class="logic"><i></i><i></i><i></i></i></div>
-                </div>
-              </figure>
-              <div class="card-tags"><span class="tag-mono">Python</span><span class="tag-mono">Anki</span><span class="tag-mono">LLMs</span></div>
-            </div>
-            <a class="card-arrow" href="https://github.com/anki-boi/Anki-MCQ-Importer-AI-Batch-Generator" target="_blank" rel="noopener" aria-label="View the code"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </article>
-
-          <article class="card span-2 card--mono">
-            <div>
-              <span class="card-num">03 / Tracking</span>
+              <span class="card-num">01 / Tracking</span>
               <h3 class="card-title">Carrier <em>tracking, start to finish</em>.</h3>
               <p class="card-body">Ship date to delivered across UPS, FedEx and EasyPost, plus address validation so a bad record never reaches a pharmacy.</p>
             </div>
@@ -2907,9 +2926,9 @@
             <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </article>
 
-          <article class="card span-2">
+          <article class="card span-3">
             <div>
-              <span class="card-num">04 / Debug</span>
+              <span class="card-num">02 / Debug</span>
               <h3 class="card-title">MV3 <em>debugging</em> &amp; optimisation.</h3>
               <p class="card-body">Brittle scripts rebuilt as isolated suites with a gate, so one fix cannot break another portal.</p>
             </div>
@@ -2925,7 +2944,7 @@
 
           <article class="card span-2">
             <div>
-              <span class="card-num">05 / Docs</span>
+              <span class="card-num">03 / Docs</span>
               <h3 class="card-title"><em>Clinic SOPs</em> and hand-off flows.</h3>
               <p class="card-body">Documented and automated the parts of the routine that never needed a pharmacist's attention.</p>
             </div>
@@ -2939,25 +2958,9 @@
             <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </article>
 
-          <article class="card span-2">
-            <div>
-              <span class="card-num">06 / Open source</span>
-              <h3 class="card-title">True-Anki MCQ <em>note template</em>.</h3>
-              <p class="card-body">An Anki card template for multiple-choice exams like the pharmacy boards: shuffled choices, single and multiple answers, and correct, wrong and missed feedback. My most-starred repo, at 15 stars.</p>
-            </div>
-            <div>
-              <figure class="viz viz-phone" aria-hidden="true">
-                <div class="phone"><span class="ph-card"><b>A</b><b>B</b><b>C</b><b>D</b></span><span class="ph-cap"><i></i><i></i></span></div>
-                <ol class="ph-steps"><li>Shuffle</li><li>Answer</li><li>Check</li><li>Correct</li><li>Missed</li><li>Review</li></ol>
-              </figure>
-              <div class="card-tags"><span class="tag-mono">HTML</span><span class="tag-mono">CSS</span><span class="tag-mono">JS</span></div>
-            </div>
-            <a class="card-arrow" href="https://github.com/anki-boi/True-Anki-MCQ-Note-Template" target="_blank" rel="noopener" aria-label="View the code"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </article>
-
           <article class="card span-4 card--dash">
             <div>
-              <span class="card-num">07 / Trading</span>
+              <span class="card-num">04 / Trading</span>
               <h3 class="card-title">15+ Expert Advisors <em>in MQL4/MQL5</em>.</h3>
               <p class="card-body">Built 2020-2023 with full risk management and validated on 99.9%-quality tick data. Where the automation habit started.</p>
             </div>
@@ -2978,6 +2981,15 @@
             <span class="card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </article>
         </div>
+
+        <!-- ── Other work: short one-liners, each with its repo ── -->
+        <div class="work-sub" id="other-work"><span>Other work</span><span class="n">3 repos</span></div>
+        <ul class="other-list">
+          <li><a href="https://github.com/anki-boi/onlinejobs.ph-suite" target="_blank" rel="noopener"><b>Job Hunter Dashboard</b><span>A local FastAPI and SQLite dashboard that scores job listings with a fixed, explainable rubric, behind 359 tests.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/anki-boi/True-Anki-MCQ-Note-Template" target="_blank" rel="noopener"><b>True-Anki MCQ Note Template</b><span>An Anki card template for multiple-choice exams like the pharmacy boards: shuffled choices, single and multiple answers. My most starred repo.</span><i aria-hidden="true">↗</i></a></li>
+          <li><a href="https://github.com/anki-boi/datecard" target="_blank" rel="noopener"><b>DateCard</b><span>A QR-based dating card with no app and no algorithm. React, Vite and Supabase, MIT licensed.</span><i aria-hidden="true">↗</i></a></li>
+        </ul>
+
       </div>
     </div>
   </section>
@@ -3022,20 +3034,20 @@
 
       <div class="body-4-9">
         <div class="about-photo" data-cursor="image">
-          <img id="img-about" alt="Jeyson Dagondon" src="img/about.png" loading="lazy" />
+          <img id="img-about" alt="Jeyson Dagondon" src="../img/about.png" width="1200" height="1600" loading="lazy" />
         </div>
 
         <div class="stats">
           <div class="stat">
-            <span class="stat-num" data-count="45" data-suffix="+">0+</span>
-            <span class="stat-label">Scripts &amp; extensions in production</span>
+            <span class="stat-num" data-count="40" data-suffix="">40</span>
+            <span class="stat-label">Scripts published in a public mirror</span>
           </div>
           <div class="stat">
-            <span class="stat-num" data-count="22" data-suffix="">0</span>
+            <span class="stat-num" data-count="22" data-suffix="">22</span>
             <span class="stat-label">Tools I work in daily</span>
           </div>
           <div class="stat">
-            <span class="stat-num" data-count="7" data-suffix="">0</span>
+            <span class="stat-num" data-count="7" data-suffix="">7</span>
             <span class="stat-label">pharmacy portals automated</span>
           </div>
         </div>
@@ -3067,7 +3079,16 @@
               <span class="wf-pub"><i></i>Published</span>
             </span>
           </div>
-          <div class="wf-flow" id="wfFlow"></div>
+          <div class="wf-flow" id="wfFlow">
+            <noscript>
+              <ol class="nojs-list" reversed>
+                <li><b>The agent stack</b>, self-hosted, since Aug 2026: Hermes orchestration with pi and DeepSeek coding harnesses, models served on my own machine, and MCP tooling.</li>
+                <li><b>Medical Ops &amp; Process Automation Specialist</b>, Colorado Medical Solutions (contract), since Apr 2026. A US telehealth clinic: records, refills and the prescription pipeline in Zoho CRM, ~6 min → ~40 s per order, with human sign-off on every action.</li>
+                <li><b>BSc Pharmacy, internships and the board</b>, Liceo de Cagayan University. Licensed RPh, board rating 91.07%.</li>
+                <li><b>Automation &amp; Algorithmic Systems</b> (contract, supervised), 2020 to 2023: Excel VBA and n8n reporting pipelines, and 15+ Expert Advisors in MQL4/MQL5.</li>
+              </ol>
+            </noscript>
+          </div>
         </div>
       </div>
     </div>
@@ -3098,7 +3119,11 @@
           <button class="filter-btn" data-filter="Data">Data</button>
         </div>
 
-        <div class="logo-grid" id="logoGrid"></div>
+        <div class="logo-grid" id="logoGrid">
+          <noscript>
+            <p class="nojs-list" style="list-style:none;padding:0;grid-column:1/-1">Zoho CRM, pharmacy portals, RingCentral, Tampermonkey, Chrome MV3, Chrome DevTools Protocol, Google Apps Script, n8n, Git and GitHub, Python, Google Sheets, Excel VBA, FastAPI and SQLite, Pi, Hermes, MCP, llama.cpp, vLLM, Ollama, Gemini API, OpenAI and Claude, ComfyUI.</p>
+          </noscript>
+        </div>
       </div>
     </div>
   </section>
@@ -3117,18 +3142,22 @@
       Have a system that <em>should run itself?</em>
     </h2>
 
-    <a class="magnetic contact-cta" href="mailto:donjeysonofficial@gmail.com" data-magnetic data-cursor-label="say hi">
-      <span class="magnetic-inner">
-        Email me: donjeysonofficial@gmail.com
-      </span>
-      <svg class="arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <div class="contact-actions">
+      <a class="magnetic contact-cta" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-magnetic data-cursor-label="book a call">
+        <span class="magnetic-inner">
+          Book a 30 minute call
+        </span>
+        <svg class="arrow-up-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a class="text-link contact-alt" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Or email donjeysonofficial@gmail.com</a>
+    </div>
 
-    <!-- Contact: reply panel; no third-party booking widget -->
+    <!-- Contact: the call is booked on Calendly in a new tab (no embedded widget, so the
+         page loads no third-party script). Email is the second action. -->
     <div class="book" id="book">
       <div class="book-copy">
-        <span class="book-kicker"><span class="pulse-dot"></span>Hire me</span>
-        <h3 class="book-h">Send the problem. <em>We'll map it together.</em></h3>
+        <span class="book-kicker"><span class="pulse-dot"></span>Book a call</span>
+        <h3 class="book-h">Bring the problem. <em>We'll map it together.</em></h3>
         <ul class="book-list">
           <li>Describe the workflow and where the manual work piles up</li>
           <li>I'll tell you what I'd automate first, and what I would leave alone</li>
@@ -3137,8 +3166,14 @@
         <p class="book-alt">Prefer email? <a href="mailto:donjeysonofficial@gmail.com">donjeysonofficial@gmail.com</a></p>
       </div>
       <div class="book-frame" id="bookFrame">
-        <div class="book-reply"><span class="book-reply-k">Reply within</span><b>24h</b><span class="book-reply-t">Flexible timezone coverage, I overlap your hours</span></div>
-        <a class="btn-primary" href="mailto:donjeysonofficial@gmail.com">Email me</a>
+        <div class="book-reply"><span class="book-reply-k">One call</span><b>30 min</b><span class="book-reply-t">Pricing is scoped per engagement, so this is where we talk through the workflow.</span></div>
+        <div class="engage-cta">
+          <a class="btn-primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-cursor-label="book a call">
+            Book a call
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="text-link" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Email me</a>
+        </div>
       </div>
     </div>
 
@@ -3161,7 +3196,7 @@
       </div>
       <div class="contact-meta-item">
         <span class="label">Résumé</span>
-        <a class="value" href="cv.pdf" target="_blank" rel="noopener">PDF · one page</a>
+        <a class="value" href="../cv.pdf" target="_blank" rel="noopener">PDF · one page</a>
       </div>
       <div class="contact-meta-item">
         <span class="label">Location</span>
@@ -3199,11 +3234,12 @@
   <div class="toast" id="toast">✦ thanks for clicking, you're the kind of curious I like</div>
 
   <!-- =============================================================
-       LIBRARIES
+       LIBRARIES: self-hosted in ../assets/vendor/ (versions and
+       licenses in ../assets/vendor/LICENSES.md). No CDN.
        ============================================================= -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="../assets/vendor/gsap.min.js"></script>
+  <script src="../assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="../assets/vendor/lenis.min.js"></script>
 
   <script>
   (function () {
@@ -3234,7 +3270,7 @@
       { id: 'zoho',       name: 'Zoho CRM',            cat: 'Clinical',   blurb: "Home base: records, refills, the whole Rx pipeline." },
       { id: 'portals',name: 'Pharmacy portals',    cat: 'Clinical',   blurb: "Seven portals across four vendors, each with its own script." },
       { id: 'ringcentral',name: 'RingCentral',         cat: 'Clinical',   blurb: "Patient messaging, sent from a CRM record." },
-      { id: 'tm',         name: 'Tampermonkey',        cat: 'Automation', blurb: "45+ userscripts against live portals." },
+      { id: 'tm',         name: 'Tampermonkey',        cat: 'Automation', blurb: "Userscripts against seven live pharmacy portals." },
       { id: 'chrome',     name: 'Chrome MV3',          cat: 'Automation', blurb: "Extensions with a test gate before release." },
       { id: 'cdp',        name: 'CDP',                 cat: 'Automation', blurb: "Chrome DevTools Protocol for pages that refuse bots." },
       { id: 'gas',        name: 'Google Apps Script',  cat: 'Automation', blurb: "Glue inside the Google stack." },
@@ -3348,11 +3384,13 @@
     /* -------------------------------------------------------------
        3. Hero: name letters, subtitle, typewriter, photo, blob
        ------------------------------------------------------------- */
-    const NAME = 'Jeyson Dagondon';
-    const TAGLINE = "45+ userscripts and Manifest V3 extensions running the back office of a live telehealth clinic: records, refills and the prescription pipeline in Zoho CRM, with a human signing off every action.";
+    // Both come from the markup, so the page reads the same with JavaScript off.
+    const nameEl = $('#heroName');
+    const NAME = nameEl.textContent.trim();
+    const TAGLINE = $('#typed').textContent.trim();
 
     // Render name as individual chars
-    const nameEl = $('#heroName');
+    nameEl.textContent = '';
     // one nowrap span per word, so the line only breaks between words, never mid-name
     let word = null;
     NAME.split('').forEach((ch, i) => {
@@ -3381,7 +3419,7 @@
       setTimeout(tick, 9);
     }
     // fast on purpose: the value line has to be readable within the first few seconds
-    if (reduced) typedEl.textContent = TAGLINE; else setTimeout(tick, 650);
+    if (reduced) typedEl.textContent = TAGLINE; else { typedEl.textContent = ''; setTimeout(tick, 650); }
 
     // Hero blob follows cursor
     const heroSec = $('.hero');
@@ -3698,8 +3736,8 @@
           tags: ['Zoho CRM', 'Tampermonkey', 'Chrome MV3'], carries: 'a live clinic to automate' },
         { kind: 'Action', icon: 'grid', role: 'The automation suite', co: 'self-built',
           start: [2026, 4], end: null, dur: '',
-          blurb: '45+ userscripts and Manifest V3 extensions, 40 of them published. Each one is isolated, so a fix for one pharmacy portal cannot break another, and every commit runs a verification gate first.',
-          tags: ['45+ scripts', 'CDP', 'CI gate'], carries: 'systems that fail loudly' },
+          blurb: 'The userscripts and Manifest V3 extensions behind the clinic, 40 of them published. Each one is isolated, so a fix for one pharmacy portal cannot break another, and every commit runs a verification gate first.',
+          tags: ['40 published', 'CDP', 'CI gate'], carries: 'systems that fail loudly' },
         { kind: 'Action', icon: 'spark', role: 'The agent stack', co: 'self-hosted',
           start: [2026, 8], end: null, dur: '',
           blurb: 'Hermes orchestration with pi and DeepSeek coding harnesses, skills and persistent memory, models served on my own machine, and MCP tooling so the agents can read the systems they maintain.',
@@ -3751,8 +3789,9 @@
             '<span class="wf-status"><i></i><span class="wf-txt">Ready</span></span></div>' +
           '<h3 class="wf-role">Your workflow, running quietly.</h3>' +
           '<p class="wf-blurb">Everything above points at your stack: your data and the busywork your team carries, with a human signing off every action.</p>' +
-          '<a class="btn-primary" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Email me' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>' +
+          '<a class="btn-primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener" data-cursor-label="book a call">Book a call' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>' +
+          ' <a class="text-link wf-alt" href="mailto:donjeysonofficial@gmail.com" data-cursor-label="email me">Or email me</a>' +
         '</article>';
       flow.innerHTML = html;
       const totalEl = $('#wfTotal');
@@ -3936,12 +3975,12 @@
     })();
 
     /* -------------------------------------------------------------
-       8e. Booking: removed: the call-to-action is a mailto
-           only when the visitor is ~1 screen away, so the hero never
-           pays for the widget. Any "#book" link also triggers it.
+       8e. Booking: every primary action is a plain link to Calendly
+           (calendly.com/donjeysonofficial/30min, new tab), and email is
+           the second action. No scheduler widget is embedded, so no
+           third-party script runs on this page and the links work
+           without JavaScript. Nothing to wire up here.
        ------------------------------------------------------------- */
-    /* No booking widget: the call-to-action is a mailto. If you add a scheduler,
-       inject its iframe here the way the reference build lazy-loaded its widget. */
 
     /* -------------------------------------------------------------
        9. 3D depth: layered hero parallax + tilting work cards
@@ -4020,7 +4059,7 @@
     if (mount && section) loadObserver.observe(section);
 
     async function boot() {
-      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js');
+      const THREE = await import(new URL('../assets/vendor/three.module.min.js', document.baseURI).href);
 
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile, powerPreference: 'high-performance' });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.25 : 1.6));
@@ -4272,7 +4311,7 @@
     async function boot(isLate) {
       const src = imgEl.currentSrc || imgEl.getAttribute('src');
       const [THREE, im] = await Promise.all([
-        import('https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js'),
+        import(new URL('../assets/vendor/three.module.min.js', document.baseURI).href),
         loadImage(src)
       ]);
       if (isLate()) return false;                       // photo already shown; don't swap it out mid-view
@@ -4466,4 +4505,4 @@
     }
   </script>
 </body>
-</htm
+</html>
