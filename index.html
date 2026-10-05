@@ -40,7 +40,7 @@
     01 · THE CHAOS      tool tiles drift in, unlinked
     02 · THE CONNECTION first accent line draws between two nodes
     03 · THE SYSTEM     hub + 8 nodes branch out and light up
-    04 · THE AGENTS     the web becomes a brain, synapses fire
+    04 · THE AGENTS     a molecule assembles atom by atom, bonds streaming
     05 · THE QUIET      particles settle into the monogram, name + CTA land
 
   EDITING:
@@ -59,7 +59,7 @@
     · GSAP master timeline: 0 to 100 units, 20 units per leg, pinned stage.
     · window.__pw = { morph, order, charge, leave, dust, gather, grow, burst,
       branch, zoom, reveal }: the scrubbed state the shaders read every frame.
-      morph: 0 chaos, 1 stream, 2 network, 3 brain, 4 monogram.
+      morph: 0 chaos, 1 stream, 2 network, 3 molecule, 4 monogram.
     · Leg 1's ring is an N-gon (any N). Leg 3's web is hardcoded 8 nodes + hub in
       BOTH buildWeb() and buildShapes(). Leg 2's node/wire coordinates are
       hardcoded in BOTH the leg-2 SVG and buildShapes(). Change one, change the other.
@@ -278,7 +278,9 @@
     .stage.pw-live #connLine,
     .stage.pw-live #connParticle,
     .stage.pw-live #sysSvg,
-    .stage.pw-live #aiSparkle { visibility: hidden; }
+    .stage.pw-live #aiSparkle,
+    .stage.pw-live .ai-ring,
+    .stage.pw-live #aiSparks { visibility: hidden; }   /* the backdrop film draws the orbitals */
     /* dark halo keeps the node names readable over the glowing particles */
     .stage.pw-live .conn-label { fill: var(--ink); font-size: 12px; font-weight: 500; paint-order: stroke; stroke: color-mix(in srgb, var(--bg) 85%, transparent); stroke-width: 3px; stroke-linejoin: round; }
     @media (max-width: 720px) { .stage.pw-live .conn-label { font-size: 17px; letter-spacing: 0.04em; stroke-width: 5px; } } /* SVG units scale ~0.5× on phones; sized so the longer node label fits */
@@ -408,7 +410,7 @@
     }
 
     /* ============================================================
-       LEG 4: THE TURN (the web becomes a brain)
+       LEG 4: THE TURN (the web becomes a molecule)
        ============================================================ */
     .ai-svg { width: 100%; height: 100%; overflow: visible; }
     .ai-ring {
@@ -421,47 +423,24 @@
       fill: var(--accent);
       filter: drop-shadow(0 0 6px var(--accent-glow));
     }
-    /* Brain: the final AI visualization */
-    .brain-outline {
-      fill: color-mix(in srgb, var(--accent) 8%, transparent);
+    /* Molecule: the leg 4 fallback (stroked bonds, filled atoms) */
+    .mol-bond {
       stroke: var(--accent);
-      stroke-width: 1.8;
-      stroke-linejoin: round;
-      filter: drop-shadow(0 0 22px var(--accent-glow));
-    }
-    .brain-sulcus {
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 1.2;
-      opacity: 0.75;
+      stroke-width: 2;
       stroke-linecap: round;
-    }
-    .brain-gyrus {
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 0.9;
-      opacity: 0.55;
-      stroke-linecap: round;
-    }
-    .brain-node {
-      fill: var(--accent);
-      filter: drop-shadow(0 0 5px var(--accent-glow));
-    }
-    .brain-node.core {
-      fill: color-mix(in srgb, var(--accent) 18%, white);
-      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
-    }
-    .brain-synapse {
-      stroke: var(--accent);
-      stroke-width: 1;
-      opacity: 0.7;
-      stroke-linecap: round;
+      opacity: 0.85;
       filter: drop-shadow(0 0 3px var(--accent-glow));
     }
-    @keyframes brain-pulse {
-      0%, 100% { transform: scale(1); }
-      50%      { transform: scale(1.15); }
+    .mol-bond.h { stroke-width: 1.4; opacity: 0.6; }
+    .mol-atom {
+      fill: var(--accent);
+      stroke: color-mix(in srgb, var(--accent) 45%, white);
+      stroke-width: 1;
+      filter: drop-shadow(0 0 6px var(--accent-glow));
     }
+    .mol-atom.o { fill: var(--hot); stroke: color-mix(in srgb, var(--hot) 55%, white); }
+    .mol-atom.n { fill: color-mix(in srgb, var(--accent) 30%, white); stroke: #fff; }
+    .mol-atom.h { fill: color-mix(in srgb, var(--accent) 70%, var(--bg)); stroke-width: 0.6; }
 
     /* ============================================================
        LEG 5: THE SIGN-OFF
@@ -812,52 +791,65 @@
       <div class="leg" id="leg4">
         <div class="scene">
           <svg class="ai-svg" viewBox="0 0 600 600" id="aiSvg" aria-hidden="true" focusable="false">
-            <!-- Rings -->
-            <circle class="ai-ring" id="aiRing1" cx="300" cy="300" r="80"/>
-            <circle class="ai-ring" id="aiRing2" cx="300" cy="300" r="140"/>
-            <circle class="ai-ring" id="aiRing3" cx="300" cy="300" r="210"/>
-            <!-- Central brain: the AI visualization -->
+            <!-- Electron orbitals -->
+            <g transform="rotate(-21 300 300)"><ellipse class="ai-ring" id="aiRing1" cx="300" cy="300" rx="232" ry="64"/></g>
+            <g transform="rotate(17 300 300)"><ellipse class="ai-ring" id="aiRing2" cx="300" cy="300" rx="252" ry="76"/></g>
+            <g transform="rotate(3 300 300)"><ellipse class="ai-ring" id="aiRing3" cx="300" cy="300" rx="270" ry="46"/></g>
+            <!-- The molecule (caffeine): bonds first so the atoms cap them; data-l is the assembly order -->
             <g id="aiSparkle" transform="translate(300 300)">
-              <!-- Outer brain silhouette (side view) -->
-              <path class="brain-outline"
-                d="M -68 -8
-                   C -74 -32, -55 -50, -30 -48
-                   C -20 -55, -5 -55, 4 -48
-                   C 20 -55, 42 -48, 52 -38
-                   C 66 -32, 74 -12, 66 2
-                   C 72 12, 64 26, 52 28
-                   C 48 40, 32 44, 18 38
-                   C 8 46, -8 46, -18 40
-                   C -32 44, -50 38, -55 24
-                   C -68 20, -74 4, -68 -8 Z"/>
-              <!-- Central sulcus dividing hemispheres -->
-              <path class="brain-sulcus"
-                d="M -2 -50 Q -6 -22, 0 4 Q 6 24, -1 40"/>
-              <!-- Gyri (folds): left hemisphere -->
-              <path class="brain-gyrus" d="M -55 -25 Q -35 -32, -15 -25"/>
-              <path class="brain-gyrus" d="M -60 -8  Q -35 -14, -12 -6"/>
-              <path class="brain-gyrus" d="M -58 12  Q -32 6,   -12 16"/>
-              <path class="brain-gyrus" d="M -48 28  Q -28 22,  -12 32"/>
-              <!-- Gyri (folds): right hemisphere -->
-              <path class="brain-gyrus" d="M 15 -25  Q 35 -32,  55 -25"/>
-              <path class="brain-gyrus" d="M 12 -8   Q 35 -14,  60 -6"/>
-              <path class="brain-gyrus" d="M 12 12   Q 32 6,    58 16"/>
-              <path class="brain-gyrus" d="M 12 28   Q 28 22,   48 32"/>
-              <!-- Synaptic connections (drawn before nodes so nodes cap them) -->
-              <line class="brain-synapse" x1="-40" y1="-14" x2="0"   y2="6"/>
-              <line class="brain-synapse" x1="40"  y1="-14" x2="0"   y2="6"/>
-              <line class="brain-synapse" x1="-30" y1="22"  x2="0"   y2="6"/>
-              <line class="brain-synapse" x1="30"  y1="22"  x2="0"   y2="6"/>
-              <line class="brain-synapse" x1="-40" y1="-14" x2="40"  y2="-14"/>
-              <line class="brain-synapse" x1="-30" y1="22"  x2="30"  y2="22"/>
-              <line class="brain-synapse" x1="-40" y1="-14" x2="-30" y2="22"/>
-              <line class="brain-synapse" x1="40"  y1="-14" x2="30"  y2="22"/>
-              <!-- Neural nodes -->
-              <circle class="brain-node" cx="-40" cy="-14" r="3"/>
-              <circle class="brain-node" cx="40"  cy="-14" r="3"/>
-              <circle class="brain-node" cx="-30" cy="22"  r="3"/>
-              <circle class="brain-node" cx="30"  cy="22"  r="3"/>
-              <circle class="brain-node core" cx="0" cy="6" r="4.5"/>
+              <line class="mol-bond" data-l="0" x1="20.8" y1="-25.2" x2="20.8" y2="22.4"/>
+              <line class="mol-bond" data-l="0" x1="14.3" y1="-16.6" x2="14.3" y2="13.8"/>
+              <line class="mol-bond" data-l="1" x1="20.8" y1="22.4" x2="-20.4" y2="46.2"/>
+              <line class="mol-bond" data-l="2" x1="-20.4" y1="46.2" x2="-61.7" y2="22.4"/>
+              <line class="mol-bond" data-l="2" x1="-61.7" y1="-25.2" x2="-61.7" y2="22.4"/>
+              <line class="mol-bond" data-l="1" x1="-20.4" y1="-49" x2="-61.7" y2="-25.2"/>
+              <line class="mol-bond" data-l="0" x1="20.8" y1="-25.2" x2="-20.4" y2="-49"/>
+              <line class="mol-bond" data-l="0" x1="20.8" y1="-25.2" x2="66.1" y2="-39.9"/>
+              <line class="mol-bond" data-l="1" x1="66.1" y1="-39.9" x2="94" y2="-1.4"/>
+              <line class="mol-bond" data-l="2" x1="94" y1="-1.4" x2="66.1" y2="37.1"/>
+              <line class="mol-bond" data-l="2" x1="83.7" y1="1.7" x2="65.9" y2="26.4"/>
+              <line class="mol-bond" data-l="1" x1="20.8" y1="22.4" x2="66.1" y2="37.1"/>
+              <line class="mol-bond" data-l="1" x1="-17.6" y1="-49" x2="-17.6" y2="-90.8"/>
+              <line class="mol-bond" data-l="1" x1="-23.2" y1="-49" x2="-23.2" y2="-90.8"/>
+              <line class="mol-bond" data-l="3" x1="-63.1" y1="20" x2="-99.3" y2="40.9"/>
+              <line class="mol-bond" data-l="3" x1="-60.3" y1="24.8" x2="-96.5" y2="45.7"/>
+              <line class="mol-bond" data-l="2" x1="-61.7" y1="-25.2" x2="-104.9" y2="-50.2"/>
+              <line class="mol-bond" data-l="2" x1="-20.4" y1="46.2" x2="-20.4" y2="96.2"/>
+              <line class="mol-bond" data-l="1" x1="66.1" y1="-39.9" x2="81.5" y2="-87.4"/>
+              <line class="mol-bond h" data-l="2" x1="94" y1="-1.4" x2="130.8" y2="-1.4"/>
+              <line class="mol-bond h" data-l="4" x1="-104.9" y1="-50.2" x2="-115.6" y2="-56.4"/>
+              <line class="mol-bond h" data-l="4" x1="-104.9" y1="-50.2" x2="-100.5" y2="-82.6"/>
+              <line class="mol-bond h" data-l="4" x1="-104.9" y1="-50.2" x2="-130.8" y2="-30.2"/>
+              <line class="mol-bond h" data-l="4" x1="-20.4" y1="96.2" x2="-50.7" y2="108.5"/>
+              <line class="mol-bond h" data-l="4" x1="-20.4" y1="96.2" x2="-20.4" y2="108.5"/>
+              <line class="mol-bond h" data-l="4" x1="-20.4" y1="96.2" x2="9.8" y2="108.5"/>
+              <line class="mol-bond h" data-l="4" x1="81.5" y1="-87.4" x2="114.1" y2="-89.9"/>
+              <line class="mol-bond h" data-l="4" x1="81.5" y1="-87.4" x2="56.6" y2="-108.5"/>
+              <line class="mol-bond h" data-l="4" x1="81.5" y1="-87.4" x2="85.3" y2="-99.2"/>
+              <circle class="mol-atom h" data-l="5" cx="85.3" cy="-99.2" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="56.6" cy="-108.5" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="114.1" cy="-89.9" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="9.8" cy="108.5" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="-20.4" cy="108.5" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="-50.7" cy="108.5" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="-130.8" cy="-30.2" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="-100.5" cy="-82.6" r="4.2"/>
+              <circle class="mol-atom h" data-l="5" cx="-115.6" cy="-56.4" r="4.2"/>
+              <circle class="mol-atom h" data-l="4" cx="130.8" cy="-1.4" r="4.2"/>
+              <circle class="mol-atom c" data-l="4" cx="81.5" cy="-87.4" r="7.5"/>
+              <circle class="mol-atom c" data-l="4" cx="-20.4" cy="96.2" r="7.5"/>
+              <circle class="mol-atom c" data-l="4" cx="-104.9" cy="-50.2" r="7.5"/>
+              <circle class="mol-atom o" data-l="4" cx="-97.9" cy="43.3" r="8.5"/>
+              <circle class="mol-atom o" data-l="4" cx="-20.4" cy="-90.8" r="8.5"/>
+              <circle class="mol-atom n" data-l="2" cx="66.1" cy="37.1" r="7.5"/>
+              <circle class="mol-atom c" data-l="2" cx="94" cy="-1.4" r="7.5"/>
+              <circle class="mol-atom n" data-l="1" cx="66.1" cy="-39.9" r="7.5"/>
+              <circle class="mol-atom n" data-l="2" cx="-20.4" cy="46.2" r="7.5"/>
+              <circle class="mol-atom c" data-l="3" cx="-61.7" cy="22.4" r="7.5"/>
+              <circle class="mol-atom n" data-l="2" cx="-61.7" cy="-25.2" r="7.5"/>
+              <circle class="mol-atom c" data-l="1" cx="-20.4" cy="-49" r="7.5"/>
+              <circle class="mol-atom c" data-l="1" cx="20.8" cy="22.4" r="7.5"/>
+              <circle class="mol-atom c" data-l="0" cx="20.8" cy="-25.2" r="7.5"/>
             </g>
             <!-- Orbital sparks -->
             <g id="aiSparks"></g>
@@ -939,7 +931,7 @@
       { short: 'Chaos',  eyebrow: '01 · The Chaos',      title: 'Seven portals.',       em: 'Nothing connected.', sub: 'Pharmacy orders keyed in by hand across seven portals and four vendors, about six minutes each, with Zoho CRM open in another tab.' },
       { short: 'Wire',   eyebrow: '02 · The Connection', title: 'One userscript.',      em: 'The portals talk.', sub: 'A userscript carries the order from Zoho CRM into the pharmacy portal and stops one click short, so a person still confirms it.' },
       { short: 'System', eyebrow: '03 · The System',     title: '45+ scripts,',         em: 'one ops layer.',  sub: '~6 min → ~40 s per order, 40 to 60 hours a month handed back, and a human still signs off every action.' },
-      { short: 'Agents', eyebrow: '04 · The Agents',     title: 'Then it starts to',    em: 'think.',          sub: 'An agent stack I run myself maintains the suite, on models served from my own machine. Every change is tested, committed and reviewed by a human.' },
+      { short: 'Agents', eyebrow: '04 · The Agents',     title: 'Then a living structure', em: 'emerges.',   sub: 'An agent stack I run myself maintains the suite, on models served from my own machine. Every change is tested, committed and reviewed by a human.' },
       { short: 'Quiet',  eyebrow: '05 · The Quiet' }
     ],
 
@@ -1155,22 +1147,28 @@
     });
 
     /* ─────────────────────────────────────────────────
-       4. LEG 4: build orbital sparks
+       4. LEG 4: the molecule's parts, and electrons riding the orbitals
        ───────────────────────────────────────────────── */
+    const molAtoms = $$('#aiSparkle .mol-atom').map(el => ({ el, l: +el.dataset.l }));
+    const molBonds = $$('#aiSparkle .mol-bond').map(el => ({ el, l: +el.dataset.l,
+      len: Math.hypot(el.x2.baseVal.value - el.x1.baseVal.value, el.y2.baseVal.value - el.y1.baseVal.value) + 1 }));
     const aiSparks = $('#aiSparks');
-    // Fewer sparks on mobile for perf (mobile GPUs struggle with 12 shadowed circles updating per-frame)
-    const sparkCount = isMobile ? 6 : 12;
+    // Fewer electrons on mobile for perf (shadowed circles updating per frame)
+    const ORBITS = [[-21, 232, 64], [17, 252, 76], [3, 270, 46]].map(([d, rx, ry]) => ({ rot: d * Math.PI / 180, rx, ry }));
+    const orbitAt = (o, a) => {
+      const ex = Math.cos(a) * o.rx, ey = Math.sin(a) * o.ry;
+      return [300 + ex * Math.cos(o.rot) - ey * Math.sin(o.rot), 300 + ex * Math.sin(o.rot) + ey * Math.cos(o.rot)];
+    };
+    const sparkCount = isMobile ? 3 : 6;
     const sparkEls = [];
     for (let i = 0; i < sparkCount; i++) {
-      const angle = (i / sparkCount) * Math.PI * 2;
-      const orbit = 210;
-      const sx = 300 + Math.cos(angle) * orbit;
-      const sy = 300 + Math.sin(angle) * orbit;
+      const orbit = ORBITS[i % 3], angle = (i / sparkCount) * Math.PI * 2 + i;
+      const [sx, sy] = orbitAt(orbit, angle);
       const spark = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       spark.setAttribute('cx', sx); spark.setAttribute('cy', sy); spark.setAttribute('r', 3);
       spark.setAttribute('class', 'ai-spark');
       aiSparks.appendChild(spark);
-      sparkEls.push({ el: spark, angle: angle });
+      sparkEls.push({ el: spark, angle, orbit });
     }
 
     /* ─────────────────────────────────────────────────
@@ -1212,7 +1210,7 @@
       chaosLines.forEach(l => { l.style.strokeDashoffset = '0'; });
       sysNodes.forEach(n => n.el.setAttribute('class', 'sys-node hot'));
       sysEdges.forEach(e => e.setAttribute('class', 'sys-edge hot'));
-      $('#aiSparkle').setAttribute('transform', 'translate(300 300) scale(1.4)');
+      $('#aiSparkle').setAttribute('transform', 'translate(300 300) scale(1.25)');
       $('#scrollCue').classList.add('gone');
       root.classList.add('rm', 'engine-on');
       fitLabels();
@@ -1243,7 +1241,9 @@
     gsap.set(sysNodes.map(n => n.el), { opacity: 0.4, scale: 0.5, transformOrigin: 'center' });
     gsap.set(sysEdges, { opacity: 0 });
     gsap.set(hub, { opacity: 0, scale: 0, transformOrigin: 'center' });
-    gsap.set('#aiSparkle', { opacity: 0, scale: 0, transformOrigin: 'center' });
+    gsap.set('#aiSparkle', { opacity: 0, scale: 0.9, transformOrigin: 'center' });
+    molAtoms.forEach(a => gsap.set(a.el, { opacity: 0, scale: 0, transformOrigin: 'center' }));
+    molBonds.forEach(b => { b.el.style.strokeDasharray = b.len; b.el.style.strokeDashoffset = b.len; });
     gsap.set(['#aiRing1','#aiRing2','#aiRing3'], { opacity: 0, scale: 0.5, transformOrigin: 'center' });
     gsap.set(sparkEls.map(s => s.el), { opacity: 0 });
     gsap.set('.stage-bg', { backgroundColor: CONFIG.tints[0] });
@@ -1256,15 +1256,15 @@
     connLine.style.strokeDashoffset = connLen;
 
     // Shared state the particle world (module script below) reads every frame.
-    //   morph  0 chaos → 1 stream → 2 network → 3 brain → 4 monogram
+    //   morph  0 chaos → 1 stream → 2 network → 3 molecule → 4 monogram
     //   order  leg-1 chaos drifting into a halo around the logo ring
-    //   charge brain synapses firing
+    //   charge sparks running the molecule's bonds
     //   leave/dust/gather/grow  the leg 1 → 2 hand-off: chaos thins out, hero
     //   breaks into dust, the dust re-forms as the node A, the wire grows to node B
     //   burst/branch  the leg 2 → 3 hand-off: hero detonates in slow motion and
     //   the cloud feeds branches that grow the network out of its hub
     //   zoom/reveal  the leg 3 → 4 hand-off: the camera pulls back until the
-    //   network is one patch of a brain, and links fire outward to reveal it
+    //   network is the seed atom's neighbourhood, and the molecule assembles from it
     const pw = window.__pw = { progress: 0, morph: 0, order: 0, charge: 0, monoGain: 1, leave: 0, dust: 0, gather: 0, grow: 0, burst: 0, branch: 0, zoom: 0, reveal: 0 };
 
     // MASTER TIMELINE: pinned via GSAP so no CSS sticky quirks
@@ -1299,13 +1299,11 @@
           } else {
             gsap.set('#connParticle', { opacity: 0 });
           }
-          // Leg-4 orbital sparks rotate continuously while visible
+          // Leg-4 electrons run their orbitals while visible
           if (p >= 0.60 && p <= 0.85) {
             const rot = p * Math.PI * 4;
-            sparkEls.forEach((s, i) => {
-              const orbit = 210;
-              const nx = 300 + Math.cos(s.angle + rot) * orbit;
-              const ny = 300 + Math.sin(s.angle + rot) * orbit;
+            sparkEls.forEach(s => {
+              const [nx, ny] = orbitAt(s.orbit, s.angle + rot);
               s.el.setAttribute('cx', nx);
               s.el.setAttribute('cy', ny);
             });
@@ -1402,19 +1400,24 @@
         onReverseComplete: () => edge.setAttribute('class', 'sys-edge')
       }, time);
     });
-    // Leg 3 → leg 4 is the zoom-out to the brain (built with the 3D flight
+    // Leg 3 → leg 4 is the zoom-out to the molecule (built with the 3D flight
     // below); reduced motion just cross-fades.
     if (reduced) crossfade('#leg3', '#leg4', 57);
 
     // ═══ LEG 4: AI (60 → 80) ═════════════════════════
-    // Brain grows in (no rotation: it's a brain, not a sparkle)
+    // The molecule assembles atom by atom: the seed atom, then each bond draws
+    // out and the atom it lands on pops in, rings close, side chains last.
+    tl.to('#aiSparkle', { opacity: 1, duration: 1.5, ease: 'power2.out' }, 60.5)
+      .fromTo('#aiSparkle', { scale: 0.9 }, { scale: 1.25, duration: 11, ease: 'power1.out', immediateRender: false }, 60.5);
+    molBonds.forEach(b => {
+      tl.to(b.el, { strokeDashoffset: 0, duration: 1.6, ease: 'power1.inOut' }, 61.6 + b.l * 1.9);
+    });
+    molAtoms.forEach(a => {
+      tl.to(a.el, { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(2)' }, 61 + a.l * 1.9 + (a.l ? -0.2 : 0));
+    });
+    // Subtle pulse once it's whole (breathing "thinking" feel)
     tl.to('#aiSparkle', {
-      opacity: 1, scale: 1.4,
-      duration: 10, ease: 'power2.out'
-    }, 61);
-    // Subtle pulse after it's grown in (breathing "thinking" feel)
-    tl.to('#aiSparkle', {
-      scale: 1.5,
+      scale: 1.32,
       duration: 4, ease: 'sine.inOut', yoyo: true, repeat: 1
     }, 72);
     // Rings expand sequentially
@@ -1426,8 +1429,8 @@
       const time = 64 + (i / sparkEls.length) * 4;
       tl.to(s.el, { opacity: 1, duration: 1, ease: 'power2.out' }, time);
     });
-    // Particle world: one cloud reshaping at every cut. The network → brain
-    // morph gets the longest run so the assembly reads as the big moment.
+    // Particle world: one cloud reshaping at every cut. The network → molecule
+    // assembly gets the longest run (most of leg 4) so it reads as the big moment.
     tl.to(pw, { order: 1,  duration: 10, ease: 'power2.inOut' }, 5)
       .to(pw, { leave: 1,  duration: 3.6, ease: 'power1.in' },   15)
       .to(pw, { dust: 1,   duration: 2.4, ease: 'none' },        16.8)
@@ -1438,12 +1441,12 @@
       .to(pw, { branch: 1.02, duration: 6, ease: 'power1.inOut' }, 37.6) // hub lights as the blast peaks
       .to(pw, { morph: 2,  duration: 8.8, ease: 'none' },        35)     // must land after branch does
       .to(pw, { zoom: 1,   duration: 6.5, ease: 'sine.inOut' },  55.5)   // camera pulls back off the network
-      .to(pw, { reveal: 1.14, duration: 6.5, ease: 'power1.inOut' }, 57) // links fire outward across the brain
-      .to(pw, { morph: 3,  duration: 8.3, ease: 'none' },        55.5)   // must land after reveal does
+      .to(pw, { reveal: 1.14, duration: 14, ease: 'none' },      57.5)   // the molecule assembles atom by atom
+      .to(pw, { morph: 3,  duration: 16.3, ease: 'none' },       55.5)   // must land after reveal does
       .to(pw, { charge: 1, duration: 5,  ease: 'sine.inOut' },   66)
       .to(pw, { morph: 4,  duration: 5,  ease: 'power2.inOut' }, 76)
       .to(pw, { monoGain: 0.34, duration: 3.5, ease: 'power2.inOut' }, 83.5);
-    // Leg 4 out at 77; the brain's particles sign the monogram on their own,
+    // Leg 4 out at 77; the molecule's particles sign the monogram on their own,
     // then the name + CTA arrive over it (83 → 86.5) as it dims to a watermark.
     tl.to('#leg4', { opacity: 0, duration: 3, ease: 'power2.in' }, 77)
       .to('#leg5', { opacity: 1, duration: 3.5, ease: 'power2.out' }, 83);
@@ -1502,7 +1505,7 @@
       }
 
       // Leg 3 → 4: the camera pulls back (all in the particle world: the
-      // network shrinks into a patch of cortex and the brain lights up
+      // network shrinks to the seed atom and the molecule assembles
       // around it), so leg 4's scene just holds still for it.
       gsap.set(scenes[3], { rotationY: -7 * k3d });
       tl.to('#leg3 .leg-caption', { opacity: 0, duration: 1.4, ease: 'power1.in' }, 54.8)
@@ -1623,7 +1626,9 @@
       const floor = Array.from({ length: Math.round(170 * n) }, () => ({ X: (R() - 0.5) * 2.6, Z: 1 + R() * 11, r: R() }));
       const sky = Array.from({ length: Math.round(40 * n) }, () => ({ x: R(), y: R() * 0.5, s: 4 + R() * 26, a: R() }));
       const streaks = Array.from({ length: Math.round(46 * n) }, () => ({ x: R() * 1.4 - 0.2, y: R() * 0.75, l: 60 + R() * 220, a: R(), c: R() < 0.7 }));
-      const rings = Array.from({ length: 7 }, (_, i) => ({ rx: 0.2 + R() * 0.13, ry: 0.2 + R() * 0.1, rot: R() * Math.PI, sp: (R() - 0.5) * 1.6, ph: R() * 6.28, w: 1 + R() * 2 }));
+      // three electron orbitals ringing the molecule like a gyroscope, each carrying an electron
+      const orbits = [[-21, 0.3, 0.07], [17, 0.33, 0.085], [3, 0.36, 0.05]].map(([deg, rx, ry], i) =>
+        ({ rx, ry, rot: deg * Math.PI / 180, sp: i % 2 ? -0.12 : 0.1, ev: 0.8 + i * 0.3, ph: i * 2.1 }));
       const quiet = Array.from({ length: Math.round(22 * n) }, () => ({ x: R(), y: R(), s: 10 + R() * 60, a: R(), c: R() < 0.55 }));
 
       let W = 0, H = 0, DPR = 1;
@@ -1705,7 +1710,7 @@
         for (let i = 0; i < 6; i++) { g.beginPath(); g.moveTo(W * (0.2 + i * 0.12), 0); g.lineTo(W * (0.05 + i * 0.12), hz); g.stroke(); }
         beam(a * 0.9, hz - 30);
       }
-      // 3 · AGENTS: a glowing grid floor, gold rings looping the brain, streaks overhead
+      // 3 · AGENTS: a glowing grid floor, electron orbitals around the molecule, streaks overhead
       function leg3(t, a) {
         const hz = HZ(), cx = W / 2;
         g.globalCompositeOperation = 'lighter'; g.globalAlpha = 1;
@@ -1738,14 +1743,21 @@
             if ((i + k) % 4 === 0) put(gd, xi, y, Math.min(22, 26 / Z), a * 0.55);
           }
         }
-        // rings around the brain (it sits at the scene centre)
+        // electron orbitals around the molecule (it sits at the scene centre), over a faint cloud
         const ry0 = H * (lite ? 0.31 : 0.42), rk = lite ? Math.min(1, W / H * 1.1) : 1;
-        rings.forEach((r, i) => {
-          const rot = r.rot + t * r.sp + r.ph * 0.1;
-          for (const [lw, al] of [[r.w * 5, 0.05], [r.w * 2, 0.12], [r.w * 0.8, 0.5]]) {
-            g.strokeStyle = rgba(i % 3 ? GOLD : BONE, al * a * (0.5 + 0.5 * sm(t * 2))); g.lineWidth = lw;
-            g.beginPath(); g.ellipse(cx, ry0, r.rx * H * 1.2 * rk, r.ry * H * 1.2 * rk, rot, 0, Math.PI * 2); g.stroke();
+        const on = a * (0.4 + 0.6 * sm(t * 2.5));
+        put(glow, cx, ry0, H * 0.62 * rk, on * 0.16);
+        const eg = tint(dot, BONE);
+        if (!lite) orbits.forEach((o, i) => {   // phones: the SVG scene draws its own orbitals
+          const rot = o.rot + t * o.sp, rx = o.rx * H * 1.2 * rk, ry = o.ry * H * 1.2 * rk;
+          for (const [lw, al] of [[6, 0.03], [2.2, 0.07], [0.9, 0.26]]) {
+            g.strokeStyle = rgba(i === 1 ? BONE : GOLD, al * on); g.lineWidth = lw;
+            g.beginPath(); g.ellipse(cx, ry0, rx, ry, rot, 0, Math.PI * 2); g.stroke();
           }
+          const e = o.ph + t * o.ev * Math.PI * 2, ex = Math.cos(e) * rx, ey = Math.sin(e) * ry;
+          const px = cx + ex * Math.cos(rot) - ey * Math.sin(rot), py = ry0 + ex * Math.sin(rot) + ey * Math.cos(rot);
+          put(glow, px, py, 46, on * 0.5);
+          put(eg, px, py, 7, on * 0.95);
         });
         beam(a, ry0 + H * 0.1);
       }
@@ -1814,7 +1826,7 @@
          0 chaos: one cluster per tool tile, then a halo around the logo ring
          1 stream: node A → node B, signals running the wire
          2 network: hub + 8 nodes in 3D, signals running the edges
-         3 brain: hemispheres, cerebellum, stem, firing synapses
+         3 molecule: caffeine assembling atom by atom, bonds streaming
          4 monogram signing off
        Each shape rides its leg's CSS 3D flight (same 1400px perspective,
        same origin), so particles and SVG labels move as one. Cursor pushes
@@ -1834,7 +1846,7 @@
     const cssVar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
     const ACCENT = cssVar('--accent') || '#0a85ad';
     const HOT = cssVar('--hot') || '#cf1b76';
-    const NET_K = 0.2;                  // leg-3 network ends at 1/5 size: one patch of the brain
+    const NET_K = 0.2;                  // leg-3 network ends at 1/5 size: the seed atom's neighbourhood
     const D2R = Math.PI / 180;
 
     // Reduced motion keeps the calmer SVG scenes: thousands of particles
@@ -1858,155 +1870,162 @@
       };
     }
 
-    // Procedural brain in "brain units" (≈2.1 wide). part: 0 hemisphere, 1 cerebellum, 2 stem
-    function buildBrain(count) {
-      const rand = rng(1107);
-      const golden = Math.PI * (3 - Math.sqrt(5));
-      const pos = new Float32Array(count * 3), part = new Uint8Array(count);
-      const nHemi = Math.floor(count * 0.8), nCb = Math.floor(count * 0.14);
-      const perHemi = Math.ceil(nHemi / 2);
-      let o = 0;
-      for (let i = 0; i < nHemi; i++, o++) {
-        const side = i % 2 ? 1 : -1, k = i >> 1;
-        const y = 1 - (k / (perHemi - 1)) * 2, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = golden * k;
-        const dx = Math.cos(th) * rad, dy = y, dz = Math.sin(th) * rad;
-        const fold = 1 + 0.08 * Math.sin(dy * 13 + dz * 9 + side) * Math.sin(dz * 11 - dx * 7);
-        let x = dx * 0.74 * fold, yy = dy * 0.7 * fold, z = dz * 1.04 * fold;
-        if (yy < -0.3) yy = -0.3 + (yy + 0.3) * 0.55;
-        if (x * side < 0) x *= 0.28;
-        pos[o * 3] = x + side * 0.3 + (rand() - 0.5) * 0.012;
-        pos[o * 3 + 1] = yy + 0.14 + (rand() - 0.5) * 0.012;
-        pos[o * 3 + 2] = z + (rand() - 0.5) * 0.012;
-      }
-      for (let i = 0; i < nCb; i++, o++) {
-        const y = 1 - (i / (nCb - 1)) * 2, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = golden * i;
-        const stri = 1 + 0.07 * Math.sin(y * 24);
-        pos[o * 3] = Math.cos(th) * rad * 0.6 * stri;
-        pos[o * 3 + 1] = -0.5 + y * 0.28 * stri;
-        pos[o * 3 + 2] = -0.66 + Math.sin(th) * rad * 0.36 * stri;
-        part[o] = 1;
-      }
-      for (; o < count; o++) {
-        const t = rand(), a = rand() * Math.PI * 2, r = 0.11 * Math.sqrt(rand());
-        pos[o * 3] = Math.cos(a) * r;
-        pos[o * 3 + 1] = -0.35 - t * 0.75;
-        pos[o * 3 + 2] = -0.18 - t * 0.2 + Math.sin(a) * r;
-        part[o] = 2;
-      }
-      return { pos, part };
-    }
+    /* ═════════════════════════════════════════════════════════════════
+       MOLECULE: a self-contained point-cloud builder (no Three.js, no DOM,
+       no outside state), so it can be lifted into another scene as is.
 
-    // Neural brain, same "brain units" as buildBrain. Neurons (somas) sit just
-    // under the cortex / cerebellum / stem surface; each is wired to its 2 to 3
-    // nearest neighbours by a curved axon that bows out to hug the surface, and
-    // sprouts a few short tapering dendrites. Grains: somas 26%, axons 50%,
-    // dendrites 10%, faint tissue 14% (keeps the silhouette). The same axons and
-    // dendrites come back as lines so the fibres read as continuous.
-    function buildNeuralBrain(count) {
-      const rand = rng(2211);
-      const gauss = () => { let u = 0; while (!u) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand()); };
-      const surf = buildBrain(9000), nS = 9000;
-      const K = lowEnd ? 90 : isMobile ? 130 : 230;
-      const centreOf = (part, x) => part === 0 ? [x < 0 ? -0.3 : 0.3, 0.14, 0] : part === 1 ? [0, -0.5, -0.66] : null;
-      const inward = (p, part, k) => {
-        const c = centreOf(part, p[0]);
-        return c ? [c[0] + (p[0] - c[0]) * k, c[1] + (p[1] - c[1]) * k, c[2] + (p[2] - c[2]) * k] : p;
+         const M = MOLECULE.build(count, seed = 5150);
+
+       Units are angstroms, centred on the origin, ring plane = XY (multiply by
+       a px-per-angstrom scale to place it). Per particle (length count, or
+       count * 3 for vectors):
+         pos     Float32Array xyz  target position
+         centre  Float32Array xyz  where it blooms from during assembly: its
+                                   atom's centre, or the atom its bond grows from
+         atom    Int16Array        atom id (index into M.atoms), -1 on a bond
+         bond    Int16Array        bond id (index into M.bonds), -1 on an atom
+         order   Float32Array      assembly time 0..1 (seed atom first, side chains
+                                   and hydrogens last); compare with a 0..1 scrub
+         colour  Uint8Array        0 gold (C, H, bonds), 1 hot (O), 2 warm white (N)
+         role    Float32Array      1 atom core, .85 atom rim, 2 atom glow (big soft
+                                   grain), .6 bond, .22 electron haze
+       Also: M.atoms [{ el, p, r, lvl }], M.bonds [{ a, b, order }],
+       M.anchor (seed atom xyz), M.lines (bond line segments: pos, t along
+       the bond, phase, kind, d = order at each vertex).
+       ═════════════════════════════════════════════════════════════════ */
+    const MOLECULE = (() => {
+    const mulberry = seed => () => {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+    // The molecule: caffeine (1,3,7-trimethylxanthine), a purine scaffold any
+    // pharmacist knows on sight. Built in angstroms from regular polygons: a
+    // 6-ring fused to a 5-ring on the C4=C5 edge, 1.4 A ring bonds, carbonyl O on
+    // C2 and C6, N-methyls on N1, N3, N7 with tetrahedral hydrogens that stand out
+    // of the ring plane (that, plus a slight pucker, gives the object real depth).
+    // lvl is the assembly order: the seed atom C5 first, then each ring atom as a
+    // bond lands on it, the rings close, then side chains, then hydrogens.
+    function caffeine() {
+      const D = Math.PI / 180, b = 1.4, at = [], bonds = [];
+      const add = (el, x, y, z, lvl) => (at.push({ el, p: [x, y, z], lvl }), at.length - 1);
+      const bond = (a, c, order) => bonds.push({ a, b: c, order: order || 1 });
+      const hx = (deg, el, z, lvl) => add(el, b * Math.cos(deg * D), b * Math.sin(deg * D), z, lvl);
+      const C5 = hx(30, 'C', 0.06, 0), C4 = hx(-30, 'C', -0.06, 1), C6 = hx(90, 'C', -0.1, 1);
+      const N1 = hx(150, 'N', 0.12, 2), C2 = hx(210, 'C', -0.1, 3), N3 = hx(270, 'N', 0.1, 2);
+      const pcx = b * Math.cos(30 * D) + b / (2 * Math.tan(36 * D)), pr = b / (2 * Math.sin(36 * D));
+      const px = (deg, el, z, lvl) => add(el, pcx + pr * Math.cos(deg * D), pr * Math.sin(deg * D), z, lvl);
+      const N7 = px(72, 'N', -0.12, 1), C8 = px(0, 'C', 0.14, 2), N9 = px(-72, 'N', -0.08, 2);
+      const out = (i, cx, len, el, lvl) => {
+        const [x, y, z] = at[i].p, dx = x - cx, dy = y, l = Math.hypot(dx, dy);
+        return add(el, x + dx / l * len, y + dy / l * len, z * 1.6, lvl);
       };
-      const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
-
-      // somas, kept apart so they don't clump
-      const somas = [];
-      for (let guard = 0; somas.length < K && guard < K * 30; guard++) {
-        const i = Math.floor(rand() * nS), part = surf.part[i];
-        const p = inward([surf.pos[i * 3], surf.pos[i * 3 + 1], surf.pos[i * 3 + 2]], part, 0.9 + rand() * 0.1);
-        if (somas.some(s => d2(s.p, p) < 0.0081)) continue;
-        somas.push({ p, part, side: Math.sign(p[0]) || 1, r: 0.01 + rand() * rand() * 0.024 });
-      }
-
-      // axons: nearest neighbours in the same region (and same hemisphere)
-      const axons = [], seen = new Set();
-      const bez = (a, c, b, t) => { const m = 1 - t; return [0, 1, 2].map(j => m * m * a[j] + 2 * m * t * c[j] + t * t * b[j]); };
-      somas.forEach((s, ai) => {
-        const near = somas.map((o, bi) => [bi, d2(s.p, o.p)])
-          .filter(([bi]) => bi !== ai && somas[bi].part === s.part && (s.part !== 0 || somas[bi].side === s.side))
-          .sort((x, y) => x[1] - y[1]).slice(0, rand() < 0.35 ? 3 : 2);
-        near.forEach(([bi, dd]) => {
-          const key = ai < bi ? ai + ':' + bi : bi + ':' + ai;
-          if (dd > 0.25 || seen.has(key)) return;
-          seen.add(key);
-          const o = somas[bi], mid = [0, 1, 2].map(j => (s.p[j] + o.p[j]) / 2);
-          const bowed = inward(mid, s.part, 1.1 + rand() * 0.12);          // bow outward along the surface
-          const c = bowed.map(v => v + (rand() - 0.5) * 0.07);             // and sway a little sideways
-          axons.push({ a: s.p, c, b: o.p, part: s.part, len: Math.sqrt(dd) * 1.1 });
-        });
-      });
-
-      // dendrites: 3 to 4 short sprigs per soma, pointing along the surface, some forked
-      const dends = [];
-      somas.forEach(s => {
-        const cen = centreOf(s.part, s.p[0]) || [s.p[0], s.p[1] + 0.3, s.p[2]];
-        const nrm = s.p.map((v, j) => v - cen[j]), nl = Math.hypot(...nrm) || 1;
-        const n = nrm.map(v => v / nl), sprigs = 3 + (rand() < 0.5 ? 1 : 0);
-        for (let q = 0; q < sprigs; q++) {
-          let v = [gauss(), gauss(), gauss()];
-          const dot = v[0] * n[0] + v[1] * n[1] + v[2] * n[2];
-          v = v.map((x, j) => x - dot * n[j] * 0.8);                        // mostly tangent to the surface
-          const vl = Math.hypot(...v) || 1, L = 0.035 + rand() * 0.05;
-          const tip = s.p.map((x, j) => x + v[j] / vl * L);
-          dends.push({ a: s.p, b: tip, part: s.part, s });
-          if (rand() < 0.55) {                                             // a fork two-thirds of the way out
-            const f = s.p.map((x, j) => x + (tip[j] - x) * 0.62);
-            const w = [gauss(), gauss(), gauss()], wl = Math.hypot(...w) || 1;
-            dends.push({ a: f, b: f.map((x, j) => x + w[j] / wl * L * 0.45), part: s.part, s, fork: true });
-          }
+      const O6 = out(C6, 0, 1.23, 'O', 4), O2 = out(C2, 0, 1.23, 'O', 4);
+      const M1 = out(N1, 0, 1.47, 'C', 4), M3 = out(N3, 0, 1.47, 'C', 4), M7 = out(N7, pcx, 1.47, 'C', 4);
+      const H8 = out(C8, pcx, 1.08, 'H', 4);
+      [[C5, C4, 2], [C4, N3], [N3, C2], [C2, N1], [N1, C6], [C6, C5], [C5, N7], [N7, C8], [C8, N9, 2], [N9, C4],
+       [C6, O6, 2], [C2, O2, 2], [N1, M1], [N3, M3], [N7, M7], [C8, H8]].forEach(e => bond(e[0], e[1], e[2]));
+      // methyl hydrogens, staggered so each methyl shows one H up and two down (or the reverse)
+      [[M1, N1, 0], [M3, N3, 1], [M7, N7, 2]].forEach(([m, n, j]) => {
+        const d = at[m].p.map((v, k) => v - at[n].p[k]), dl = Math.hypot(...d), u = d.map(v => v / dl);
+        const e1 = [-u[1], u[0], 0];
+        for (let q = 0; q < 3; q++) {
+          const a = (q * 120 + 90 + j * 60) * D;
+          const v = u.map((x, k) => x * 0.334 + (e1[k] * Math.cos(a) + (k === 2 ? 1 : 0) * Math.sin(a)) * 0.943);
+          bond(m, add('H', at[m].p[0] + v[0] * 1.09, at[m].p[1] + v[1] * 1.09, at[m].p[2] + v[2] * 1.09, 5));
         }
       });
+      // centre it
+      const ext = [0, 1, 2].map(k => { const v = at.map(a => a.p[k]); return (Math.min(...v) + Math.max(...v)) / 2; });
+      at.forEach(a => { a.p = a.p.map((v, k) => v - ext[k]); });
+      const R = { C: 0.3, N: 0.31, O: 0.36, H: 0.17 }, E = { C: 0, H: 0, O: 1, N: 2 };
+      at.forEach(a => { a.r = R[a.el]; a.e = E[a.el]; });
+      return { at, bonds, seed: C5 };
+    }
 
-      // grains
-      const pos = new Float32Array(count * 3), part = new Uint8Array(count), bright = new Float32Array(count);
-      const somaW = somas.map(s => s.r * s.r), somaT = somaW.reduce((x, y) => x + y, 0);
-      const axT = axons.reduce((x, a) => x + a.len, 0);
-      const pick = (arr, weight, total) => { let r = rand() * total, k = 0; while (r > weight(arr[k]) && k < arr.length - 1) { r -= weight(arr[k]); k++; } return arr[k]; };
+    // Grains for the molecule (angstroms). Atoms 62%: dense balls with a crisp
+    // rim and a few big soft grains inside (the glow), more grains for bigger
+    // atoms. Bonds 29%: thin streams between atom surfaces, two parallel
+    // streams for a double bond. 9%: a faint electron
+    // haze around each atom. order = when each grain lands during the
+    // assembly; centre = where it blooms from (its atom's centre, or for a bond,
+    // the atom the bond grows out of), so atoms swell open and bonds stream out.
+    function build(count, seed = 5150) {
+      const rand = mulberry(seed);
+      const gauss = () => { let u = 0; while (!u) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand()); };
+      const { at, bonds, seed: seedAtom } = caffeine();
+      const T = at.map(a => 0.03 + a.lvl * 0.15 + rand() * 0.02);
+      const sph = () => { const u = rand() * 2 - 1, th = rand() * Math.PI * 2, s = Math.sqrt(1 - u * u); return [Math.cos(th) * s, u, Math.sin(th) * s]; };
+      const geomB = bonds.map(e => {
+        const first = T[e.a] <= T[e.b] ? e.a : e.b, other = first === e.a ? e.b : e.a;
+        const P0 = at[first].p, P1 = at[other].p, d = P1.map((v, k) => v - P0[k]), len = Math.hypot(...d);
+        const u = d.map(v => v / len), nl = Math.hypot(u[0], u[1]) || 1;
+        return { e, first, other, P0, P1, u, len, n: [-u[1] / nl, u[0] / nl, 0],
+                 t0: at[first].r * 0.8 / len, t1: 1 - at[other].r * 0.8 / len,
+                 closes: at[first].lvl === at[other].lvl };
+      });
+      // arrival time of a point on a bond at t (0 at the first atom, 1 at the other)
+      const bondT = (g, t) => {
+        const ta = T[g.first], tb = T[g.other];
+        if (g.closes) return ta + 0.05 + (Math.min(t, 1 - t) / 0.5) * 0.1;   // ring closure: both ends grow in to meet
+        return ta + 0.05 + t * Math.max(tb - ta - 0.05, 0.04);
+      };
+      const offs = g => g.e.order === 2 ? [-0.11, 0.11] : [0];
+      const aW = at.map(a => a.r * a.r), aWT = aW.reduce((s, v) => s + v, 0);
+      const bW = geomB.map(g => g.len * g.e.order), bWT = bW.reduce((s, v) => s + v, 0);
+      const pick = (w, tot) => { let r = rand() * tot, k = 0; while (r > w[k] && k < w.length - 1) { r -= w[k]; k++; } return k; };
+
+      const pos = new Float32Array(count * 3), cen = new Float32Array(count * 3);
+      const bright = new Float32Array(count), el = new Uint8Array(count), rev = new Float32Array(count);
+      const atomId = new Int16Array(count).fill(-1), bondId = new Int16Array(count).fill(-1);
       for (let i = 0; i < count; i++) {
         const r = rand();
-        let p, pt, b;
-        if (r < 0.26) {                                   // soma: a tight bright body, bigger neurons get more grains
-          const s = pick(somas, x => x.r * x.r, somaT);
-          p = s.p.map(v => v + gauss() * s.r * 0.55); pt = s.part; b = 1;
-        } else if (r < 0.76 && axons.length) {            // axon
-          const ax = pick(axons, x => x.len, axT), t = rand();
-          p = bez(ax.a, ax.c, ax.b, t).map(v => v + gauss() * 0.0045); pt = ax.part; b = 0.5;
-        } else if (r < 0.86 && dends.length) {            // dendrite, thinning toward the tip
-          const dn = dends[Math.floor(rand() * dends.length)], t = Math.sqrt(rand());
-          p = dn.a.map((v, j) => v + (dn.b[j] - v) * (1 - t) + gauss() * 0.003); pt = dn.part; b = 0.45;
-        } else {                                          // tissue haze
-          const k = Math.floor(rand() * nS);
-          p = [surf.pos[k * 3], surf.pos[k * 3 + 1], surf.pos[k * 3 + 2]].map(v => v + gauss() * 0.01); pt = surf.part[k]; b = 0.26;
+        let p, c, br, e, tv;
+        if (r < 0.62) {
+          const ai = pick(aW, aWT), a = at[ai], v = sph(), q = rand(), rim = q < 0.36, glow = q > 0.92;
+          const rr = rim ? a.r * (0.93 + rand() * 0.09) : a.r * (glow ? 0.45 : 0.95) * Math.sqrt(rand());   // denser toward the core
+          p = a.p.map((x, k) => x + v[k] * rr); c = a.p; br = rim ? 0.85 : glow ? 2 : 1; e = a.e;
+          tv = T[ai] + rand() * 0.05; atomId[i] = ai;
+        } else if (r < 0.91) {
+          const gi = pick(bW, bWT), g = geomB[gi], os = offs(g), o = os[Math.floor(rand() * os.length)];
+          bondId[i] = gi;
+          const t = g.t0 + rand() * (g.t1 - g.t0);
+          p = g.P0.map((x, k) => x + g.u[k] * g.len * t + g.n[k] * o + gauss() * 0.028);
+          const from = g.closes && t > 0.5 ? g.P1 : g.P0;
+          c = from.map((x, k) => x + g.n[k] * o); br = 0.6; e = 0;
+          tv = bondT(g, t);
+        } else {
+          const ai = pick(aW, aWT), a = at[ai], v = sph(), rr = a.r * (1.12 + Math.abs(gauss()) * 0.7);
+          p = a.p.map((x, k) => x + v[k] * rr); c = a.p; br = 0.22; e = a.e;
+          tv = T[ai] + 0.06 + rand() * 0.06; atomId[i] = ai;
         }
-        pos[i * 3] = p[0]; pos[i * 3 + 1] = p[1]; pos[i * 3 + 2] = p[2]; part[i] = pt; bright[i] = b;
+        pos[i * 3] = p[0]; pos[i * 3 + 1] = p[1]; pos[i * 3 + 2] = p[2];
+        cen[i * 3] = c[0]; cen[i * 3 + 1] = c[1]; cen[i * 3 + 2] = c[2];
+        bright[i] = br; el[i] = e; rev[i] = Math.min(Math.max(tv, 0), 1);
       }
 
-      // lines: axons as 10-segment curves (t runs soma → soma so signals can
-      // travel them), dendrites as single tapering segments (kind 1)
-      const lp = [], lt = [], lph = [], lk = [], lmid = [];
-      axons.forEach(ax => {
+      // bond lines: 10 segments per stream, each vertex lit when the stream reaches it
+      const lp = [], lt = [], lph = [], lk = [], ld = [];
+      geomB.forEach(g => {
         const ph = rand();
-        for (let q = 0; q < 10; q++) {
-          const t0 = q / 10, t1 = (q + 1) / 10;
-          lp.push(...bez(ax.a, ax.c, ax.b, t0), ...bez(ax.a, ax.c, ax.b, t1));
-          lt.push(t0, t1); lph.push(ph, ph); lk.push(0, 0);
-          lmid.push(ax.c, ax.c);
-        }
-      });
-      dends.forEach(dn => {
-        lp.push(...dn.a, ...dn.b); lt.push(dn.fork ? 0.4 : 0, 1); lph.push(0, 0); lk.push(1, 1);
-        lmid.push(dn.s.p, dn.s.p);
+        offs(g).forEach(o => {
+          for (let q = 0; q < 10; q++) {
+            [q / 10, (q + 1) / 10].map(f => g.t0 + f * (g.t1 - g.t0)).forEach(t => {
+              lp.push(...g.P0.map((x, k) => x + g.u[k] * g.len * t + g.n[k] * o));
+              lt.push(t); lph.push(ph); lk.push(0); ld.push(bondT(g, t));
+            });
+          }
+        });
       });
       return {
-        pos, part, bright,
-        lines: { pos: new Float32Array(lp), t: new Float32Array(lt), phase: new Float32Array(lph), kind: new Float32Array(lk), mid: lmid }
+        pos, centre: cen, atom: atomId, bond: bondId, order: rev, colour: el, role: bright,
+        atoms: at, bonds, anchor: at[seedAtom].p,
+        lines: { pos: new Float32Array(lp), t: new Float32Array(lt), phase: new Float32Array(lph), kind: new Float32Array(lk), d: new Float32Array(ld) }
       };
     }
+    return { build, caffeine };
+    })();
 
     // The monogram, sampled from the page's own display font, normalised to height 1
     async function sampleMonogram() {
@@ -2052,7 +2071,7 @@
       };
     }
 
-    function buildShapes(L, mono, brain, lines) {
+    function buildShapes(L, mono, mol, lines) {
       const R = rng(9001);
       const gauss = () => { let u = 0; while (!u) u = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * R()); };
       const P = [0, 1, 2, 3, 4].map(() => new Float32Array(N * 3));
@@ -2154,26 +2173,12 @@
         P[2][i * 3] = x; P[2][i * 3 + 1] = y; P[2][i * 3 + 2] = z;
       }
 
-      // 3 · BRAIN: sized to sit inside the leg-4 HUD rings
-      const bs = minDim * 0.5 / 2.1;
-      for (let i = 0; i < N * 3; i++) P[3][i] = brain.pos[i] * bs;
-      // Where the leg-3 network lives inside the brain: a patch of outer cortex
-      // that faces the camera. The leg 3 → 4 reveal spreads outward from it;
-      // aRev = when each grain leaves the network for its place in the brain
-      // (~12% stay in the patch until the very end so it reads as "you were here").
-      const HT = [0.95, 0.4, 0.2];
-      let hb = 0, hd = Infinity;
-      for (let i = 0; i < N; i++) {
-        if (brain.part[i]) continue;
-        const d = (brain.pos[i * 3] - HT[0]) ** 2 + (brain.pos[i * 3 + 1] - HT[1]) ** 2 + (brain.pos[i * 3 + 2] - HT[2]) ** 2;
-        if (d < hd) { hd = d; hb = i; }
-      }
-      const HB = [brain.pos[hb * 3], brain.pos[hb * 3 + 1], brain.pos[hb * 3 + 2]];
-      const revAt = (x, y, z) => 0.04 + Math.min(Math.hypot(x - HB[0], y - HB[1], z - HB[2]) / 2.3, 1) * 0.78;
-      const aRev = new Float32Array(N);
-      for (let i = 0; i < N; i++) {
-        aRev[i] = R() < 0.12 ? 0.86 + R() * 0.1 : revAt(brain.pos[i * 3], brain.pos[i * 3 + 1], brain.pos[i * 3 + 2]) + R() * 0.04;
-      }
+      // 3 · MOLECULE: angstroms to px. The leg-3 network ends up as the seed
+      // atom's neighbourhood (anchor): the leg 3 → 4 assembly grows out of it.
+      const bs = minDim * 0.105;
+      const aC3 = new Float32Array(N * 3);
+      for (let i = 0; i < N * 3; i++) { P[3][i] = mol.pos[i] * bs; aC3[i] = mol.centre[i] * bs; }
+      const aRev = mol.order;
 
       // 4 · MONOGRAM: your initials, big and quiet behind the sign-off
       const mh = minDim * 0.8, mCount = mono.length / 2;
@@ -2186,17 +2191,16 @@
         }
       }
 
-      // Axon + dendrite lines for the brain, in the same pixel space. aD = when
-      // each lights up during the reveal (same outward front as the grains).
-      const BL = brain.lines;
-      lines.pos = BL.pos.map(v => v * bs);
-      lines.t = BL.t; lines.phase = BL.phase; lines.kind = BL.kind;
-      lines.d = new Float32Array(BL.mid.map(m => revAt(m[0], m[1], m[2])));
+      // Bond lines in the same pixel space; aD = when each vertex lights up
+      // (the same front as the bond's grains).
+      const ML = mol.lines;
+      lines.pos = ML.pos.map(v => v * bs);
+      lines.t = ML.t; lines.phase = ML.phase; lines.kind = ML.kind; lines.d = ML.d;
 
       const s1 = minDim / 720;               // leg-1 viewBox (720×720, meet) → px
       return {
-        P, aRand, aFlow, aNet, aNetC, aRev, aB3: brain.bright, ringR: 240 * s1, span: 400 * s2,
-        anchor: [HB[0] * bs, HB[1] * bs, HB[2] * bs],
+        P, aRand, aFlow, aNet, aNetC, aRev, aC3, aB3: mol.role, aEl: Float32Array.from(mol.colour), ringR: 240 * s1, span: 400 * s2,
+        anchor: mol.anchor.map(v => v * bs),
         s1, heroY: 240 * s1,                  // hero tile sits straight above the ring centre
         nodeA: [ax, ay, 0], nodeB: [bx, by, 0], nodeR
       };
@@ -2247,7 +2251,7 @@
         import(new URL('./assets/vendor/three.module.min.js', document.baseURI).href),
         sampleMonogram()
       ]);
-      const brain = buildNeuralBrain(N);
+      const mol = MOLECULE.build(N);
       try { await document.fonts.load('500 10px "JetBrains Mono"'); } catch (e) { /* label falls back to monospace */ }
       const tileGrains = sampleHeroTile();
 
@@ -2280,10 +2284,10 @@
         uBranch: { value: 0 },
         uZoom:   { value: 0 },
         uReveal: { value: 0 },
-        uK:      { value: NET_K },                // network's size inside the brain
+        uK:      { value: NET_K },                // network's size inside the molecule
         uS:      { value: 1 / NET_K },            // camera zoom about the anchor
-        uA:      { value: new THREE.Vector3() },  // anchor patch, world (final brain)
-        uAS:     { value: new THREE.Vector3() },  // anchor patch, on screen right now
+        uA:      { value: new THREE.Vector3() },  // seed atom, world (final molecule)
+        uAS:     { value: new THREE.Vector3() },  // seed atom, on screen right now
         uHub:    { value: new THREE.Vector3() },  // network hub, world
         uNodeR:  { value: 40 },
         uSpan:   { value: 400 },
@@ -2304,11 +2308,12 @@
           uniform vec2 uSpin[5];
           uniform float uGain[5];
           uniform vec3 uNodeA, uNodeB, uA, uAS, uHub;
-          attribute vec3 aP0, aP1, aP2, aP3, aP4, aNetC;
+          attribute vec3 aP0, aP1, aP2, aP3, aP4, aNetC, aC3;
           attribute vec4 aRand, aFlow;
           attribute vec2 aNet;
-          attribute float aRev, aB3;      // aB3: brain role: soma 1, axon .5, dendrite .45, tissue .26
+          attribute float aRev, aB3, aEl;  // aB3: molecule role: atom 1, atom rim .85, bond .6, haze .22, atom glow 2; aEl: 0 gold, 1 hot, 2 warm white
           varying float vBright;
+          varying vec2 vEl;
 
           vec3 rotXY(vec3 p, vec2 r) {
             float cx = cos(r.x), sx = sin(r.x), cy = cos(r.y), sy = sin(r.y);
@@ -2393,17 +2398,23 @@
               mid = 0.0;
             } else if (a == 2) {
               // Leg 3 → 4: the camera pulls back. Everything scales about the
-              // anchor patch (uS: 1/uK → 1): the network shrinks into one patch of
-              // cortex, then grains leave it outward-first (aRev) for their place
-              // in the brain, so the links spread until the whole brain shows.
+              // seed atom (uS: 1/uK → 1): the network shrinks into the seed
+              // atom's neighbourhood, then the molecule assembles in order (aRev):
+              // each grain flies to where its atom blooms, or to the atom its bond
+              // grows out of (aC3), and opens out to its place (atoms swell, bonds
+              // stream along until they land on the next atom).
               float arr = clamp((uReveal - aRev) / 0.14, 0.0, 1.0);
               float arrE = arr * arr * (3.0 - 2.0 * arr);
-              vec3 net = uAS + (xf(aP2, 2) - uHub) * uK * uS;
-              vec3 brn = uAS + (xf(aP3, 3) - uA) * uS;
-              p = mix(net, brn, arrE);
-              vis = mix(1.0 - 0.5 * uZoom, 1.0, arrE);                 // the shrinking patch dims so it doesn't blow out
+              float bl = smoothstep(0.3, 1.0, arr);
+              // grains still waiting in the network draw in tight around the seed atom
+              vec3 net = uAS + (xf(aP2, 2) - uHub) * uK * uS * (1.0 - 0.65 * smoothstep(0.08, 0.45, uReveal));
+              vec3 mol = uAS + (xf(mix(aC3, aP3, bl), 3) - uA) * uS;
+              p = mix(net, mol, arrE);
+              // the shrinking network dims so it doesn't blow out, and keeps dimming
+              // as the assembly draws on it, so the rings around it stay legible
+              vis = mix((1.0 - 0.55 * uZoom) * (1.0 - 0.7 * smoothstep(0.12, 0.55, uReveal)), 1.0, arrE);
               lt = arrE;
-              tip = sin(arr * 3.14159265) * 0.7;                        // grains flare as they fire out to the brain
+              tip = sin(arr * 3.14159265) * 0.38;                       // grains flare as they land
               mid = 0.0;
             } else {
               float f = m - float(a);
@@ -2434,23 +2445,31 @@
             }
             if (aFlow.y >= 0.0) pulse += w2 * smoothstep(0.1, 0.0, abs(fract(uTime * 0.32 + aFlow.z) - aFlow.y));
             float tw = 0.5 + 0.5 * sin(uTime * (1.1 + uCharge * 2.6 * w3) + aRand.y * 6.2831853);
-            float n3 = mix(1.0, aB3 * 0.9, w3);            // in the brain: neurons glow, fibres and tissue sit back
+            float glowG = step(1.5, aB3);                  // big soft grains that give each atom its glow
+            float n3 = mix(1.0, mix(aB3 * 0.9, 0.2, glowG), w3);   // in the molecule: atoms glow, bonds and haze sit back
             vBright = (gain * n3 * (0.5 + 0.5 * tw * (0.6 + uCharge * w3 * 0.8)) + pulse * 0.7 + w2 * aFlow.w * 0.35) * vis + tip * 0.9;
 
             vec4 mv = modelViewMatrix * vec4(p, 1.0);
             float depth = -mv.z;
             vBright *= smoothstep(60.0, 360.0, depth);   // grains rushing past the camera fade instead of ballooning
-            float s3 = mix(1.0, 0.55 + aB3 * 0.6, w3);     // somas a touch bigger, fibres finer
+            // the molecule catches light: near side brighter, far side dimmer (on top of size by depth)
+            vBright *= mix(1.0, clamp(1.0 + (${CAM_Z.toFixed(1)} - depth) / 460.0, 0.45, 1.4), w3);
+            vEl = w3 * vec2(step(0.5, aEl) * step(aEl, 1.5), step(1.5, aEl));
+            float s3 = mix(1.0, mix(0.55 + aB3 * 0.6, 6.0, glowG), w3);   // atoms a touch bigger, bonds finer
             gl_PointSize = min(uSize * aRand.z * s3 * (1.0 + pulse * 0.6 + w2 * aFlow.w * 0.25 + tip * 0.8) * uPR * (${CAM_Z.toFixed(1)} / max(depth, 1.0)), 44.0 * uPR);
             gl_Position = projectionMatrix * mv;
           }`,
         fragmentShader: `
           uniform vec3 uAccent, uHot;
           varying float vBright;
+          varying vec2 vEl;
           void main() {
             float d = length(gl_PointCoord - 0.5);
             float a = smoothstep(0.5, 0.08, d);
             vec3 c = mix(vec3(1.0, 0.64, 0.22), vec3(1.0, 0.95, 0.85), clamp(vBright - 0.55, 0.0, 1.0));
+            // element tints in the molecule: oxygen runs hot, nitrogen warm white
+            c = mix(c, mix(uHot, vec3(1.0, 0.78, 0.6), clamp(vBright - 1.0, 0.0, 1.0)), vEl.x * 0.9);
+            c = mix(c, vec3(1.0, 0.93, 0.84), vEl.y * 0.75);
             gl_FragColor = vec4(c, a * clamp(vBright, 0.0, 1.6) * 0.8);
           }`
       });
@@ -2458,9 +2477,9 @@
       points.frustumCulled = false;
       scene.add(points);
 
-      // Brain synapses ride the same transforms: outer = leg-4 flight, inner = brain spin
-      // During the leg 3 → 4 zoom-out they also scale about the anchor patch and
-      // light up with the same outward front as the grains (a flash, then settle).
+      // Bond lines ride the same transforms: outer = leg-4 flight, inner = molecule spin.
+      // During the leg 3 → 4 zoom-out they also scale about the seed atom and
+      // draw on with the same front as their bond's grains (a flash, then settle).
       const linkUniforms = {
         uTime: uniforms.uTime, uCharge: uniforms.uCharge, uShow: { value: 0 },
         uReveal: uniforms.uReveal, uA: uniforms.uA, uAS: uniforms.uAS, uS: uniforms.uS,
@@ -2484,23 +2503,22 @@
           uniform vec3 uAccent, uHot;
           varying float vT, vPhase, vD, vKind;
           void main() {
-            // Each axon fires now and then (more often once the brain is
-            // "charged"): a spike runs soma → soma along it. Dendrites don't
-            // fire; they just taper out from the cell body.
+            // Each bond carries a pulse now and then (more often once the
+            // molecule is "charged"): a spark runs atom to atom along it.
             float cyc = uTime * (0.24 + uCharge * 0.22) + vPhase * 13.0;
             float fires = step(fract(floor(cyc) * 0.618034 + vPhase * 3.7), 0.28 + uCharge * 0.5);
             float spike = (1.0 - vKind) * fires * smoothstep(0.09, 0.0, abs(fract(cyc) - vT));
-            float base = vKind > 0.5 ? (1.0 - vT) * 0.34 : 0.15;
-            float lit = clamp((uReveal - vD) / 0.1, 0.0, 1.0);
+            float base = vKind > 0.5 ? (1.0 - vT) * 0.34 : 0.26;
+            float lit = clamp((uReveal - vD - 0.1) / 0.08, 0.0, 1.0);   // draws on just behind its grains
             float flash = sin(lit * 3.14159265);
             vec3 col = mix(vec3(1.0, 0.72, 0.36), vec3(1.0, 0.95, 0.82), spike);
             gl_FragColor = vec4(col, uShow * (lit * (base + spike * (0.7 + uCharge * 0.3)) + flash * 0.6));
           }`
       }));
       links.frustumCulled = false;
-      const brainOuter = new THREE.Group(), brainInner = new THREE.Group();
-      brainOuter.rotation.order = brainInner.rotation.order = 'YXZ';
-      brainInner.add(links); brainOuter.add(brainInner); scene.add(brainOuter);
+      const molOuter = new THREE.Group(), molInner = new THREE.Group();
+      molOuter.rotation.order = molInner.rotation.order = 'YXZ';
+      molInner.add(links); molOuter.add(molInner); scene.add(molOuter);
 
       // hero dust: grains sampled from the leg-1 tile. They sit exactly on the
       // tile (riding leg 1's dive), break free left → right like ash on the
@@ -2596,7 +2614,7 @@
       let dustReady = false;
 
       // Same maths as the shader's xf(): self spin, then the leg's CSS flight.
-      // Used to find where the brain's anchor patch is on screen each frame.
+      // Used to find where the molecule's seed atom is on screen each frame.
       const anchorLocal = new THREE.Vector3();
       function xfJS(v, k, out) {
         const sp = uniforms.uSpin.value[k], T = uniforms.uT.value[k], XY = uniforms.uXY.value[k];
@@ -2622,7 +2640,7 @@
         camera.setViewOffset(Wf, Hf, Wf / 2 - L.cx, Hf / 2 - L.cy, L.W, L.H);   // vanishing point = scene centre, like the CSS
 
         const lines = {};
-        const S = buildShapes(L, mono, brain, lines);
+        const S = buildShapes(L, mono, mol, lines);
         ['aP0', 'aP1', 'aP2', 'aP3', 'aP4'].forEach((n, k) => geo.setAttribute(n, new THREE.BufferAttribute(S.P[k], 3)));
         geo.setAttribute('position', new THREE.BufferAttribute(S.P[0], 3));
         geo.setAttribute('aRand', new THREE.BufferAttribute(S.aRand, 4));
@@ -2643,6 +2661,8 @@
         linkGeo.setAttribute('aD', new THREE.BufferAttribute(lines.d, 1));
         linkGeo.setAttribute('aKind', new THREE.BufferAttribute(lines.kind, 1));
         geo.setAttribute('aB3', new THREE.BufferAttribute(S.aB3, 1));
+        geo.setAttribute('aEl', new THREE.BufferAttribute(S.aEl, 1));
+        geo.setAttribute('aC3', new THREE.BufferAttribute(S.aC3, 3));
       }
       rebuild();
       let rt = 0;
@@ -2662,7 +2682,7 @@
 
       // Render loop: runs while the stage is on screen and the tab is visible
       const clock = new THREE.Clock();
-      let onScreen = true, running = false, bY = -1.35, bX = 0.16, smX = mX, smY = mY;
+      let onScreen = true, running = false, bY = -0.62, bX = 0.34, smX = mX, smY = mY;
       new IntersectionObserver(es => { onScreen = es.some(e => e.isIntersecting); if (onScreen) wake(); }).observe(stage);
 
       function frame() {
@@ -2691,8 +2711,10 @@
         }
         // per-shape self rotation
         const legT = Math.min(Math.max((p - 0.6) / 0.2, 0), 1);
-        bY += ((-1.35 + legT * 1.1 + Math.sin(t * 0.35) * 0.05 + sMX * 0.3) - bY) * 0.08;
-        bX += ((0.16 + sMY * 0.14) - bX) * 0.08;
+        // molecule: a slow turn scrubbed by leg 4, a small idle drift, and an eased
+        // tilt of a few degrees toward the pointer
+        bY += ((-0.62 + legT * 1.2 + Math.sin(t * 0.35) * 0.06 + sMX * 0.16) - bY) * 0.06;
+        bX += ((0.34 + Math.sin(t * 0.27) * 0.04 + sMY * 0.12) - bX) * 0.06;
         uniforms.uSpin.value[0].set(0, t * 0.015);
         uniforms.uSpin.value[2].set(0.42 + Math.sin(t * 0.2) * 0.05, t * 0.14 + p * 3.0);
         uniforms.uSpin.value[3].set(bX, bY);
@@ -2703,11 +2725,11 @@
         uniforms.uMouse.value.set(smX, smY);
         uniforms.uRepel.value += (repelTarget - uniforms.uRepel.value) * 0.08;
 
-        // brain synapses
+        // bond lines
         const m = pw.morph;
         linkUniforms.uShow.value = m < 2 ? 0 : (m <= 3 ? 1 : 1 - smoothstep(3.0, 3.2, m));
 
-        // leg 3 → 4 zoom-out: the world scales about the brain's anchor patch
+        // leg 3 → 4 zoom-out: the world scales about the molecule's seed atom
         uniforms.uZoom.value = pw.zoom;
         uniforms.uReveal.value = pw.reveal;
         uniforms.uS.value = Math.pow(1 / NET_K, 1 - pw.zoom);
@@ -2716,8 +2738,8 @@
         xfJS(anchorLocal, 3, uniforms.uA.value);
         uniforms.uAS.value.lerpVectors(uniforms.uHub.value, uniforms.uA.value, pw.zoom);
         const T4 = uniforms.uT.value[3];
-        brainOuter.rotation.set(T4.x, T4.y, 0); brainOuter.position.z = T4.z;
-        brainInner.rotation.set(bX, bY, 0);
+        molOuter.rotation.set(T4.x, T4.y, 0); molOuter.position.z = T4.z;
+        molInner.rotation.set(bX, bY, 0);
         links.visible = linkUniforms.uShow.value > 0.001 && pw.reveal > 0.001;
 
         renderer.render(scene, camera);
