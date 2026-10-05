@@ -1,35 +1,34 @@
 /* ============================================================
    Shared design tokens: anki-boi.github.io landing (/) and portfolio (/work/)
    ============================================================
-   Light "lab" theme. Both pages load this file before their own inline CSS and
-   must not redefine these colours, so the palette cannot drift between them.
-   Layout CSS stays inline in each page.
+   Warm dark theme: warm near-black and gold, chosen to sit with the portrait and
+   to let the landing's WebGL glow work (additive blending needs a dark ground).
+   Both pages load this file before their own inline CSS and must not redefine
+   these colours, so the palette cannot drift between them. Layout CSS stays
+   inline in each page.
 
    Canonical names come first. The alias blocks below map each page's
    historic token names onto them, so neither page had to be renamed:
      landing   (index.html)       uses --ink --mut --accent --hot --lime --panel
      portfolio (work/index.html)  uses --bone --muted --amber --sage --ink-50
-   Note: on the portfolio --amber is the ACCENT (cyan), not an orange. The real
-   amber is --warn.
+   The landing's shaders read --accent (and --hot) at runtime.
    ============================================================ */
 :root {
   /* palette */
-  --bg0: #f2f6fa;           /* page */
-  --bg1: #eaf1f8;           /* alternate band */
-  --panel: #ffffff;
-  --panel-2: #f4f8fc;
-  --cyan: #0a85ad;          /* accent */
-  --cyan-deep: #086c8e;     /* accent text on light, hover */
-  --cyan-soft: rgba(10, 133, 173, 0.12);
-  --mag: #cf1b76;           /* hot accent, used sparingly */
-  --lime: #3f7d1e;          /* ok / verified */
-  --warn: #d97b06;          /* amber */
-  --ink: #17222f;           /* body text */
-  --ink-strong: #101b28;    /* headings */
-  --mut: #38485f;           /* secondary text */
-  --mut-2: #485970;
-  --line: rgba(10, 133, 173, 0.22);
-  --line-strong: rgba(10, 133, 173, 0.42);
+  --bg0: #0d0b09;           /* page */
+  --bg1: #13100c;           /* alternate band */
+  --panel: #17130f;
+  --panel-2: #1c1813;
+  --gold: #ffb547;          /* accent */
+  --gold-deep: #e89a2a;     /* hover, pressed */
+  --gold-soft: rgba(255, 181, 71, 0.12);
+  --hot-c: #ff6a2b;         /* hot accent, used sparingly */
+  --sage-c: #8fa07f;        /* ok / verified */
+  --live: #7fd19b;          /* live indicator */
+  --ink: #f5f1eb;           /* body text (bone) */
+  --mut: #9a9184;           /* secondary text */
+  --line: rgba(255, 181, 71, 0.12);
+  --line-strong: rgba(255, 181, 71, 0.26);
 
   /* type */
   --display: 'Fraunces', Georgia, 'Times New Roman', serif;
@@ -43,22 +42,24 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: var(--ease);
   --chamfer: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-  --grain-opacity: 0.05;
+  --grain-opacity: 0.06;
 
   /* aliases: landing */
   --bg: var(--bg0);
   --bg-warm: var(--bg1);
-  --accent: var(--cyan);
-  --hot: var(--mag);
-  --accent-glow: color-mix(in srgb, var(--cyan) 22%, transparent);
+  --accent: var(--gold);
+  --hot: var(--hot-c);
+  --lime: var(--sage-c);
+  --accent-glow: color-mix(in srgb, var(--gold) 35%, transparent);
 
   /* aliases: portfolio */
   --bone: var(--ink);
   --muted: var(--mut);
-  --amber: var(--cyan);
-  --amber-deep: var(--cyan-deep);
-  --amber-soft: var(--cyan-soft);
-  --sage: var(--lime);
+  --amber: var(--gold);
+  --amber-deep: var(--gold-deep);
+  --amber-soft: var(--gold-soft);
+  --sage: var(--sage-c);
+  --mag: var(--hot-c);
   --ink-50: var(--panel);
-  --ink-100: var(--panel);
+  --ink-100: var(--panel-2);
 }

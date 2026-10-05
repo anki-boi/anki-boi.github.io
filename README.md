@@ -28,10 +28,12 @@ Fonts: [Fraunces](https://fonts.google.com/specimen/Fraunces),
 [Inter](https://fonts.google.com/specimen/Inter) and
 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono).
 
-**One theme.** Both pages are a light "lab" theme (pale blue grey, cyan accent, magenta used
-sparingly) and load `assets/tokens.css` before their own inline CSS. Change a colour there, never
-inline, or the two pages drift. Each page keeps its historic token names as aliases (see the file
-header). There is no dark mode, deliberately.
+**One theme.** Both pages are warm dark: warm near-black and gold, chosen to sit with the
+portrait and because the landing's WebGL glow only works on a dark ground (additive blending is
+invisible on light; a light retheme was tried and lost the bloom, light rays and depth). Both load
+`assets/tokens.css` before their own inline CSS. Change a colour there, never inline, or the two
+pages drift. Each page keeps its historic token names as aliases (see the file header). There is no
+light mode, deliberately.
 
 **The motif.** Health is the evidence and the texture; automation is the offer. The health motif
 lives in the landing's first leg (the clinic chaos: portals, order sheets, prescriptions), in the
