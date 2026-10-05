@@ -1,0 +1,2742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    /* Old portfolio deep links (/#projects, /#contact, /#cb-ojph, /index.html#services...) now live
+       at /work/. Forward any hash this page does not own before anything renders. */
+    (function () {
+      var h = location.hash, own = ['#top', '#intro', '#story', '#signoff'];
+      if (h && h !== '#' && own.indexOf(h) < 0) location.replace('/work/' + h);
+    })();
+    document.documentElement.classList.add('js');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jeyson Dagondon · AI-Native Workflow Automation, RPh</title>
+  <meta name="description" content="AI-native workflow automation, built by a pharmacist. Jeyson Dagondon, RPh, builds browser automation, Zoho CRM workflows and agent tooling that take manual work off a team." />
+  <link rel="canonical" href="https://anki-boi.github.io/" />
+  <meta name="theme-color" content="#0d0b09" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jeyson Dagondon" />
+  <meta property="og:url" content="https://anki-boi.github.io/" />
+  <meta property="og:title" content="Jeyson Dagondon · AI-Native Workflow Automation, RPh" />
+  <meta property="og:description" content="AI-native workflow automation, built by a pharmacist: browser automation, Zoho CRM and agent tooling, with a human signing off every action." />
+  <meta property="og:image" content="https://anki-boi.github.io/img/og-card.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Jeyson Dagondon, AI-native workflow automation, RPh: 45+ scripts and extensions, 7 pharmacy portals, 91.07% board rating." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Jeyson Dagondon · AI-Native Workflow Automation, RPh" />
+  <meta name="twitter:description" content="AI-native workflow automation, built by a pharmacist: browser automation, Zoho CRM and agent tooling, with a human signing off every action." />
+  <meta name="twitter:image" content="https://anki-boi.github.io/img/og-card.png" />
+  <meta name="twitter:image:alt" content="Jeyson Dagondon, AI-native workflow automation, RPh: 45+ scripts and extensions, 7 pharmacy portals, 91.07% board rating." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d0b09'/%3E%3Cpolygon points='32,10 51,21 51,43 32,54 13,43 13,21' fill='none' stroke='%23ffb547' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23f5f1eb'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jeyson Dagondon","jobTitle":"AI-Native Workflow Automation Specialist","description":"Registered Pharmacist (RPh) and automation builder","url":"https://anki-boi.github.io/","mainEntityOfPage":"https://anki-boi.github.io/work/","sameAs":["https://github.com/anki-boi","https://www.linkedin.com/in/donjeysonmd"]}</script>
+<!--
+  LANDING: the scroll story (anki-boi.github.io/). The portfolio lives at /work/.
+  Hand edited in this repo; the portfolio-ref build chain is retired for this file.
+
+    01 · THE CHAOS      tool tiles drift in, unlinked
+    02 · THE CONNECTION first accent line draws between two nodes
+    03 · THE SYSTEM     hub + 8 nodes branch out and light up
+    04 · THE AGENTS     the web becomes a brain, synapses fire
+    05 · THE QUIET      particles settle into the monogram, name + CTA land
+
+  EDITING:
+    · Copy lives in CONFIG (the script under the footer): name, monogram, tagline, links,
+      tool tiles, node labels, every caption, footer, per-leg tints. The static no-JS
+      block (#intro) and the static footer markup repeat the essentials for visitors
+      without JavaScript; keep them in step with CONFIG.
+    · Palette and fonts come from assets/tokens.css (shared with /work/). --accent and
+      --hot are read by the WebGL shaders, so they recolour the particle world too.
+      Warm dark theme: the particles, lines and dust use AdditiveBlending, which is
+      what makes them glow (it needs the dark ground). The backdrop film (#film) is
+      drawn procedurally on a 2D canvas; no video, no third-party assets.
+    · Libraries are self-hosted in assets/vendor/ (see LICENSES.md). No CDN.
+
+  ENGINE (leave alone unless you mean to):
+    · GSAP master timeline: 0 to 100 units, 20 units per leg, pinned stage.
+    · window.__pw = { morph, order, charge, leave, dust, gather, grow, burst,
+      branch, zoom, reveal }: the scrubbed state the shaders read every frame.
+      morph: 0 chaos, 1 stream, 2 network, 3 brain, 4 monogram.
+    · Leg 1's ring is an N-gon (any N). Leg 3's web is hardcoded 8 nodes + hub in
+      BOTH buildWeb() and buildShapes(). Leg 2's node/wire coordinates are
+      hardcoded in BOTH the leg-2 SVG and buildShapes(). Change one, change the other.
+    · Three.js loads only on a fine pointer, at 768px and wider, without Save-Data and
+      without reduced motion. Everyone else gets the inline SVG scenes.
+    · Reduced motion: no pinning, no scrub. The five scenes and captions render as a
+      normal page (html.rm).
+    · The fallback (#intro) shows until the engine has actually started (html.engine-on),
+      so a JS error still leaves the name, tagline and both CTAs on screen.
+
+  Total scroll length: 800vh desktop, 600vh phones (taller = slower scroll-through).
+-->
+
+  <!-- Self-hosted, the same three woff2 files the portfolio ships. Fraunces is roman-only
+       variable 300-900: the italic accents below are synthesised. -->
+  <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/tokens.css" />
+  <style>
+    @font-face{font-family:'Fraunces';src:url('fonts/fraunces-latin.woff2') format('woff2');font-weight:300 900;font-style:normal;font-display:swap}
+    @font-face{font-family:'Inter';src:url('fonts/inter-latin.woff2') format('woff2');font-weight:300 800;font-style:normal;font-display:swap}
+    @font-face{font-family:'JetBrains Mono';src:url('fonts/jetbrains-mono-latin.woff2') format('woff2');font-weight:400 700;font-style:normal;font-display:swap}
+  </style>
+
+  <style>
+    /* Palette, fonts, --ease-out and --chamfer come from assets/tokens.css. If --display
+       changes there, set CONFIG.displayFont to the same family: the closing monogram is
+       sampled from it. */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--accent); color: var(--bg); }
+
+    /* Grain overlay */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      opacity: 0.06;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+    }
+
+    /* ============================================================
+       HEADER: floating nav
+       ============================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 32px;
+      pointer-events: none;
+    }
+    .nav > * { pointer-events: auto; }
+    .logo {
+      font-family: var(--display);
+      font-size: 24px;
+      line-height: 1;
+    }
+    .logo i { font-style: italic; color: var(--accent); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      clip-path: var(--chamfer);
+      border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: color-mix(in srgb, var(--bg) 80%, transparent);
+      transition: border-color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out);
+    }
+    .nav-cta:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+    .nav-cta:active { transform: scale(0.97); }
+    .nav-cta svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+    /* ============================================================
+       PROGRESS INDICATOR: fixed left rail
+       ============================================================ */
+    .progress {
+      position: fixed;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .progress-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mut);
+      transition: color 200ms ease;
+    }
+    .progress { transition: opacity 0.4s ease; }
+    .progress.gone { opacity: 0; }
+    .progress-item.active { color: var(--accent); }
+    /* Desktop: lift the scenes so the caption block clears the leg-1 ring */
+    @media (min-width: 721px) { .leg { padding-bottom: 16vh; } }
+    .progress-item .dot {
+      width: 6px; height: 6px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ink) 28%, transparent);
+      transition: background-color 200ms ease, transform 250ms var(--ease-out);
+    }
+    .progress-item.active .dot {
+      background: var(--accent);
+      transform: scale(1.4);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+    }
+    .progress-item .num {
+      opacity: 0.8;
+    }
+
+    /* ============================================================
+       SCROLL WORLD: long scroll container
+       ============================================================ */
+    .scroll-world {
+      position: relative;
+      height: 800vh;   /* 5 legs × 160vh: the one knob for how fast the world scrolls through (taller = slower) */
+    }
+
+    /* The pinned stage: GSAP will pin this while scrolling through .scroll-world */
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Background color layer: animates between legs */
+    .stage-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      /* colour is scrubbed by the GSAP timeline: a CSS transition here would lag behind every frame */
+      z-index: 0;
+    }
+    /* Ambient center glow that grows/shifts per leg */
+    .stage-glow {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 1000px; height: 1000px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, var(--accent-glow), transparent 60%);
+      filter: blur(60px);
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Each leg is absolute-positioned and fades in/out */
+    .leg {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .leg .scene {
+      position: relative;
+      width: min(720px, 80vw);
+      height: min(720px, 80vw);
+      max-height: 60vh;
+      will-change: transform; /* GSAP flies each scene through 3D space between legs */
+    }
+    /* One particle system for the whole scroll world (Three.js).
+       Sits above the bg/glow, below the leg content. */
+    .pw-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+    .pw-canvas canvas { width: 100% !important; height: 100% !important; display: block; }
+    /* Backdrop film: drawn procedurally (see section 5b of the engine), dimmed under the
+       particles, with a vignette that keeps the edges quiet. */
+    .film { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+    .film.on { opacity: var(--film-dim, 0.9); }
+    .film canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+    .film::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 45%, rgba(13,11,9,0) 35%, rgba(13,11,9,0.82) 100%);
+    }
+    html.rm .film { display: none; }
+    .stage.pw-live .pw-canvas { opacity: 1; }
+    /* Once particles are live they draw these shapes; the SVG versions are the no-WebGL fallback */
+    .stage.pw-live .conn-node,
+    .stage.pw-live #connLine,
+    .stage.pw-live #connParticle,
+    .stage.pw-live #sysSvg,
+    .stage.pw-live #aiSparkle { visibility: hidden; }
+    /* dark halo keeps the node names readable over the glowing particles */
+    .stage.pw-live .conn-label { fill: var(--ink); font-size: 12px; font-weight: 500; paint-order: stroke; stroke: color-mix(in srgb, var(--bg) 85%, transparent); stroke-width: 3px; stroke-linejoin: round; }
+    @media (max-width: 720px) { .stage.pw-live .conn-label { font-size: 17px; letter-spacing: 0.04em; stroke-width: 5px; } } /* SVG units scale ~0.5× on phones; sized so the longer node label fits */
+    .leg-caption {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 12vh;
+      text-align: center;
+      pointer-events: none;
+    }
+    .leg-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .leg-title {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 5vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0;
+      font-weight: 400;
+    }
+    .leg-title em { font-style: italic; color: var(--accent); }
+    .leg-caption, .quiet { text-shadow: 0 1px 2px rgba(13, 11, 9, 0.9), 0 0 22px rgba(13, 11, 9, 0.85); }
+    .leg-sub {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--mut);
+      max-width: 60ch;
+      padding: 0 16px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.55;
+    }
+
+    /* ============================================================
+       LEG 1: THE CHAOS (CONFIG.tools tiles, fall into a ring)
+       ============================================================ */
+    .chaos-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .chaos-logo { will-change: transform; }
+    .chaos-logo .tile {
+      fill: rgba(23, 19, 15, 0.9);
+      stroke: color-mix(in srgb, var(--ink) 28%, transparent);
+      stroke-width: 1;
+    }
+    .chaos-logo .mark { fill: var(--ink); transition: fill 0.4s ease; }
+    .chaos-logo.landed .mark { fill: var(--accent); }
+    .chaos-logo.landed .tile { stroke: color-mix(in srgb, var(--accent) 45%, transparent); }
+    .chaos-logo .label {
+      fill: var(--mut);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-anchor: middle;
+    }
+    .chaos-line {
+      stroke: var(--accent);
+      stroke-width: 1.2;
+      fill: none;
+      filter: drop-shadow(0 0 4px var(--accent-glow));
+      stroke-linecap: round;
+    }
+
+    /* ============================================================
+       LEG 2: THE CONNECTION
+       ============================================================ */
+    .conn-svg {
+      width: 100%; height: 100%;
+      overflow: visible;
+    }
+    .conn-node {
+      fill: var(--bg);
+      stroke: var(--ink);
+      stroke-width: 1.5;
+    }
+    .conn-node.active {
+      stroke: var(--accent);
+    }
+    .conn-line {
+      stroke: var(--accent);
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 1;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+    .conn-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      fill: var(--mut);
+    }
+    .conn-particle { fill: var(--accent); }
+
+    /* ============================================================
+       LEG 3: THE SYSTEM
+       ============================================================ */
+    .sys-svg { width: 100%; height: 100%; overflow: visible; }
+    .sys-node {
+      fill: rgba(23, 19, 15, 0.8);
+      stroke: color-mix(in srgb, var(--ink) 40%, transparent);
+      stroke-width: 1;
+    }
+    .sys-node.hot {
+      stroke: var(--accent);
+      fill: color-mix(in srgb, var(--accent) 8%, transparent);
+    }
+    .sys-edge {
+      stroke: color-mix(in srgb, var(--ink) 15%, transparent);
+      stroke-width: 1;
+      fill: none;
+    }
+    .sys-edge.hot {
+      stroke: var(--accent);
+      stroke-width: 1.5;
+      filter: drop-shadow(0 0 4px var(--accent-glow));
+    }
+
+    /* ============================================================
+       LEG 4: THE TURN (the web becomes a brain)
+       ============================================================ */
+    .ai-svg { width: 100%; height: 100%; overflow: visible; }
+    .ai-ring {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1;
+      opacity: 0.35;
+    }
+    .ai-spark {
+      fill: var(--accent);
+      filter: drop-shadow(0 0 6px var(--accent-glow));
+    }
+    /* Brain: the final AI visualization */
+    .brain-outline {
+      fill: color-mix(in srgb, var(--accent) 8%, transparent);
+      stroke: var(--accent);
+      stroke-width: 1.8;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 22px var(--accent-glow));
+    }
+    .brain-sulcus {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.2;
+      opacity: 0.75;
+      stroke-linecap: round;
+    }
+    .brain-gyrus {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 0.9;
+      opacity: 0.55;
+      stroke-linecap: round;
+    }
+    .brain-node {
+      fill: var(--accent);
+      filter: drop-shadow(0 0 5px var(--accent-glow));
+    }
+    .brain-node.core {
+      fill: color-mix(in srgb, var(--accent) 18%, white);
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+    }
+    .brain-synapse {
+      stroke: var(--accent);
+      stroke-width: 1;
+      opacity: 0.7;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 3px var(--accent-glow));
+    }
+    @keyframes brain-pulse {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.15); }
+    }
+
+    /* ============================================================
+       LEG 5: THE SIGN-OFF
+       ============================================================ */
+    .quiet {
+      text-align: center;
+    }
+    .quiet-tag {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+    .quiet-h {
+      font-family: var(--display);
+      font-size: clamp(3rem, 9vw, 8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin: 0;
+      font-weight: 400;
+    }
+    .quiet-h .italic {
+      font-style: italic;
+      color: var(--accent);
+      display: block;
+      font-size: 0.7em;
+      margin-top: 8px;
+    }
+    .quiet-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 48px;
+      padding: 16px 28px;
+      background: var(--accent);
+      color: var(--bg);
+      clip-path: var(--chamfer);
+      font-size: 14px;
+      font-weight: 600;
+      pointer-events: auto;
+      transition: transform 160ms var(--ease-out), background-color 200ms ease;
+    }
+    .quiet-cta:active { transform: scale(0.97); }
+    @media (hover: hover) and (pointer: fine) {
+      .quiet-cta:hover { background: color-mix(in srgb, var(--accent) 75%, white); }
+    }
+    .quiet-cta svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ============================================================
+       SCROLL CUE: dismisses on first scroll
+       ============================================================ */
+    .scroll-cue {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--mut);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      transition: opacity 0.6s ease;
+    }
+    .scroll-cue.gone { opacity: 0; pointer-events: none; }
+    .scroll-cue-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: cue-drop 1.6s ease-in-out infinite;
+      transform-origin: top;
+    }
+    @keyframes cue-drop {
+      0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+      50%      { transform: scaleY(1);   opacity: 1;   }
+    }
+
+    /* ============================================================
+       POST-SCROLL FOOTER
+       ============================================================ */
+    .end {
+      position: relative;
+      z-index: 5;
+      background: var(--bg-warm);
+      padding: 120px 32px;
+      text-align: center;
+      border-top: 1px solid var(--line);
+    }
+    .end small {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mut);
+      display: block;
+      margin-bottom: 24px;
+    }
+    .end h2 {
+      font-family: var(--display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin: 0 0 32px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+    }
+    .end h2 em { font-style: italic; color: var(--accent); }
+    .end-links {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .end-links a {
+      padding: 14px 24px;
+      clip-path: var(--chamfer);
+      border: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: border-color 200ms ease, background-color 200ms ease, transform 160ms var(--ease-out);
+    }
+    .end-links a:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+    .end-links a:active { transform: scale(0.97); }
+    .end-links a.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+    /* ============================================================
+       MOBILE: perf-tuned. Fewer effects, static caption flow,
+       smaller scenes, no ambient glow (drops constant blur/filter cost).
+       ============================================================ */
+    @media (max-width: 720px) {
+      .scroll-world { height: 600vh; }   /* fewer swipes on a phone */
+      .progress { display: none; }
+      .nav { padding: 14px 18px; }
+      .nav-cta { padding: 9px 14px; font-size: 12px; letter-spacing: 0.12em; }
+      .logo { font-size: 22px; }
+
+      /* Kill heavy visual effects */
+      .grain { opacity: 0.03; }
+
+      /* Flow layout: scene stacked above caption (no more absolute overlap risk) */
+      .leg {
+        justify-content: flex-start;
+        padding: 12vh 20px 4vh;
+        gap: 16px;
+      }
+      .leg .scene {
+        width: min(340px, 78vw);
+        height: min(340px, 78vw);
+        max-height: 40vh;
+      }
+      .leg-caption {
+        position: static;
+        padding-top: 8px;
+        max-width: 90vw;
+      }
+      .leg-eyebrow { font-size: 12px; letter-spacing: 0.2em; margin-bottom: 8px; }
+      .leg-title   { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+      .leg-sub     { font-size: 13px; margin-top: 10px; max-width: 34ch; }
+
+      /* Leg 5 quiet: scale text down so it fits */
+      .quiet-tag { font-size: 12px; letter-spacing: 0.2em; margin-bottom: 16px; }
+      .quiet-h   { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+      .quiet-cta { margin-top: 32px; padding: 14px 22px; font-size: 13px; }
+    }
+    /* Reduced motion: loops stop and scenes don't fly (JS skips the 3D flight),
+       but legs still cross-fade on scroll: forcing every leg to opacity 1
+       stacked all five on top of each other. */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    }
+
+    /* ============================================================
+       ACCESSIBILITY: skip link, focus, screen-reader-only text
+       ============================================================ */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+    .skip {
+      position: fixed; left: 16px; top: 12px; z-index: 100;
+      padding: 12px 18px; background: var(--accent); color: var(--bg);
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+      transform: translateY(-160%); transition: transform 160ms var(--ease-out);
+    }
+    .skip:focus, .skip:focus-visible { transform: none; outline: 2px solid var(--ink); outline-offset: 2px; }
+    a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    /* clip-path clips an outer outline, so the chamfered buttons draw theirs inside */
+    .nav-cta:focus-visible, .end-links a:focus-visible, .intro-links a:focus-visible {
+      outline: 2px solid var(--ink); outline-offset: -5px;
+      background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+    }
+    .end-links a.primary:focus-visible, .intro-links a.primary:focus-visible, .quiet-cta:focus-visible {
+      outline: 2px solid var(--bg); outline-offset: -6px; background: var(--gold-deep);
+    }
+    #signoff:focus { outline: none; }
+
+    /* ============================================================
+       STATIC INTRO: the no-JS and engine-failed fallback. Visible until the
+       engine has started (html.engine-on). With JS on it waits 2.5s before
+       showing, so a normal load never flashes it; a JS error still reveals it.
+       ============================================================ */
+    .intro-static {
+      min-height: 100vh; min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 120px max(16px, 6vw) 80px;
+      max-width: 980px; margin: 0 auto;
+    }
+    .js .intro-static { animation: intro-reveal 0.4s ease 2.5s both; }
+    @keyframes intro-reveal { from { opacity: 0; } to { opacity: 1; } }
+    .intro-static .eyebrow {
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent); margin: 0 0 20px;
+    }
+    .intro-static h1 {
+      font-family: var(--display); font-weight: 400; letter-spacing: -0.02em;
+      font-size: clamp(2.6rem, 8vw, 5.5rem); line-height: 1; margin: 0;
+    }
+    .intro-static .lede {
+      font-family: var(--display); font-style: italic; color: var(--accent);
+      font-size: clamp(1.4rem, 3.4vw, 2.2rem); line-height: 1.2; margin: 14px 0 0;
+    }
+    .intro-static .proof { color: var(--mut); font-size: 17px; line-height: 1.6; max-width: 60ch; margin: 28px 0 0; }
+    .intro-static noscript p { color: var(--mut); font-size: 15px; margin: 20px 0 0; }
+    .intro-static noscript a { color: var(--accent); text-decoration: underline; }
+    .intro-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+    .intro-links a {
+      padding: 14px 24px; clip-path: var(--chamfer); border: 1px solid var(--line-strong);
+      font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .intro-links a.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    /* Engine gating: the story only exists once the engine has started. */
+    html:not(.engine-on) .scroll-world,
+    html:not(.engine-on) .progress,
+    html:not(.engine-on) .scroll-cue { display: none; }
+    html.engine-on .intro-static { display: none; }
+    .end-note { margin: 28px auto 0; max-width: 52ch; color: var(--mut); font-size: 15px; line-height: 1.6; }
+
+    /* ============================================================
+       REDUCED MOTION (html.rm, set by the engine): no pin, no scrub.
+       Each leg is a normal section with its scene in its final state.
+       ============================================================ */
+    html.rm .scroll-world { height: auto; }
+    html.rm .stage { height: auto; overflow: visible; }
+    html.rm .stage-bg, html.rm .stage-glow, html.rm .pw-canvas,
+    html.rm .progress, html.rm .scroll-cue { display: none; }
+    html.rm .leg {
+      position: relative; inset: auto; opacity: 1;
+      justify-content: flex-start; gap: 28px;
+      padding: 96px 16px 64px; min-height: 0;
+      border-bottom: 1px solid var(--line);
+    }
+    html.rm #leg2, html.rm #leg4 { background: var(--bg-warm); }
+    html.rm .leg .scene { width: min(520px, 86vw); height: min(520px, 86vw); max-height: 52vh; }
+    html.rm .leg-caption { position: static; }
+    html.rm #leg5 { padding: 96px 16px; border-bottom: 0; }
+    html.rm #leg5 .scene.quiet { height: auto; max-height: none; width: min(980px, 100%); }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#signoff">Skip to links</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- HEADER (static so it works without JavaScript; CONFIG re-fills it) -->
+  <header class="nav">
+    <a class="logo" id="logo" href="#top" aria-label="Jeyson Dagondon, back to the top">J<i>D</i></a>
+    <a class="nav-cta" id="navCta" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener">
+      <span>Book a call</span>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </header>
+
+  <!-- PROGRESS INDICATOR (decorative: the captions carry the story) -->
+  <div class="progress" id="progressRail" aria-hidden="true"></div>
+
+  <!-- SCROLL CUE -->
+  <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+    <span>Scroll</span>
+    <span class="scroll-cue-line"></span>
+  </div>
+
+  <main id="top">
+  <!-- STATIC INTRO: what a visitor sees without JavaScript, or if the engine fails -->
+  <section class="intro-static" id="intro">
+    <p class="eyebrow">RPh · Cagayan de Oro, Philippines</p>
+    <h1>Jeyson Dagondon</h1>
+    <p class="lede">AI-native workflow automation, built by a pharmacist.</p>
+    <p class="proof">Registered Pharmacist, licensed November 2025. On contract with a live clinic since April 2026, where 45+ scripts and extensions I built run in production.</p>
+    <div class="intro-links">
+      <a class="primary" href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener">Book a call</a>
+      <a href="/work/">See the work</a>
+    </div>
+    <noscript><p>This page tells its story with JavaScript. The full portfolio works without it: <a href="/work/">open the portfolio</a>.</p></noscript>
+  </section>
+
+  <!-- SCROLL WORLD -->
+  <div class="scroll-world" id="story">
+    <h1 class="sr-only">Jeyson Dagondon: AI-native workflow automation, built by a pharmacist.</h1>
+    <div class="stage">
+      <div class="stage-bg" id="stageBg" aria-hidden="true"></div>
+      <div class="film" id="film" aria-hidden="true"><canvas></canvas></div>
+      <div class="stage-glow" id="stageGlow" aria-hidden="true"></div>
+      <div class="pw-canvas" id="particleWorld" aria-hidden="true"></div>
+
+      <!-- ── LEG 1: THE CHAOS ─────────────────────────── -->
+      <div class="leg" id="leg1">
+        <div class="scene">
+          <svg id="chaosSvg" class="chaos-svg" aria-hidden="true" focusable="false" viewBox="0 0 720 720" preserveAspectRatio="xMidYMid meet"></svg>
+        </div>
+        <div class="leg-caption"></div>
+      </div>
+
+      <!-- ── LEG 2: THE CONNECTION ────────────────────── -->
+      <div class="leg" id="leg2">
+        <div class="scene">
+          <svg class="conn-svg" viewBox="0 0 600 400" id="connSvg" aria-hidden="true" focusable="false">
+            <!-- two circle nodes -->
+            <circle class="conn-node active" id="connNodeA" cx="120" cy="200" r="42"/>
+            <text x="120" y="205" text-anchor="middle" class="conn-label" id="connLabelA"></text>
+            <circle class="conn-node active" id="connNodeB" cx="480" cy="200" r="42"/>
+            <text x="480" y="205" text-anchor="middle" class="conn-label" id="connLabelB"></text>
+            <!-- animated line -->
+            <path class="conn-line" id="connLine" d="M 162 200 Q 300 100, 438 200"/>
+            <!-- particle traveling the line -->
+            <circle id="connParticle" class="conn-particle" r="5" opacity="0"/>
+          </svg>
+        </div>
+        <div class="leg-caption"></div>
+      </div>
+
+      <!-- ── LEG 3: THE SYSTEM ────────────────────────── -->
+      <div class="leg" id="leg3">
+        <div class="scene">
+          <svg class="sys-svg" viewBox="0 0 600 600" id="sysSvg" aria-hidden="true" focusable="false"></svg>
+        </div>
+        <div class="leg-caption"></div>
+      </div>
+
+      <!-- ── LEG 4: THE TURN ──────────────────────────── -->
+      <div class="leg" id="leg4">
+        <div class="scene">
+          <svg class="ai-svg" viewBox="0 0 600 600" id="aiSvg" aria-hidden="true" focusable="false">
+            <!-- Rings -->
+            <circle class="ai-ring" id="aiRing1" cx="300" cy="300" r="80"/>
+            <circle class="ai-ring" id="aiRing2" cx="300" cy="300" r="140"/>
+            <circle class="ai-ring" id="aiRing3" cx="300" cy="300" r="210"/>
+            <!-- Central brain: the AI visualization -->
+            <g id="aiSparkle" transform="translate(300 300)">
+              <!-- Outer brain silhouette (side view) -->
+              <path class="brain-outline"
+                d="M -68 -8
+                   C -74 -32, -55 -50, -30 -48
+                   C -20 -55, -5 -55, 4 -48
+                   C 20 -55, 42 -48, 52 -38
+                   C 66 -32, 74 -12, 66 2
+                   C 72 12, 64 26, 52 28
+                   C 48 40, 32 44, 18 38
+                   C 8 46, -8 46, -18 40
+                   C -32 44, -50 38, -55 24
+                   C -68 20, -74 4, -68 -8 Z"/>
+              <!-- Central sulcus dividing hemispheres -->
+              <path class="brain-sulcus"
+                d="M -2 -50 Q -6 -22, 0 4 Q 6 24, -1 40"/>
+              <!-- Gyri (folds): left hemisphere -->
+              <path class="brain-gyrus" d="M -55 -25 Q -35 -32, -15 -25"/>
+              <path class="brain-gyrus" d="M -60 -8  Q -35 -14, -12 -6"/>
+              <path class="brain-gyrus" d="M -58 12  Q -32 6,   -12 16"/>
+              <path class="brain-gyrus" d="M -48 28  Q -28 22,  -12 32"/>
+              <!-- Gyri (folds): right hemisphere -->
+              <path class="brain-gyrus" d="M 15 -25  Q 35 -32,  55 -25"/>
+              <path class="brain-gyrus" d="M 12 -8   Q 35 -14,  60 -6"/>
+              <path class="brain-gyrus" d="M 12 12   Q 32 6,    58 16"/>
+              <path class="brain-gyrus" d="M 12 28   Q 28 22,   48 32"/>
+              <!-- Synaptic connections (drawn before nodes so nodes cap them) -->
+              <line class="brain-synapse" x1="-40" y1="-14" x2="0"   y2="6"/>
+              <line class="brain-synapse" x1="40"  y1="-14" x2="0"   y2="6"/>
+              <line class="brain-synapse" x1="-30" y1="22"  x2="0"   y2="6"/>
+              <line class="brain-synapse" x1="30"  y1="22"  x2="0"   y2="6"/>
+              <line class="brain-synapse" x1="-40" y1="-14" x2="40"  y2="-14"/>
+              <line class="brain-synapse" x1="-30" y1="22"  x2="30"  y2="22"/>
+              <line class="brain-synapse" x1="-40" y1="-14" x2="-30" y2="22"/>
+              <line class="brain-synapse" x1="40"  y1="-14" x2="30"  y2="22"/>
+              <!-- Neural nodes -->
+              <circle class="brain-node" cx="-40" cy="-14" r="3"/>
+              <circle class="brain-node" cx="40"  cy="-14" r="3"/>
+              <circle class="brain-node" cx="-30" cy="22"  r="3"/>
+              <circle class="brain-node" cx="30"  cy="22"  r="3"/>
+              <circle class="brain-node core" cx="0" cy="6" r="4.5"/>
+            </g>
+            <!-- Orbital sparks -->
+            <g id="aiSparks"></g>
+          </svg>
+        </div>
+        <div class="leg-caption"></div>
+      </div>
+
+      <!-- ── LEG 5: THE SIGN-OFF ──────────────────────── -->
+      <div class="leg" id="leg5">
+        <div class="scene quiet">
+          <div class="quiet-tag" id="quietTag"></div>
+          <h2 class="quiet-h">
+            <span id="quietName"></span>
+            <span class="italic" id="quietTagline"></span>
+          </h2>
+          <a class="quiet-cta" id="quietCta" href="#">
+            <span id="quietCtaLabel"></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST-SCROLL FOOTER -->
+  <section class="end" id="signoff" tabindex="-1" aria-labelledby="endTitle">
+    <small id="endSmall">Next step</small>
+    <h2 id="endTitle">Have a workflow that should <em>run itself?</em></h2>
+    <div class="end-links" id="endLinks">
+      <a href="/work/" class="primary">View the work</a>
+      <a href="https://calendly.com/donjeysonofficial/30min" target="_blank" rel="noopener">Book a call</a>
+      <a href="cv.pdf">Résumé (PDF)</a>
+      <a href="mailto:&#100;&#111;&#110;&#106;&#101;&#121;&#115;&#111;&#110;&#111;&#102;&#102;&#105;&#99;&#105;&#97;&#108;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;">Email me</a>
+    </div>
+    <p class="end-note" id="endNote">Based in Cagayan de Oro on UTC+8: the same clock as Perth, with full overlap with the Australian business day.</p>
+  </section>
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       YOUR CONTENT. Everything brand-specific is in this one object; the
+       markup above is just slots it fills (the static #intro block and the
+       static footer repeat the essentials for no-JS visitors). svg entries are
+       24×24 markup. Every claim here traces to Dropbox/Resumes/!CAREER-TRUTH.md.
+       ══════════════════════════════════════════════════════════════════ -->
+  <script>
+  var CONFIG = {
+    name: 'Jeyson Dagondon',
+    monogram: ['J', 'D'],            // header logo + the shape the particles sign at the end
+    displayFont: 'Fraunces',         // must match --display in assets/tokens.css
+    tagline: 'AI-native automation, built by a pharmacist.',
+    navCta: { label: 'Book a call', href: 'https://calendly.com/donjeysonofficial/30min', external: true },
+    cta: { label: 'See the work', href: '/work/' },
+
+    // Leg 1: the scattered "tabs". Index 0 is the hero: the camera dives into
+    // it, it shatters into dust, and it becomes leg 2's left node. Keep it a
+    // single <path> so the dust can be sampled from it.
+    tools: [
+      // Index 0 is the hero: the camera dives into it, it shatters into dust, and it
+      // re-forms as leg 2's left node. Hexagon = the brand mark already in the site's favicon.
+      { label: 'ZOHO',   svg: '<path d="M12 2.2 20.6 7.1v9.8L12 21.8 3.4 16.9V7.1z"/>' },
+      { label: 'SCRIPT', svg: '<path d="M8.5 17.5 3 12l5.5-5.5 1.4 1.4L5.8 12l4.1 4.1zM15.5 17.5 21 12l-5.5-5.5-1.4 1.4L18.2 12l-4.1 4.1z"/>' },
+      { label: 'MV3',    svg: '<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 6.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7z"/>' },
+      { label: 'PY',     svg: '<path d="M11.8 2h.4c2.6 0 4.3.9 4.3 3.4v3.9H8.9v1.4h7.6c1.6 0 2.7 1.2 2.7 2.9v4.3c0 2.2-1.6 3.4-4.1 3.4h-3.6c-2.4 0-4-1.1-4-3.3v-3.5h7.4V12H6.1V5.5C6.1 3 8 2 11.8 2z"/>' },
+      { label: 'CDP',    svg: '<path d="M4 5h16v11H4zM1 19h22v2H1z"/>' },
+      { label: 'SHEETS', svg: '<path d="M3 4h18v4H3zM3 10h8v4H3zM13 10h8v4h-8zM3 16h8v4H3zM13 16h8v4h-8z"/>' },
+      { label: 'N8N',    svg: '<path d="M21.5 5.7c-1.2 0-2.2.8-2.4 1.9h-2.9c-1.2 0-2.3.9-2.5 2.1l-.1.6a1.3 1.3 0 0 1-1.2 1.1h-.1c-.3-1.1-1.3-1.9-2.4-1.9s-2.2.8-2.4 1.9H5c-.3-1.1-1.3-1.9-2.4-1.9C1.1 9.5 0 10.6 0 12s1.1 2.5 2.5 2.5c1.2 0 2.2-.8 2.4-1.9h1.4c.3 1.1 1.3 1.9 2.4 1.9 1.2 0 2.2-.8 2.4-1.9h1a1.3 1.3 0 0 1 1.2 1.1l.1.6c.2 1.2 1.3 2.1 2.5 2.1h.4c.3 1.1 1.3 1.9 2.4 1.9 1.4 0 2.5-1.1 2.5-2.5s-1.1-2.5-2.5-2.5c-1.2 0-2.2.8-2.4 1.9h-.4a1.3 1.3 0 0 1-1.2-1.1l-.1-.6A2.5 2.5 0 0 0 14 12a2.5 2.5 0 0 0 .8-1.5l.1-.6a1.3 1.3 0 0 1 1.2-1.1h2.9c.3 1.1 1.3 1.9 2.4 1.9 1.4 0 2.5-1.1 2.5-2.5s-1.1-2.5-2.5-2.5"/>' },
+      { label: 'MCP',    svg: '<path d="M12 2 21 7v10l-9 5-9-5V7zM12 6.5 7 9.3v5.4l5 2.8 5-2.8V9.3z"/>' },
+      { label: 'LLM',    svg: '<path d="M9 3h6v3h3v6h-3v6H9v-6H6V6h3zM10.5 7.5h3v3h-3z"/>' },
+      { label: 'GIT',    svg: '<circle cx="6.5" cy="6.5" r="3"/><circle cx="6.5" cy="17.5" r="3"/><circle cx="17.5" cy="12" r="3"/><path d="M5.6 9.5h1.8v5H5.6zM9.4 16.1l5.4-3.2 1 1.6-5.4 3.2zM9.4 7.9l5.4 3.2-1 1.6-5.4-3.2z"/>' },
+      { label: 'API',    svg: '<path d="M7 8 3 12l4 4 1.4-1.4L5.8 12l2.6-2.6zM17 8l-1.4 1.4L18.2 12l-2.6 2.6L17 16l4-4zM13.2 6l-2.4 12 1.9.4 2.4-12z"/>' },
+      { label: 'GAS',    svg: '<path d="M12 2.5 20.5 7.4v9.8L12 22 3.5 17.2V7.4zM12 7l4 2.3v4.6l-4 2.3-4-2.3V9.3z"/>' }
+    ],
+
+    nodes: ['ZOHO', 'PORTALS'],      // leg 2: the two things the first wire joins
+
+    // Legs 1-4 captions (leg 5 supplies only its eyebrow + rail label).
+    legs: [
+      { short: 'Chaos',  eyebrow: '01 · The Chaos',      title: 'Seven portals.',       em: 'Nothing connected.', sub: 'Pharmacy orders keyed in by hand across seven portals and four vendors, about six minutes each, with Zoho CRM open in another tab.' },
+      { short: 'Wire',   eyebrow: '02 · The Connection', title: 'One userscript.',      em: 'The portals talk.', sub: 'A userscript carries the order from Zoho CRM into the pharmacy portal and stops one click short, so a person still confirms it.' },
+      { short: 'System', eyebrow: '03 · The System',     title: '45+ scripts,',         em: 'one ops layer.',  sub: '~6 min → ~40 s per order, 40 to 60 hours a month handed back, and a human still signs off every action.' },
+      { short: 'Agents', eyebrow: '04 · The Agents',     title: 'Then it starts to',    em: 'think.',          sub: 'An agent stack I run myself maintains the suite, on models served from my own machine. Every change is tested, committed and reviewed by a human.' },
+      { short: 'Quiet',  eyebrow: '05 · The Quiet' }
+    ],
+
+    // Per-leg background tint of the pinned stage (6 stops: leg 1 → leg 5 → rest).
+    tints: ['#0d0b09', '#0d0c0f', '#100d0a', '#120d0b', '#110d08', '#0d0b09'],
+
+    footer: {
+      small: 'Next step',
+      title: 'Have a workflow that should', em: 'run itself?',
+      links: [
+        { label: 'View the work', href: '/work/', primary: true },
+        { label: 'Book a call', href: 'https://calendly.com/donjeysonofficial/30min', external: true },
+        { label: 'Résumé (PDF)', href: 'cv.pdf' },
+        { label: 'Email me', email: ['donjeysonofficial', 'gmail.com'] }   // assembled at runtime, light obfuscation
+      ],
+      note: 'Based in Cagayan de Oro on UTC+8: the same clock as Perth, with full overlap with the Australian business day.'
+    }
+  };
+  </script>
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/lenis.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+    const $  = (s, c) => (c||document).querySelector(s);
+    const $$ = (s, c) => Array.from((c||document).querySelectorAll(s));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const isMobile = window.matchMedia('(max-width: 720px)').matches;
+
+    /* ─────────────────────────────────────────────────
+       0. RENDER CONTENT: fill the markup from CONFIG
+       ───────────────────────────────────────────────── */
+    const TOOLS = CONFIG.tools;
+    const ext = l => l.external ? ' target="_blank" rel="noopener"' : '';
+    const hrefOf = l => l.email ? 'mailto:' + l.email[0] + '@' + l.email[1] : l.href;
+    $('#logo').innerHTML = CONFIG.monogram[0] + '<i>' + CONFIG.monogram[1] + '</i>';
+    $('#navCta').href = CONFIG.navCta.href;
+    if (CONFIG.navCta.external) { $('#navCta').target = '_blank'; $('#navCta').rel = 'noopener'; }
+    $('#navCta span').textContent = CONFIG.navCta.label;
+    $('#progressRail').innerHTML = CONFIG.legs.map((L, i) =>
+      '<div class="progress-item"><span class="dot"></span><span class="num">' +
+      String(i + 1).padStart(2, '0') + ' · ' + L.short + '</span></div>').join('');
+    CONFIG.legs.forEach((L, i) => {
+      const cap = $('#leg' + (i + 1) + ' .leg-caption');
+      if (!cap || !L.title) return;
+      cap.innerHTML = '<div class="leg-eyebrow">' + L.eyebrow + '</div>' +
+        '<h2 class="leg-title">' + L.title + ' <em>' + L.em + '</em></h2>' +
+        '<p class="leg-sub">' + L.sub + '</p>';
+    });
+    $('#quietTag').textContent = CONFIG.legs[4].eyebrow;
+    $('#quietName').textContent = CONFIG.name;
+    $('#quietTagline').textContent = CONFIG.tagline;
+    $('#quietCta').href = CONFIG.cta.href;
+    $('#quietCtaLabel').textContent = CONFIG.cta.label;
+    $('#connLabelA').textContent = CONFIG.nodes[0];
+    $('#connLabelB').textContent = CONFIG.nodes[1];
+    $('#endSmall').textContent = CONFIG.footer.small;
+    $('#endTitle').innerHTML = CONFIG.footer.title + ' <em>' + CONFIG.footer.em + '</em>';
+    $('#endLinks').innerHTML = CONFIG.footer.links.map(l =>
+      '<a href="' + hrefOf(l) + '"' + ext(l) + (l.primary ? ' class="primary"' : '') + '>' + l.label + '</a>').join('');
+    $('#endNote').textContent = CONFIG.footer.note || '';
+
+    /* ─────────────────────────────────────────────────
+       1. LENIS smooth scroll
+       ───────────────────────────────────────────────── */
+    // Skip Lenis on touch: native mobile scroll is smoother and drops the constant RAF overhead
+    let lenis = null;
+    if (!reduced && !isTouch && window.Lenis) {
+      lenis = new window.Lenis({
+        duration: 1.6,
+        easing: t => 1 - Math.pow(1 - t, 4),
+        wheelMultiplier: 0.7,      // how far one wheel notch travels (was 0.85)
+        touchMultiplier: 1.6,
+        smoothWheel: true,
+        lerp: 0.085
+      });
+      // GSAP's ticker drives Lenis below (section 5); this loop is only the no-GSAP fallback.
+      // Running both advanced Lenis twice per frame.
+      if (!(window.gsap && window.ScrollTrigger)) {
+        const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      }
+    }
+
+    /* ─────────────────────────────────────────────────
+       2. LEG 1: build the N tool tiles (fall into a ring)
+          Each tile is CONFIG.tools[i]: a short label + 24×24 svg markup.
+       ───────────────────────────────────────────────── */
+    const NS = 'http://www.w3.org/2000/svg';
+    const chaosSvg = $('#chaosSvg');
+
+    const chaosData = TOOLS.map(t => ({ label: t.label, svg: t.svg }));
+    const NT = chaosData.length;
+
+
+    // Compute end positions on a circle (N-gon) centred in the 720x720 viewBox
+    const cxT = 360, cyT = 360, rT = 240;
+    chaosData.forEach((d, i) => {
+      const angle = (i / NT) * Math.PI * 2 - Math.PI / 2;
+      d.endX = cxT + rT * Math.cos(angle);
+      d.endY = cyT + rT * Math.sin(angle);
+      // Random scattered start position: top 40% of scene, wide x-spread
+      d.startX = 40 + Math.random() * 640;
+      d.startY = -60 + Math.random() * 260;
+      d.startRot = -90 + Math.random() * 180;
+    });
+
+    // Line pairs: the ring, plus diameters across it for the network read
+    const linePairs = chaosData.map((_, i) => [i, (i + 1) % NT])
+      .concat(Array.from({ length: Math.floor(NT / 2) }, (_, i) => [i, i + NT / 2]));
+
+    // Build connection lines FIRST so they render behind the logos
+    const chaosLines = [];
+    linePairs.forEach((pair, i) => {
+      const [a, b] = pair;
+      const A = chaosData[a], B = chaosData[b];
+      const line = document.createElementNS(NS, 'line');
+      line.setAttribute('x1', A.endX);
+      line.setAttribute('y1', A.endY);
+      line.setAttribute('x2', B.endX);
+      line.setAttribute('y2', B.endY);
+      line.setAttribute('class', 'chaos-line');
+      const len = Math.hypot(B.endX - A.endX, B.endY - A.endY);
+      line.style.strokeDasharray = len;
+      line.style.strokeDashoffset = len;
+      chaosSvg.appendChild(line);
+      chaosLines.push(line);
+    });
+
+    // Build logo groups (on top of lines)
+    const chaosLogos = [];
+    chaosData.forEach((d, i) => {
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'chaos-logo');
+      g.id = 'chaos-logo-' + i;
+
+      // Rounded tile background
+      const tile = document.createElementNS(NS, 'rect');
+      tile.setAttribute('x', -28); tile.setAttribute('y', -28);
+      tile.setAttribute('width', 56); tile.setAttribute('height', 56);
+      tile.setAttribute('rx', 8);
+      tile.setAttribute('class', 'tile');
+      g.appendChild(tile);
+
+      // Tool mark, scaled to fit (24x24 native → ~32x32 in tile, centred)
+      const markG = document.createElementNS(NS, 'g');
+      markG.setAttribute('transform', 'translate(-16, -18) scale(1.33)');
+      const parser = new DOMParser();
+      const svgWrap = '<svg xmlns="http://www.w3.org/2000/svg">' + (d.svg || '') + '</svg>';
+      const parsed = parser.parseFromString(svgWrap, 'image/svg+xml');
+      Array.from(parsed.documentElement.children).forEach(child => {
+        const imp = document.importNode(child, true);
+        if (imp.tagName !== 'text') imp.setAttribute('class', 'mark');
+        markG.appendChild(imp);
+      });
+      g.appendChild(markG);
+
+      // Label beneath
+      const label = document.createElementNS(NS, 'text');
+      label.setAttribute('y', 46);
+      label.setAttribute('class', 'label');
+      label.textContent = d.label;
+      g.appendChild(label);
+
+      chaosSvg.appendChild(g);
+      chaosLogos.push(g);
+    });
+
+    /* ─────────────────────────────────────────────────
+       3. LEG 3: build 8-node system web
+       ───────────────────────────────────────────────── */
+    const sysSvg = $('#sysSvg');
+    const cx = 300, cy = 300, radius = 200;
+    const sysNodes = [];
+    const sysEdges = [];
+    // 8 nodes evenly placed around a circle
+    for (let i = 0; i < 8; i++) {
+      const angle = (i / 8) * Math.PI * 2 - Math.PI / 2;
+      const nx = cx + Math.cos(angle) * radius;
+      const ny = cy + Math.sin(angle) * radius;
+      sysNodes.push({ x: nx, y: ny });
+    }
+    // Edges connecting each node to 2-3 nearby others
+    const edgePairs = [
+      [0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,0],
+      [0,3],[1,4],[2,5],[3,6],[4,7],[5,0],[6,1],[7,2]
+    ];
+    edgePairs.forEach(([a,b]) => {
+      const A = sysNodes[a], B = sysNodes[b];
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', A.x); line.setAttribute('y1', A.y);
+      line.setAttribute('x2', B.x); line.setAttribute('y2', B.y);
+      line.setAttribute('class', 'sys-edge');
+      sysSvg.appendChild(line);
+      sysEdges.push(line);
+    });
+    // Central hub
+    const hub = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    hub.setAttribute('cx', cx); hub.setAttribute('cy', cy); hub.setAttribute('r', 18);
+    hub.setAttribute('class', 'sys-node');
+    sysSvg.appendChild(hub);
+    // Nodes on top
+    sysNodes.forEach((n, i) => {
+      const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      c.setAttribute('cx', n.x); c.setAttribute('cy', n.y); c.setAttribute('r', 22);
+      c.setAttribute('class', 'sys-node');
+      c.dataset.i = i;
+      sysSvg.appendChild(c);
+      n.el = c;
+    });
+
+    /* ─────────────────────────────────────────────────
+       4. LEG 4: build orbital sparks
+       ───────────────────────────────────────────────── */
+    const aiSparks = $('#aiSparks');
+    // Fewer sparks on mobile for perf (mobile GPUs struggle with 12 shadowed circles updating per-frame)
+    const sparkCount = isMobile ? 6 : 12;
+    const sparkEls = [];
+    for (let i = 0; i < sparkCount; i++) {
+      const angle = (i / sparkCount) * Math.PI * 2;
+      const orbit = 210;
+      const sx = 300 + Math.cos(angle) * orbit;
+      const sy = 300 + Math.sin(angle) * orbit;
+      const spark = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      spark.setAttribute('cx', sx); spark.setAttribute('cy', sy); spark.setAttribute('r', 3);
+      spark.setAttribute('class', 'ai-spark');
+      aiSparks.appendChild(spark);
+      sparkEls.push({ el: spark, angle: angle });
+    }
+
+    /* ─────────────────────────────────────────────────
+       5. GSAP + ScrollTrigger: MASTER TIMELINE
+       Single pinned trigger. Timeline goes 0 → 100.
+       Legs occupy: 1 (0-20), 2 (20-40), 3 (40-60), 4 (60-80), 5 (80-100).
+       ───────────────────────────────────────────────── */
+    const root = document.documentElement;
+
+    // SVG text scales with its scene, so a 10-unit label reads as ~4px on a phone.
+    // Size the decorative labels so they render at 12px or more on any screen;
+    // on phones the leg-2 node labels move under their circles to stay legible.
+    function fitLabels() {
+      const unit = (svg, vbW, vbH) => {
+        const s = svg.parentElement;
+        return Math.min(s.offsetWidth / vbW, s.offsetHeight / vbH) || 1;
+      };
+      const k1 = unit(chaosSvg, 720, 720);
+      $$('.chaos-logo .label').forEach(t => {
+        t.style.fontSize = Math.max(10, 13 / k1).toFixed(1) + 'px';
+        t.style.letterSpacing = k1 < 0.6 ? '0' : '';
+      });
+      const k2 = unit($('#connSvg'), 600, 400), fs2 = Math.max(10.5, 13 / k2);
+      $$('.conn-label').forEach(t => {
+        t.style.fontSize = fs2.toFixed(1) + 'px';
+        t.style.letterSpacing = fs2 > 15 ? '0.02em' : '';
+        t.setAttribute('y', fs2 > 15 ? 200 + 42 + fs2 * 1.15 : 205);
+      });
+    }
+    window.addEventListener('resize', fitLabels);
+
+    // Reduced motion: no pin and no scrub. Every scene is drawn in its final
+    // state and the five legs stack as a normal page (CSS: html.rm).
+    if (reduced) {
+      chaosLogos.forEach((el, i) => {
+        el.setAttribute('transform', 'translate(' + chaosData[i].endX + ' ' + chaosData[i].endY + ')');
+        el.classList.add('landed');
+      });
+      chaosLines.forEach(l => { l.style.strokeDashoffset = '0'; });
+      sysNodes.forEach(n => n.el.setAttribute('class', 'sys-node hot'));
+      sysEdges.forEach(e => e.setAttribute('class', 'sys-edge hot'));
+      $('#aiSparkle').setAttribute('transform', 'translate(300 300) scale(1.4)');
+      $('#scrollCue').classList.add('gone');
+      root.classList.add('rm', 'engine-on');
+      fitLabels();
+      window.__engineOK = true;
+      return;
+    }
+
+    if (!window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    // The story is display:none until now (the #intro fallback holds the screen);
+    // reveal it before any measuring so ScrollTrigger sees the real layout.
+    root.classList.add('engine-on');
+    fitLabels();
+    const quietCta = $('#quietCta');
+    quietCta.tabIndex = -1;   // invisible until leg 5; the footer carries the same links
+
+    // Lenis ↔ ScrollTrigger sync
+    if (lenis) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(t => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // Initial states
+    gsap.set('#leg1', { opacity: 1 });
+    gsap.set(['#leg2','#leg3','#leg4','#leg5'], { opacity: 0 });
+    gsap.set('#connParticle', { opacity: 0, attr: { cx: 162, cy: 200 } });
+    gsap.set(sysNodes.map(n => n.el), { opacity: 0.4, scale: 0.5, transformOrigin: 'center' });
+    gsap.set(sysEdges, { opacity: 0 });
+    gsap.set(hub, { opacity: 0, scale: 0, transformOrigin: 'center' });
+    gsap.set('#aiSparkle', { opacity: 0, scale: 0, transformOrigin: 'center' });
+    gsap.set(['#aiRing1','#aiRing2','#aiRing3'], { opacity: 0, scale: 0.5, transformOrigin: 'center' });
+    gsap.set(sparkEls.map(s => s.el), { opacity: 0 });
+    gsap.set('.stage-bg', { backgroundColor: CONFIG.tints[0] });
+    gsap.set('.stage-glow', { opacity: 0 });
+
+    // Pre-compute connection line length
+    const connLine = $('#connLine');
+    const connLen = connLine.getTotalLength();
+    connLine.style.strokeDasharray = connLen;
+    connLine.style.strokeDashoffset = connLen;
+
+    // Shared state the particle world (module script below) reads every frame.
+    //   morph  0 chaos → 1 stream → 2 network → 3 brain → 4 monogram
+    //   order  leg-1 chaos drifting into a halo around the logo ring
+    //   charge brain synapses firing
+    //   leave/dust/gather/grow  the leg 1 → 2 hand-off: chaos thins out, hero
+    //   breaks into dust, the dust re-forms as the node A, the wire grows to node B
+    //   burst/branch  the leg 2 → 3 hand-off: hero detonates in slow motion and
+    //   the cloud feeds branches that grow the network out of its hub
+    //   zoom/reveal  the leg 3 → 4 hand-off: the camera pulls back until the
+    //   network is one patch of a brain, and links fire outward to reveal it
+    const pw = window.__pw = { progress: 0, morph: 0, order: 0, charge: 0, monoGain: 1, leave: 0, dust: 0, gather: 0, grow: 0, burst: 0, branch: 0, zoom: 0, reveal: 0 };
+
+    // MASTER TIMELINE: pinned via GSAP so no CSS sticky quirks
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.scroll-world',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1,
+        pin: '.stage',
+        pinSpacing: false,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        onUpdate(self) {
+          // Live update: progress rail + connection particle + orbital sparks
+          const p = self.progress;
+          pw.progress = p;
+          if (window.__pwWake) window.__pwWake();
+          if (window.__filmWake) window.__filmWake();
+          const legIndex = Math.min(Math.floor(p * 5), 4);
+          $$('.progress-item').forEach((it, i) => {
+            it.classList.toggle('active', i === legIndex);
+          });
+          quietCta.tabIndex = p > 0.86 ? 0 : -1;
+          // Leg-2 particle travels the line (active from t=0.20 to 0.40)
+          if (p >= 0.22 && p <= 0.42) {
+            const partP = (p - 0.22) / 0.20;
+            const pt = connLine.getPointAtLength(connLen * partP);
+            $('#connParticle').setAttribute('cx', pt.x);
+            $('#connParticle').setAttribute('cy', pt.y);
+            gsap.set('#connParticle', { opacity: 1 });
+          } else {
+            gsap.set('#connParticle', { opacity: 0 });
+          }
+          // Leg-4 orbital sparks rotate continuously while visible
+          if (p >= 0.60 && p <= 0.85) {
+            const rot = p * Math.PI * 4;
+            sparkEls.forEach((s, i) => {
+              const orbit = 210;
+              const nx = 300 + Math.cos(s.angle + rot) * orbit;
+              const ny = 300 + Math.sin(s.angle + rot) * orbit;
+              s.el.setAttribute('cx', nx);
+              s.el.setAttribute('cy', ny);
+            });
+          }
+        }
+      }
+    });
+
+    // ═══ LEG 1: CHAOS → CIRCLE FORMATION (0 → 20) ═══
+    // Set initial scattered positions (top of viewport, wide x-spread, wild rotation)
+    chaosLogos.forEach((el, i) => {
+      const d = chaosData[i];
+      gsap.set(el, {
+        x: d.startX,
+        y: d.startY,
+        rotation: d.startRot,
+        opacity: 0.55,
+        transformOrigin: 'center'
+      });
+    });
+    // Fall into position (staggered start; each takes ~7 timeline units)
+    chaosLogos.forEach((el, i) => {
+      const d = chaosData[i];
+      tl.to(el, {
+        x: d.endX,
+        y: d.endY,
+        rotation: 0,
+        opacity: 1,
+        duration: 7,
+        ease: 'back.out(1.3)',
+        onComplete: () => el.classList.add('landed'),
+        onReverseComplete: () => el.classList.remove('landed')
+      }, i * 0.35);
+    });
+    // Draw connecting lines once most logos have landed (t=8 onwards, staggered;
+    // done by 14.5 so the ring is complete before the camera dives at hero)
+    chaosLines.forEach((line, i) => {
+      const time = 8 + (i / chaosLines.length) * 4.5;
+      tl.to(line, {
+        strokeDashoffset: 0,
+        duration: 2,
+        ease: 'power2.out'
+      }, time);
+    });
+    // Leg hand-off: the outgoing leg is mostly gone before the next one rises
+    // (no double exposure of two captions), and on desktop the captions blur
+    // through the swap so it reads as one change rather than two layers.
+    const blurCaptions = !isMobile && !reduced;
+    function crossfade(from, to, T) {
+      tl.to(from, { opacity: 0, duration: 1.8, ease: 'power1.inOut' }, T)
+        .to(to, { opacity: 1, duration: 2.6, ease: 'power2.out' }, T + 1.2);
+      if (blurCaptions) {
+        tl.to(from + ' .leg-caption', { filter: 'blur(6px)', duration: 1.8, ease: 'power1.inOut' }, T)
+          .fromTo(to + ' .leg-caption', { filter: 'blur(6px)' },
+            { filter: 'blur(0px)', duration: 2.6, ease: 'power2.out' }, T + 1.2);
+      }
+    }
+
+    // Leg 1 → leg 2 is the hero dive (built with the 3D flight below);
+    // reduced motion just cross-fades.
+    if (reduced) crossfade('#leg1', '#leg2', 17);
+
+    // ═══ LEG 2: CONNECTION (20 → 40) ═════════════════
+    // Line draws in during 22 → 36
+    tl.to(connLine, {
+      strokeDashoffset: 0,
+      duration: 14,
+      ease: 'power2.inOut'
+    }, 22);
+    // Leg 2 → leg 3 is the hero detonation (built with the 3D flight below);
+    // reduced motion just cross-fades.
+    if (reduced) crossfade('#leg2', '#leg3', 37);
+
+    // ═══ LEG 3: SYSTEM (40 → 60) ═════════════════════
+    // Hub reveals first
+    tl.to(hub, { opacity: 1, scale: 1, duration: 2, ease: 'back.out(1.6)' }, 41);
+    // Nodes reveal in a wave (43 → 51)
+    sysNodes.forEach((n, i) => {
+      const time = 43 + (i / sysNodes.length) * 6;
+      tl.to(n.el, {
+        opacity: 1, scale: 1,
+        duration: 1.2, ease: 'back.out(1.6)',
+        onStart: () => n.el.setAttribute('class', 'sys-node hot'),
+        onReverseComplete: () => n.el.setAttribute('class', 'sys-node')
+      }, time);
+    });
+    // Edges light up sequentially (48 → 56)
+    sysEdges.forEach((edge, i) => {
+      const time = 48 + (i / sysEdges.length) * 8;
+      tl.to(edge, {
+        opacity: 1,
+        duration: 0.8, ease: 'power2.out',
+        onStart: () => edge.setAttribute('class', 'sys-edge hot'),
+        onReverseComplete: () => edge.setAttribute('class', 'sys-edge')
+      }, time);
+    });
+    // Leg 3 → leg 4 is the zoom-out to the brain (built with the 3D flight
+    // below); reduced motion just cross-fades.
+    if (reduced) crossfade('#leg3', '#leg4', 57);
+
+    // ═══ LEG 4: AI (60 → 80) ═════════════════════════
+    // Brain grows in (no rotation: it's a brain, not a sparkle)
+    tl.to('#aiSparkle', {
+      opacity: 1, scale: 1.4,
+      duration: 10, ease: 'power2.out'
+    }, 61);
+    // Subtle pulse after it's grown in (breathing "thinking" feel)
+    tl.to('#aiSparkle', {
+      scale: 1.5,
+      duration: 4, ease: 'sine.inOut', yoyo: true, repeat: 1
+    }, 72);
+    // Rings expand sequentially
+    tl.to('#aiRing1', { opacity: 0.5, scale: 1, duration: 4, ease: 'power2.out' }, 63)
+      .to('#aiRing2', { opacity: 0.35, scale: 1, duration: 5, ease: 'power2.out' }, 65)
+      .to('#aiRing3', { opacity: 0.2, scale: 1, duration: 6, ease: 'power2.out' }, 67);
+    // Orbital sparks fade in
+    sparkEls.forEach((s, i) => {
+      const time = 64 + (i / sparkEls.length) * 4;
+      tl.to(s.el, { opacity: 1, duration: 1, ease: 'power2.out' }, time);
+    });
+    // Particle world: one cloud reshaping at every cut. The network → brain
+    // morph gets the longest run so the assembly reads as the big moment.
+    tl.to(pw, { order: 1,  duration: 10, ease: 'power2.inOut' }, 5)
+      .to(pw, { leave: 1,  duration: 3.6, ease: 'power1.in' },   15)
+      .to(pw, { dust: 1,   duration: 2.4, ease: 'none' },        16.8)
+      .to(pw, { gather: 1, duration: 2.4, ease: 'power2.inOut' }, 18.6)
+      .to(pw, { grow: 1.1, duration: 4,   ease: 'power1.inOut' }, 19.7)   // node A blooms while the dust lands
+      .to(pw, { morph: 1,  duration: 8.2, ease: 'none' },        16)     // must land after grow does
+      .to(pw, { burst: 1,  duration: 4,   ease: 'sine.out' },    35)     // slow-motion detonation
+      .to(pw, { branch: 1.02, duration: 6, ease: 'power1.inOut' }, 37.6) // hub lights as the blast peaks
+      .to(pw, { morph: 2,  duration: 8.8, ease: 'none' },        35)     // must land after branch does
+      .to(pw, { zoom: 1,   duration: 6.5, ease: 'sine.inOut' },  55.5)   // camera pulls back off the network
+      .to(pw, { reveal: 1.14, duration: 6.5, ease: 'power1.inOut' }, 57) // links fire outward across the brain
+      .to(pw, { morph: 3,  duration: 8.3, ease: 'none' },        55.5)   // must land after reveal does
+      .to(pw, { charge: 1, duration: 5,  ease: 'sine.inOut' },   66)
+      .to(pw, { morph: 4,  duration: 5,  ease: 'power2.inOut' }, 76)
+      .to(pw, { monoGain: 0.34, duration: 3.5, ease: 'power2.inOut' }, 83.5);
+    // Leg 4 out at 77; the brain's particles sign the monogram on their own,
+    // then the name + CTA arrive over it (83 → 86.5) as it dims to a watermark.
+    tl.to('#leg4', { opacity: 0, duration: 3, ease: 'power2.in' }, 77)
+      .to('#leg5', { opacity: 1, duration: 3.5, ease: 'power2.out' }, 83);
+
+    // ═══ LEG 5: QUIET (80 → 100) ═════════════════════
+    // Just holds: leg-5 content stays visible
+
+    // ═══ 3D CAMERA FLIGHT: each scene flies in from depth, orbits while held,
+    //     then rushes past the camera at the next cut. Softer on phones.
+    //     Reduced motion: scenes stay put and the legs just cross-fade.
+    const k3d = isMobile ? 0.6 : 1;
+    const scenes = [1, 2, 3, 4, 5].map(i => document.querySelector('#leg' + i + ' .scene'));
+    if (!reduced) {
+      gsap.set(scenes, { transformPerspective: 1400, transformOrigin: '50% 50%' });
+      gsap.set(scenes[0], { rotationY: -7 * k3d });
+
+      // Leg 1 → 2: the camera lines up on hero and dives at it; the particle
+      // world breaks hero into dust, re-forms it as leg 2's node A and grows
+      // the wire out to node B. hero sits on the scene's vertical axis, so the
+      // orbit's rotationY never pushes it off-centre.
+      const heroLift = () => 240 * Math.min(scenes[0].offsetWidth, scenes[0].offsetHeight) / 720;
+      const DIVE_Z = 1400 * (1 - 1 / (isMobile ? 4 : 5));   // hero ends ~5× its size (4× on phones)
+      tl.to('#leg1 .leg-caption', { opacity: 0, duration: 1.6, ease: 'power1.in' }, 13.6)
+        .to(scenes[0], { y: heroLift, duration: 1.8, ease: 'power2.inOut' }, 14)
+        .to(scenes[0], { z: DIVE_Z, duration: 4.2, ease: 'power2.in' }, 14.4)
+        .to(chaosLogos.slice(1).concat(chaosLines), { opacity: 0, duration: 1.6, ease: 'power1.in' }, 15.4)
+        .to(chaosLogos[0], { opacity: 0, duration: 0.5, ease: 'none' }, 16.8)      // hands off to the dust
+        .to('#leg1', { opacity: 0, duration: 0.6, ease: 'none' }, 18.2)
+        .fromTo(scenes[1],
+          { z: -420 * k3d, rotationX: 14, rotationY: -16 * k3d },
+          { z: 0, rotationX: 0, rotationY: -7 * k3d, duration: 3.2, ease: 'power3.out' }, 18.2)
+        .to('#leg2', { opacity: 1, duration: 1.4, ease: 'power2.out' }, 19.2)
+        .fromTo('#leg2 .leg-caption', { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'power2.out' }, 20.8)
+        .fromTo(['#connNodeB', '#connLabelB'], { opacity: 0 }, { opacity: 1, duration: 1, ease: 'power2.out' }, 22.5);  // node B shows up when the wire lands
+      if (blurCaptions) {
+        tl.to('#leg1 .leg-caption', { filter: 'blur(6px)', duration: 1.6, ease: 'power1.in' }, 13.6)
+          .fromTo('#leg2 .leg-caption', { filter: 'blur(6px)' },
+            { filter: 'blur(0px)', duration: 2.4, ease: 'power2.out' }, 20.8);
+      }
+
+      // Leg 2 → 3: hero slides to centre (where leg 3's hub will be) and the
+      // particle world detonates it; the network then branches out of the hub.
+      const heroShift = () => 180 * Math.min(scenes[1].offsetWidth / 600, scenes[1].offsetHeight / 400);
+      tl.to('#leg2 .leg-caption', { opacity: 0, duration: 1.4, ease: 'power1.in' }, 34.2)
+        .to(scenes[1], { x: heroShift, z: 120 * k3d, duration: 2.2, ease: 'power2.inOut' }, 33.4)
+        .to('#leg2', { opacity: 0, duration: 1, ease: 'none' }, 35.2)          // node labels go with the blast
+        .fromTo(scenes[2],
+          { z: -160 * k3d, rotationY: -12 * k3d },
+          { z: 0, rotationY: -7 * k3d, duration: 6, ease: 'power2.out' }, 37)
+        .to('#leg3', { opacity: 1, duration: 1.4, ease: 'power2.out' }, 39.4)
+        .fromTo('#leg3 .leg-caption', { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'power2.out' }, 41.4);
+      if (blurCaptions) {
+        tl.to('#leg2 .leg-caption', { filter: 'blur(6px)', duration: 1.4, ease: 'power1.in' }, 34.2)
+          .fromTo('#leg3 .leg-caption', { filter: 'blur(6px)' },
+            { filter: 'blur(0px)', duration: 2.4, ease: 'power2.out' }, 41.4);
+      }
+
+      // Leg 3 → 4: the camera pulls back (all in the particle world: the
+      // network shrinks into a patch of cortex and the brain lights up
+      // around it), so leg 4's scene just holds still for it.
+      gsap.set(scenes[3], { rotationY: -7 * k3d });
+      tl.to('#leg3 .leg-caption', { opacity: 0, duration: 1.4, ease: 'power1.in' }, 54.8)
+        .to('#leg3', { opacity: 0, duration: 0.8, ease: 'none' }, 56.2)
+        .to('#leg4', { opacity: 1, duration: 1.4, ease: 'power2.out' }, 60)
+        .fromTo('#leg4 .leg-caption', { opacity: 0 }, { opacity: 1, duration: 2.4, ease: 'power2.out' }, 61.6);
+      if (blurCaptions) {
+        tl.to('#leg3 .leg-caption', { filter: 'blur(6px)', duration: 1.4, ease: 'power1.in' }, 54.8)
+          .fromTo('#leg4 .leg-caption', { filter: 'blur(6px)' },
+            { filter: 'blur(0px)', duration: 2.4, ease: 'power2.out' }, 61.6);
+      }
+
+      [77].forEach((T) => {
+        const i = 3;
+        tl.to(scenes[i], { z: 420 * k3d, rotationX: -16, duration: 3, ease: 'power2.in' }, T);
+        tl.fromTo(scenes[i + 1],
+          { z: -560 * k3d, rotationX: 24, rotationY: -18 * k3d },
+          { z: 0, rotationX: 0, rotationY: -7 * k3d, duration: 3.6, ease: 'power3.out' }, T);
+      });
+      [[0, 18.4], [21.4, 37], [43, 57], [55.5, 77], [80.6, 100]].forEach(([a, b], i) => {
+        tl.to(scenes[i], { rotationY: 7 * k3d, duration: b - a, ease: 'none' }, a);
+      });
+    }
+
+    // ═══ STAGE BG + GLOW: smooth per-leg tint ═══════
+    // The last stop lands at 100 in an instant: a full 20-unit tween there stretched
+    // the timeline to 120, so every leg (and the rail) ran a fifth early on the scroll.
+    CONFIG.tints.forEach((c, i) =>
+      tl.to('.stage-bg', { backgroundColor: c, duration: Math.max(0.01, Math.min(20, 100 - i * 20)), ease: 'none' }, Math.min(i * 20, 99.99)));
+    tl.to('.stage-glow', { opacity: 0.25, duration: 20, ease: 'none' }, 0)
+      .to('.stage-glow', { opacity: 0.45, duration: 20, ease: 'none' }, 20)
+      .to('.stage-glow', { opacity: 0.65, duration: 20, ease: 'none' }, 40)
+      .to('.stage-glow', { opacity: 0.9,  duration: 20, ease: 'none' }, 60)
+      .to('.stage-glow', { opacity: 0.5,  duration: 20, ease: 'none' }, 80);
+
+    /* ─────────────────────────────────────────────────
+       6. Hide scroll cue after first scroll
+       ───────────────────────────────────────────────── */
+    const cue = $('#scrollCue');
+    let cueHidden = false;
+    window.addEventListener('scroll', () => {
+      if (!cueHidden && window.scrollY > 40) {
+        cue.classList.add('gone');
+        cueHidden = true;
+      }
+    }, { passive: true });
+
+    /* ─────────────────────────────────────────────────
+       5b. BACKDROP FILM: drawn, not filmed. A 2D canvas under the particles,
+           scrubbed by the same 0 to 100 units as the timeline. Each leg has its
+           own world (depth-blurred blocks, a horizon flare, a lit floor, a grid
+           with rings and streaks, a quiet bokeh field) and the legs dissolve at
+           the seams. It only redraws when the scroll moves. Phones draw it at
+           1x with fewer elements; reduced motion never gets here.
+       ───────────────────────────────────────────────── */
+    const film = (() => {
+      const host = $('#film');
+      if (!host) return null;
+      const cv = host.querySelector('canvas'), g = cv.getContext('2d');
+      const lite = isMobile || isTouch;
+      const GOLD = [255, 181, 71], HOT = [255, 140, 60], BONE = [245, 236, 220], COOL = [120, 150, 215];
+      const rgba = (c, a) => 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a.toFixed(3) + ')';
+      let seed = 7;
+      const R = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+      const canFilter = 'filter' in g;
+
+      // pre-blurred sprites
+      function sprite(size, draw, blur) {
+        const pad = Math.ceil(blur * 2.2), c = document.createElement('canvas');
+        c.width = c.height = size + pad * 2;
+        const x = c.getContext('2d');
+        if (canFilter && blur) x.filter = 'blur(' + blur + 'px)';
+        x.translate(pad, pad); draw(x, size);
+        return { c, pad, size };
+      }
+      const blockTones = [[78, 60, 38], [122, 96, 58], [170, 142, 96], [196, 152, 72], [104, 78, 44], [150, 128, 100]];
+      const blocks = [];
+      [4, 9, 16].forEach(blur => blockTones.forEach(t => blocks.push(sprite(120, (x, s) => {
+        const gr = x.createLinearGradient(0, 0, s, s);
+        gr.addColorStop(0, rgba(t.map(v => Math.min(255, v + 40)), 1)); gr.addColorStop(1, rgba(t.map(v => v * 0.55), 1));
+        x.fillStyle = gr; x.beginPath(); x.roundRect ? x.roundRect(0, 0, s, s * 0.82, 10) : x.rect(0, 0, s, s * 0.82); x.fill();
+        x.fillStyle = 'rgba(255,240,210,0.18)'; x.fillRect(4, 3, s - 8, 3);       // a lit top edge
+      }, blur))));
+      const dot = sprite(64, (x, s) => {
+        const gr = x.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+        gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.55, 'rgba(255,255,255,0.75)');
+        gr.addColorStop(0.8, 'rgba(255,255,255,0.9)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+        x.fillStyle = gr; x.beginPath(); x.arc(s / 2, s / 2, s / 2, 0, 7); x.fill();
+      }, 2);
+      const glow = sprite(128, (x, s) => {
+        const gr = x.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+        gr.addColorStop(0, 'rgba(255,236,200,1)'); gr.addColorStop(0.18, 'rgba(255,190,100,0.55)');
+        gr.addColorStop(0.5, 'rgba(255,160,60,0.14)'); gr.addColorStop(1, 'rgba(255,150,50,0)');
+        x.fillStyle = gr; x.fillRect(0, 0, s, s);
+      }, 0);
+      // tint a white sprite once per colour
+      const tinted = {};
+      function tint(sp, col) {
+        const k = sp.size + ':' + col.join(',');
+        if (tinted[k]) return tinted[k];
+        const c = document.createElement('canvas'); c.width = sp.c.width; c.height = sp.c.height;
+        const x = c.getContext('2d'); x.drawImage(sp.c, 0, 0);
+        x.globalCompositeOperation = 'source-in'; x.fillStyle = rgba(col, 1); x.fillRect(0, 0, c.width, c.height);
+        return (tinted[k] = { c, pad: sp.pad, size: sp.size });
+      }
+      function put(sp, cx, cy, d, a) {   // draw a sprite centred, d = drawn diameter
+        if (a <= 0.002 || d <= 0.5) return;
+        const k = d / sp.size, w = sp.c.width * k;
+        g.globalAlpha = Math.min(1, a);
+        g.drawImage(sp.c, cx - w / 2, cy - w / 2, w, w);
+      }
+
+      // world data (deterministic)
+      const n = lite ? 0.55 : 1;
+      const L0 = Array.from({ length: Math.round(30 * n) }, () => ({ x: R() * 1.3 - 0.15, y: R() * 1.1 - 0.05, z: R(), s: blocks[Math.floor(R() * blocks.length)] }));
+      const L1 = Array.from({ length: Math.round(16 * n) }, () => ({ x: R() * 1.4 - 0.2, y: R() * 1.3 - 0.15, z: R(), s: blocks[(Math.floor(R() * 6)) + 6] }));
+      const specks = Array.from({ length: Math.round(220 * n) }, () => ({ x: R(), y: R(), z: R(), r: R() }));
+      const floor = Array.from({ length: Math.round(170 * n) }, () => ({ X: (R() - 0.5) * 2.6, Z: 1 + R() * 11, r: R() }));
+      const sky = Array.from({ length: Math.round(40 * n) }, () => ({ x: R(), y: R() * 0.5, s: 4 + R() * 26, a: R() }));
+      const streaks = Array.from({ length: Math.round(46 * n) }, () => ({ x: R() * 1.4 - 0.2, y: R() * 0.75, l: 60 + R() * 220, a: R(), c: R() < 0.7 }));
+      const rings = Array.from({ length: 7 }, (_, i) => ({ rx: 0.2 + R() * 0.13, ry: 0.2 + R() * 0.1, rot: R() * Math.PI, sp: (R() - 0.5) * 1.6, ph: R() * 6.28, w: 1 + R() * 2 }));
+      const quiet = Array.from({ length: Math.round(22 * n) }, () => ({ x: R(), y: R(), s: 10 + R() * 60, a: R(), c: R() < 0.55 }));
+
+      let W = 0, H = 0, DPR = 1;
+      function size() {
+        DPR = Math.min(devicePixelRatio || 1, lite ? 1 : 1.5);
+        W = host.clientWidth; H = host.clientHeight;
+        cv.width = Math.max(1, Math.round(W * DPR)); cv.height = Math.max(1, Math.round(H * DPR));
+      }
+
+      const sm = x => { x = Math.min(Math.max(x, 0), 1); return x * x * (3 - 2 * x); };
+      const HZ = () => H * (lite ? 0.34 : 0.54);   // phones: the scene sits high, captions below it
+
+      function horizon(a, wide) {
+        if (a <= 0) return;
+        const hz = HZ();
+        g.globalCompositeOperation = 'lighter';
+        let gr = g.createLinearGradient(0, 0, W, 0);
+        gr.addColorStop(0, rgba(GOLD, 0)); gr.addColorStop(0.5, rgba(HOT, 0.5 * a)); gr.addColorStop(1, rgba(GOLD, 0));
+        g.globalAlpha = 1; g.fillStyle = gr; g.fillRect(0, hz - 1, W, 2);
+        gr = g.createLinearGradient(0, hz - wide, 0, hz + wide);
+        gr.addColorStop(0, rgba(GOLD, 0)); gr.addColorStop(0.5, rgba(GOLD, 0.16 * a)); gr.addColorStop(1, rgba(GOLD, 0));
+        g.fillStyle = gr; g.fillRect(0, hz - wide, W, wide * 2);
+      }
+      function beam(a, top) {
+        if (a <= 0) return;
+        g.globalCompositeOperation = 'lighter';
+        const gr = g.createLinearGradient(0, H, 0, top);
+        gr.addColorStop(0, rgba(HOT, 0.16 * a)); gr.addColorStop(0.6, rgba(GOLD, 0.07 * a)); gr.addColorStop(1, rgba(GOLD, 0));
+        g.globalAlpha = 1; g.fillStyle = gr;
+        if (canFilter) g.filter = 'blur(9px)';
+        for (const [wb, wt] of [[90, 10], [44, 4], [16, 1.5]]) {   // three passes: a soft edge, then the core
+          g.beginPath(); g.moveTo(W / 2 - wb, H); g.lineTo(W / 2 - wt, top); g.lineTo(W / 2 + wt, top); g.lineTo(W / 2 + wb, H); g.fill();
+        }
+        if (canFilter) g.filter = 'none';
+      }
+
+      // 0 · CHAOS: depth-blurred blocks drifting toward camera, gold dust
+      function leg0(t, a) {
+        const push = 1 + t * 0.35, cx = W / 2, cy = H * 0.46;
+        g.globalCompositeOperation = 'source-over';
+        L0.forEach(b => {
+          const k = push * (0.7 + b.z * 0.6), x = cx + (b.x * W - cx) * k, y = cy + (b.y * H - cy) * k - t * 40 * b.z;
+          put(b.s, x, y, (70 + b.z * 190) * (0.8 + t * 0.4) * (W / 1440 + 0.35), a * (0.28 + b.z * 0.42));
+        });
+        g.globalCompositeOperation = 'lighter';
+        const gd = tint(dot, GOLD);
+        specks.forEach(p => put(gd, p.x * W, (p.y * H - t * 60 * p.z + H) % H, 1.2 + p.z * 2.6, a * (0.25 + p.r * 0.6)));
+        const bd = tint(dot, BONE);
+        sky.slice(0, 12).forEach(p => put(bd, p.x * W, p.y * 2 * H, p.s * 0.5, a * 0.12 * p.a));
+      }
+      // 1 · CONNECTION: big dark blocks close to the lens, a horizon flare
+      function leg1(t, a) {
+        const push = 1.1 + t * 0.25, cx = W / 2, cy = H * 0.5;
+        g.globalCompositeOperation = 'source-over';
+        L1.forEach(b => {
+          const k = push * (0.8 + b.z * 0.5), x = cx + (b.x * W - cx) * k, y = cy + (b.y * H - cy) * k;
+          put(b.s, x, y, (190 + b.z * 260) * (W / 1440 + 0.3), a * (0.26 + b.z * 0.3));
+        });
+        horizon(a * (0.5 + t * 0.6), 26);
+        g.globalCompositeOperation = 'lighter';
+        put(glow, W / 2, HZ(), 150 + t * 60, a * (0.55 + t * 0.35));
+        const gd = tint(dot, GOLD);
+        specks.slice(0, 80).forEach(p => put(gd, p.x * W, p.y * H, 1 + p.z * 2, a * 0.3 * p.r));
+      }
+      // 2 · SYSTEM: a lit floor of bokeh under a glowing horizon, a beam up the middle
+      function leg2(t, a) {
+        const hz = HZ(), f = W * 0.42;
+        g.globalCompositeOperation = 'lighter';
+        horizon(a, 44);
+        const gd = tint(dot, GOLD), bd = tint(dot, BONE);
+        floor.forEach(p => {
+          let Z = p.Z - t * 3; if (Z < 0.8) Z += 11;
+          const x = W / 2 + p.X * f / Z * 2.2, y = hz + (H * 0.55) / Z;
+          if (y > H + 40) return;
+          put(p.r < 0.25 ? bd : gd, x, y, Math.min(46, 30 / Z * (W / 1440 + 0.4)), a * Math.min(1, 1.6 / Z) * (0.35 + p.r * 0.5));
+        });
+        sky.forEach(p => put(p.a < 0.3 ? bd : gd, p.x * W, p.y * hz * 1.6, p.s * 0.8, a * 0.18 * p.a));
+        g.strokeStyle = rgba(GOLD, 0.05 * a); g.lineWidth = 1; g.globalAlpha = 1;
+        for (let i = 0; i < 6; i++) { g.beginPath(); g.moveTo(W * (0.2 + i * 0.12), 0); g.lineTo(W * (0.05 + i * 0.12), hz); g.stroke(); }
+        beam(a * 0.9, hz - 30);
+      }
+      // 3 · AGENTS: a glowing grid floor, gold rings looping the brain, streaks overhead
+      function leg3(t, a) {
+        const hz = HZ(), cx = W / 2;
+        g.globalCompositeOperation = 'lighter'; g.globalAlpha = 1;
+        horizon(a, 30);
+        const cool = tint(dot, COOL), gd = tint(dot, GOLD);
+        streaks.forEach(s => {
+          const x = ((s.x + t * 0.25) % 1.4 - 0.2) * W, y = s.y * hz;
+          const dx = s.l * 0.9, dy = -s.l * 0.42;
+          const gr = g.createLinearGradient(x, y, x + dx, y + dy);
+          const col = s.c ? COOL : GOLD;
+          gr.addColorStop(0, rgba(col, 0)); gr.addColorStop(1, rgba(col, (0.22 + s.a * 0.3) * a));
+          g.strokeStyle = gr; g.lineWidth = 1 + s.a * 1.6;
+          g.beginPath(); g.moveTo(x, y); g.lineTo(x + dx, y + dy); g.stroke();
+          put(s.c ? cool : gd, x + dx, y + dy, 4 + s.a * 5, a * 0.8);
+        });
+        // grid floor
+        const off = (t * 3) % 1;
+        for (let i = -14; i <= 14; i++) {
+          const x1 = cx + i * W * 0.012, x2 = cx + i * W * 0.11;
+          g.strokeStyle = rgba(GOLD, 0.16 * a * (1 - Math.abs(i) / 16)); g.lineWidth = 1.1;
+          g.beginPath(); g.moveTo(x1, hz); g.lineTo(x2, H); g.stroke();
+        }
+        for (let k = 1; k < 14; k++) {
+          const Z = k - off, y = hz + (H * 0.5) / Z;
+          if (y > H) continue;
+          g.strokeStyle = rgba(GOLD, Math.min(0.22, 0.5 / Z) * a); g.lineWidth = 1;
+          g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke();
+          for (let i = -14; i <= 14; i += 2) {
+            const xi = cx + (i * W * 0.012) + (i * W * 0.098) * ((y - hz) / (H - hz));
+            if ((i + k) % 4 === 0) put(gd, xi, y, Math.min(22, 26 / Z), a * 0.55);
+          }
+        }
+        // rings around the brain (it sits at the scene centre)
+        const ry0 = H * (lite ? 0.31 : 0.42), rk = lite ? Math.min(1, W / H * 1.1) : 1;
+        rings.forEach((r, i) => {
+          const rot = r.rot + t * r.sp + r.ph * 0.1;
+          for (const [lw, al] of [[r.w * 5, 0.05], [r.w * 2, 0.12], [r.w * 0.8, 0.5]]) {
+            g.strokeStyle = rgba(i % 3 ? GOLD : BONE, al * a * (0.5 + 0.5 * sm(t * 2))); g.lineWidth = lw;
+            g.beginPath(); g.ellipse(cx, ry0, r.rx * H * 1.2 * rk, r.ry * H * 1.2 * rk, rot, 0, Math.PI * 2); g.stroke();
+          }
+        });
+        beam(a, ry0 + H * 0.1);
+      }
+      // 4 · QUIET: a slow bokeh field over a faint horizon
+      function leg4(t, a) {
+        g.globalCompositeOperation = 'lighter';
+        horizon(a * 0.7, 36);
+        const gd = tint(dot, GOLD), cool = tint(dot, COOL), bd = tint(dot, BONE);
+        quiet.forEach(q => put(q.c ? gd : cool, q.x * W + (q.x - 0.5) * t * 60, q.y * H, q.s * (1 + t * 0.15) * (W / 1440 + 0.4), a * (0.08 + q.a * 0.22)));
+        floor.slice(0, 40).forEach(p => put(bd, W / 2 + p.X * W * 0.4, HZ() + (p.r - 0.5) * 12, 4 + p.r * 8, a * 0.35 * p.r));
+        streaks.slice(0, 14).forEach(s => {
+          g.strokeStyle = rgba(COOL, 0.12 * a); g.lineWidth = 1.5;
+          const x = s.x * W, y = s.y * H * 0.6;
+          g.beginPath(); g.moveTo(x, y); g.lineTo(x + s.l * 0.9, y - s.l * 0.42); g.stroke();
+        });
+      }
+      const LEGS = [leg0, leg1, leg2, leg3, leg4], SEAM = 3.2;
+
+      let raf = 0, lastU = -1;
+      function draw() {
+        raf = 0;
+        const u = Math.min(Math.max(pw.progress * 100, 0), 100);
+        if (Math.abs(u - lastU) < 0.005) return;
+        lastU = u;
+        g.setTransform(DPR, 0, 0, DPR, 0, 0);
+        g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
+        g.clearRect(0, 0, W, H);
+        LEGS.forEach((fn, i) => {
+          const a0 = i * 20, b0 = a0 + 20;
+          const fin = i === 0 ? 1 : sm((u - (a0 - SEAM)) / (SEAM * 2));
+          const fout = i === 4 ? 1 : 1 - sm((u - (b0 - SEAM)) / (SEAM * 2));
+          const op = Math.min(fin, fout);
+          if (op > 0.003) fn(Math.min(Math.max((u - a0) / 20, 0), 1), op);
+        });
+        g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
+      }
+      function wake() { if (!raf) raf = requestAnimationFrame(draw); }
+      size();
+      window.addEventListener('resize', () => { size(); lastU = -1; wake(); });
+      host.classList.add('on');
+      wake();
+      return { wake };
+    })();
+    window.__filmWake = film ? film.wake : null;
+
+    // The rail steps aside once the sign-off footer scrolls in.
+    const rail = $('#progressRail');
+    ScrollTrigger.create({ trigger: '.end', start: 'top 85%', onToggle: self => rail.classList.toggle('gone', self.isActive) });
+
+    /* Refresh on resize */
+    window.addEventListener('resize', () => ScrollTrigger.refresh());
+    window.__engineOK = true;
+  })();
+  </script>
+  <script>
+    // If the engine threw before finishing, drop back to the static #intro.
+    if (!window.__engineOK) {
+      document.documentElement.classList.remove('engine-on', 'rm');
+      if (window.ScrollTrigger) ScrollTrigger.getAll().forEach(t => t.kill(true));
+    }
+  </script>
+
+<!-- ─────────────────────────────────────────────────────────────
+       PARTICLE WORLD (Three.js)
+       One cloud of particles that reshapes at every cut:
+         0 chaos: one cluster per tool tile, then a halo around the logo ring
+         1 stream: node A → node B, signals running the wire
+         2 network: hub + 8 nodes in 3D, signals running the edges
+         3 brain: hemispheres, cerebellum, stem, firing synapses
+         4 monogram signing off
+       Each shape rides its leg's CSS 3D flight (same 1400px perspective,
+       same origin), so particles and SVG labels move as one. Cursor pushes
+       particles aside on desktop. If WebGL fails, the SVG scenes stay.
+       ───────────────────────────────────────────────────────────── -->
+  <script type="module">
+    const pw = window.__pw;
+    const stage = document.querySelector('.stage');
+    const mount = document.getElementById('particleWorld');
+    const scenes = [1, 2, 3, 4, 5].map(i => document.querySelector('#leg' + i + ' .scene'));
+    const isMobile = matchMedia('(max-width: 720px)').matches;
+    const reduced  = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fine     = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const lowEnd   = isMobile && (navigator.hardwareConcurrency || 8) <= 4;
+    const N = lowEnd ? 2400 : isMobile ? 3200 : 7000;
+    const CAM_Z = 1400;                 // = GSAP transformPerspective on the scenes
+    const cssVar = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+    const ACCENT = cssVar('--accent') || '#0a85ad';
+    const HOT = cssVar('--hot') || '#cf1b76';
+    const NET_K = 0.2;                  // leg-3 network ends at 1/5 size: one patch of the brain
+    const D2R = Math.PI / 180;
+
+    // Reduced motion keeps the calmer SVG scenes: thousands of particles
+    // swirling between shapes is exactly the large-field motion it asks us to avoid.
+    // Performance gate: Three.js (~690 KB) and the particle system load only on a
+    // fine pointer at 768px and wider, without Save-Data. Phones and tablets keep the
+    // inline SVG scenes, the same path a WebGL failure falls back to.
+    const saveData = !!(navigator.connection && navigator.connection.saveData);
+    const desktop  = matchMedia('(pointer: fine) and (min-width: 768px)').matches;
+    if (desktop && !saveData && !reduced && window.__engineOK && pw && stage && mount && scenes.every(Boolean) && window.gsap) {
+      boot().catch(err => console.warn('[particle-world] falling back to SVG scenes:', err.message));
+    }
+
+    // Deterministic RNG so every visit gets the same world
+    function rng(seed) {
+      return () => {
+        seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+        let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    }
+
+    // Procedural brain in "brain units" (≈2.1 wide). part: 0 hemisphere, 1 cerebellum, 2 stem
+    function buildBrain(count) {
+      const rand = rng(1107);
+      const golden = Math.PI * (3 - Math.sqrt(5));
+      const pos = new Float32Array(count * 3), part = new Uint8Array(count);
+      const nHemi = Math.floor(count * 0.8), nCb = Math.floor(count * 0.14);
+      const perHemi = Math.ceil(nHemi / 2);
+      let o = 0;
+      for (let i = 0; i < nHemi; i++, o++) {
+        const side = i % 2 ? 1 : -1, k = i >> 1;
+        const y = 1 - (k / (perHemi - 1)) * 2, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = golden * k;
+        const dx = Math.cos(th) * rad, dy = y, dz = Math.sin(th) * rad;
+        const fold = 1 + 0.08 * Math.sin(dy * 13 + dz * 9 + side) * Math.sin(dz * 11 - dx * 7);
+        let x = dx * 0.74 * fold, yy = dy * 0.7 * fold, z = dz * 1.04 * fold;
+        if (yy < -0.3) yy = -0.3 + (yy + 0.3) * 0.55;
+        if (x * side < 0) x *= 0.28;
+        pos[o * 3] = x + side * 0.3 + (rand() - 0.5) * 0.012;
+        pos[o * 3 + 1] = yy + 0.14 + (rand() - 0.5) * 0.012;
+        pos[o * 3 + 2] = z + (rand() - 0.5) * 0.012;
+      }
+      for (let i = 0; i < nCb; i++, o++) {
+        const y = 1 - (i / (nCb - 1)) * 2, rad = Math.sqrt(Math.max(0, 1 - y * y)), th = golden * i;
+        const stri = 1 + 0.07 * Math.sin(y * 24);
+        pos[o * 3] = Math.cos(th) * rad * 0.6 * stri;
+        pos[o * 3 + 1] = -0.5 + y * 0.28 * stri;
+        pos[o * 3 + 2] = -0.66 + Math.sin(th) * rad * 0.36 * stri;
+        part[o] = 1;
+      }
+      for (; o < count; o++) {
+        const t = rand(), a = rand() * Math.PI * 2, r = 0.11 * Math.sqrt(rand());
+        pos[o * 3] = Math.cos(a) * r;
+        pos[o * 3 + 1] = -0.35 - t * 0.75;
+        pos[o * 3 + 2] = -0.18 - t * 0.2 + Math.sin(a) * r;
+        part[o] = 2;
+      }
+      return { pos, part };
+    }
+
+    // Neural brain, same "brain units" as buildBrain. Neurons (somas) sit just
+    // under the cortex / cerebellum / stem surface; each is wired to its 2 to 3
+    // nearest neighbours by a curved axon that bows out to hug the surface, and
+    // sprouts a few short tapering dendrites. Grains: somas 26%, axons 50%,
+    // dendrites 10%, faint tissue 14% (keeps the silhouette). The same axons and
+    // dendrites come back as lines so the fibres read as continuous.
+    function buildNeuralBrain(count) {
+      const rand = rng(2211);
+      const gauss = () => { let u = 0; while (!u) u = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * rand()); };
+      const surf = buildBrain(9000), nS = 9000;
+      const K = lowEnd ? 90 : isMobile ? 130 : 230;
+      const centreOf = (part, x) => part === 0 ? [x < 0 ? -0.3 : 0.3, 0.14, 0] : part === 1 ? [0, -0.5, -0.66] : null;
+      const inward = (p, part, k) => {
+        const c = centreOf(part, p[0]);
+        return c ? [c[0] + (p[0] - c[0]) * k, c[1] + (p[1] - c[1]) * k, c[2] + (p[2] - c[2]) * k] : p;
+      };
+      const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+
+      // somas, kept apart so they don't clump
+      const somas = [];
+      for (let guard = 0; somas.length < K && guard < K * 30; guard++) {
+        const i = Math.floor(rand() * nS), part = surf.part[i];
+        const p = inward([surf.pos[i * 3], surf.pos[i * 3 + 1], surf.pos[i * 3 + 2]], part, 0.9 + rand() * 0.1);
+        if (somas.some(s => d2(s.p, p) < 0.0081)) continue;
+        somas.push({ p, part, side: Math.sign(p[0]) || 1, r: 0.01 + rand() * rand() * 0.024 });
+      }
+
+      // axons: nearest neighbours in the same region (and same hemisphere)
+      const axons = [], seen = new Set();
+      const bez = (a, c, b, t) => { const m = 1 - t; return [0, 1, 2].map(j => m * m * a[j] + 2 * m * t * c[j] + t * t * b[j]); };
+      somas.forEach((s, ai) => {
+        const near = somas.map((o, bi) => [bi, d2(s.p, o.p)])
+          .filter(([bi]) => bi !== ai && somas[bi].part === s.part && (s.part !== 0 || somas[bi].side === s.side))
+          .sort((x, y) => x[1] - y[1]).slice(0, rand() < 0.35 ? 3 : 2);
+        near.forEach(([bi, dd]) => {
+          const key = ai < bi ? ai + ':' + bi : bi + ':' + ai;
+          if (dd > 0.25 || seen.has(key)) return;
+          seen.add(key);
+          const o = somas[bi], mid = [0, 1, 2].map(j => (s.p[j] + o.p[j]) / 2);
+          const bowed = inward(mid, s.part, 1.1 + rand() * 0.12);          // bow outward along the surface
+          const c = bowed.map(v => v + (rand() - 0.5) * 0.07);             // and sway a little sideways
+          axons.push({ a: s.p, c, b: o.p, part: s.part, len: Math.sqrt(dd) * 1.1 });
+        });
+      });
+
+      // dendrites: 3 to 4 short sprigs per soma, pointing along the surface, some forked
+      const dends = [];
+      somas.forEach(s => {
+        const cen = centreOf(s.part, s.p[0]) || [s.p[0], s.p[1] + 0.3, s.p[2]];
+        const nrm = s.p.map((v, j) => v - cen[j]), nl = Math.hypot(...nrm) || 1;
+        const n = nrm.map(v => v / nl), sprigs = 3 + (rand() < 0.5 ? 1 : 0);
+        for (let q = 0; q < sprigs; q++) {
+          let v = [gauss(), gauss(), gauss()];
+          const dot = v[0] * n[0] + v[1] * n[1] + v[2] * n[2];
+          v = v.map((x, j) => x - dot * n[j] * 0.8);                        // mostly tangent to the surface
+          const vl = Math.hypot(...v) || 1, L = 0.035 + rand() * 0.05;
+          const tip = s.p.map((x, j) => x + v[j] / vl * L);
+          dends.push({ a: s.p, b: tip, part: s.part, s });
+          if (rand() < 0.55) {                                             // a fork two-thirds of the way out
+            const f = s.p.map((x, j) => x + (tip[j] - x) * 0.62);
+            const w = [gauss(), gauss(), gauss()], wl = Math.hypot(...w) || 1;
+            dends.push({ a: f, b: f.map((x, j) => x + w[j] / wl * L * 0.45), part: s.part, s, fork: true });
+          }
+        }
+      });
+
+      // grains
+      const pos = new Float32Array(count * 3), part = new Uint8Array(count), bright = new Float32Array(count);
+      const somaW = somas.map(s => s.r * s.r), somaT = somaW.reduce((x, y) => x + y, 0);
+      const axT = axons.reduce((x, a) => x + a.len, 0);
+      const pick = (arr, weight, total) => { let r = rand() * total, k = 0; while (r > weight(arr[k]) && k < arr.length - 1) { r -= weight(arr[k]); k++; } return arr[k]; };
+      for (let i = 0; i < count; i++) {
+        const r = rand();
+        let p, pt, b;
+        if (r < 0.26) {                                   // soma: a tight bright body, bigger neurons get more grains
+          const s = pick(somas, x => x.r * x.r, somaT);
+          p = s.p.map(v => v + gauss() * s.r * 0.55); pt = s.part; b = 1;
+        } else if (r < 0.76 && axons.length) {            // axon
+          const ax = pick(axons, x => x.len, axT), t = rand();
+          p = bez(ax.a, ax.c, ax.b, t).map(v => v + gauss() * 0.0045); pt = ax.part; b = 0.5;
+        } else if (r < 0.86 && dends.length) {            // dendrite, thinning toward the tip
+          const dn = dends[Math.floor(rand() * dends.length)], t = Math.sqrt(rand());
+          p = dn.a.map((v, j) => v + (dn.b[j] - v) * (1 - t) + gauss() * 0.003); pt = dn.part; b = 0.45;
+        } else {                                          // tissue haze
+          const k = Math.floor(rand() * nS);
+          p = [surf.pos[k * 3], surf.pos[k * 3 + 1], surf.pos[k * 3 + 2]].map(v => v + gauss() * 0.01); pt = surf.part[k]; b = 0.26;
+        }
+        pos[i * 3] = p[0]; pos[i * 3 + 1] = p[1]; pos[i * 3 + 2] = p[2]; part[i] = pt; bright[i] = b;
+      }
+
+      // lines: axons as 10-segment curves (t runs soma → soma so signals can
+      // travel them), dendrites as single tapering segments (kind 1)
+      const lp = [], lt = [], lph = [], lk = [], lmid = [];
+      axons.forEach(ax => {
+        const ph = rand();
+        for (let q = 0; q < 10; q++) {
+          const t0 = q / 10, t1 = (q + 1) / 10;
+          lp.push(...bez(ax.a, ax.c, ax.b, t0), ...bez(ax.a, ax.c, ax.b, t1));
+          lt.push(t0, t1); lph.push(ph, ph); lk.push(0, 0);
+          lmid.push(ax.c, ax.c);
+        }
+      });
+      dends.forEach(dn => {
+        lp.push(...dn.a, ...dn.b); lt.push(dn.fork ? 0.4 : 0, 1); lph.push(0, 0); lk.push(1, 1);
+        lmid.push(dn.s.p, dn.s.p);
+      });
+      return {
+        pos, part, bright,
+        lines: { pos: new Float32Array(lp), t: new Float32Array(lt), phase: new Float32Array(lph), kind: new Float32Array(lk), mid: lmid }
+      };
+    }
+
+    // The monogram, sampled from the page's own display font, normalised to height 1
+    async function sampleMonogram() {
+      const [mA, mB] = CONFIG.monogram, F = CONFIG.displayFont;
+      try {
+        await Promise.all([document.fonts.load(`400 300px ${F}`), document.fonts.load(`italic 400 300px ${F}`)]);
+      } catch (e) { /* falls back to the serif stack */ }
+      const c = document.createElement('canvas');
+      c.width = 760; c.height = 460;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      const fs = 360, base = 350;
+      g.fillStyle = '#fff';
+      g.font = `400 ${fs}px ${F}, Georgia, serif`;
+      const wA = g.measureText(mA).width;
+      g.font = `italic 400 ${fs}px ${F}, Georgia, serif`;
+      const wB = g.measureText(mB).width;
+      const x0 = (c.width - wA - wB) / 2;
+      g.font = `400 ${fs}px ${F}, Georgia, serif`;        g.fillText(mA, x0, base);
+      g.font = `italic 400 ${fs}px ${F}, Georgia, serif`; g.fillText(mB, x0 + wA, base);
+      const d = g.getImageData(0, 0, c.width, c.height).data;
+      const pts = [];
+      let minY = 1e9, maxY = -1e9, minX = 1e9, maxX = -1e9;
+      for (let y = 0; y < c.height; y += 2) for (let x = 0; x < c.width; x += 2) {
+        if (d[(y * c.width + x) * 4 + 3] > 120) {
+          pts.push(x, y);
+          minY = Math.min(minY, y); maxY = Math.max(maxY, y); minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        }
+      }
+      const h = Math.max(1, maxY - minY), cx = (minX + maxX) / 2, cy = (minY + maxY) / 2;
+      const out = new Float32Array(pts.length);
+      for (let i = 0; i < pts.length; i += 2) { out[i] = (pts[i] - cx) / h; out[i + 1] = -(pts[i + 1] - cy) / h; }
+      return out;
+    }
+
+    // Where the scenes sit (all five share one layout box)
+    function layout() {
+      const s = scenes[0];
+      const w = s.offsetWidth, h = s.offsetHeight;
+      return {
+        W: stage.clientWidth, H: stage.clientHeight, w, h,
+        cx: s.offsetLeft + w / 2, cy: s.offsetTop + h / 2,
+        minDim: Math.min(w, h)
+      };
+    }
+
+    function buildShapes(L, mono, brain, lines) {
+      const R = rng(9001);
+      const gauss = () => { let u = 0; while (!u) u = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * R()); };
+      const P = [0, 1, 2, 3, 4].map(() => new Float32Array(N * 3));
+      const aRand = new Float32Array(N * 4), aFlow = new Float32Array(N * 4);
+      const { W, H, w, h, cx, cy, minDim } = L;
+
+      for (let i = 0; i < N; i++) {
+        aRand[i * 4] = R();                    // morph delay
+        aRand[i * 4 + 1] = R() * Math.PI * 2;  // phase
+        aRand[i * 4 + 2] = 0.6 + R();          // size
+        aRand[i * 4 + 3] = R();                // halo angle / membership
+        aFlow[i * 4] = -1; aFlow[i * 4 + 1] = -1;
+      }
+
+      // 0 · CHAOS: one cluster per tool tile + dust across the whole screen
+      const clusters = Array.from({ length: CONFIG.tools.length }, () => [(R() - 0.5) * W * 0.9, (R() - 0.5) * H * 0.8, (R() - 0.5) * 500]);
+      for (let i = 0; i < N; i++) {
+        let x, y, z;
+        if (R() < 0.6) {
+          const c = clusters[i % CONFIG.tools.length], sg = 20 + R() * 36;
+          x = c[0] + gauss() * sg; y = c[1] + gauss() * sg; z = c[2] + gauss() * sg;
+        } else {
+          x = (R() - 0.5) * W * 1.1; y = (R() - 0.5) * H * 1.05; z = (R() - 0.5) * 700;
+        }
+        P[0][i * 3] = x + (W / 2 - cx); P[0][i * 3 + 1] = y - (H / 2 - cy); P[0][i * 3 + 2] = z;
+      }
+
+      // 1 · STREAM: node shells + wire, laid over the leg-2 SVG (viewBox 600×400, meet)
+      const s2 = Math.min(w / 600, h / 400);
+      const sv = (x, y) => [(x - 300) * s2, -(y - 200) * s2];
+      const [ax, ay] = sv(120, 200), [bx, by] = sv(480, 200);
+      const [q0x, q0y] = sv(162, 200), [qcx, qcy] = sv(300, 100), [q1x, q1y] = sv(438, 200);
+      const nodeR = 42 * s2;
+      for (let i = 0; i < N; i++) {
+        const r = R();
+        let x, y, z;
+        if (r < 0.44) {
+          const left = r < 0.22, u = R() * 2 - 1, th = R() * Math.PI * 2, rr = nodeR * (0.85 + R() * 0.22), sx = Math.sqrt(1 - u * u);
+          x = (left ? ax : bx) + Math.cos(th) * sx * rr; y = (left ? ay : by) + u * rr; z = Math.sin(th) * sx * rr;
+          if (!left) aFlow[i * 4] = -2;       // −1 node A shell, −2 node B shell (the wire grows from one to the other)
+        } else {
+          const t = R(), mt = 1 - t, spread = 2.5 + Math.sin(t * Math.PI) * 5;
+          x = mt * mt * q0x + 2 * mt * t * qcx + t * t * q1x + gauss() * spread;
+          y = mt * mt * q0y + 2 * mt * t * qcy + t * t * q1y + gauss() * spread;
+          z = gauss() * spread;
+          aFlow[i * 4] = t;
+        }
+        P[1][i * 3] = x; P[1][i * 3 + 1] = y; P[1][i * 3 + 2] = z;
+      }
+
+      // 2 · NETWORK: hub + 8 nodes on a sphere, particles strung along the edges
+      const Rn = minDim * 0.34, g8 = Math.PI * (3 - Math.sqrt(5));
+      const nodes = [[0, 0, 0]];
+      for (let k = 0; k < 8; k++) {
+        const y = 1 - (k / 7) * 2, rad = Math.sqrt(1 - y * y), th = g8 * k;
+        nodes.push([Math.cos(th) * rad * Rn, y * Rn * 0.8, Math.sin(th) * rad * Rn]);
+      }
+      const edges = [];
+      for (let k = 1; k <= 8; k++) edges.push([0, k]);
+      const linked = (a, b) => edges.some(e => (e[0] === a && e[1] === b) || (e[0] === b && e[1] === a));
+      for (let k = 1; k <= 8; k++) {
+        let best = -1, bd = Infinity;
+        for (let j = 1; j <= 8; j++) {
+          if (j === k || linked(k, j)) continue;
+          const dd = (nodes[k][0] - nodes[j][0]) ** 2 + (nodes[k][1] - nodes[j][1]) ** 2 + (nodes[k][2] - nodes[j][2]) ** 2;
+          if (dd < bd) { bd = dd; best = j; }
+        }
+        if (best > 0) edges.push([k, best]);
+      }
+      const eLen = edges.map(([a, b]) => Math.hypot(nodes[a][0] - nodes[b][0], nodes[a][1] - nodes[b][1], nodes[a][2] - nodes[b][2]));
+      const eTotal = eLen.reduce((s, v) => s + v, 0);
+      const ePhase = edges.map(() => R());
+      // Branching order for the leg 2 → 3 build (0…1): hub, then the 8 spokes
+      // grow out of it, each node blooms as its spoke lands, then cross-links
+      // grow node → node. aNet = (arrival, 0 node | 1 edge), aNetC = bloom centre.
+      const eStart = edges.map((_, e) => e < 8 ? 0.08 + R() * 0.06 : 0.46 + R() * 0.08);
+      const eSpan = edges.map((_, e) => e < 8 ? 0.28 : 0.3);
+      const aNet = new Float32Array(N * 2), aNetC = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) {
+        let x, y, z;
+        if (R() < 0.46) {                              // nodes: denser, brighter, read as hubs
+          const k = Math.floor(R() * 9), nr = (k === 0 ? 0.085 : 0.05) * minDim;
+          const u = R() * 2 - 1, th = R() * Math.PI * 2, rr = nr * Math.cbrt(R()), sx = Math.sqrt(1 - u * u);
+          x = nodes[k][0] + Math.cos(th) * sx * rr; y = nodes[k][1] + u * rr; z = nodes[k][2] + Math.sin(th) * sx * rr;
+          aFlow[i * 4 + 3] = 1;
+          aNet[i * 2] = k === 0 ? R() * 0.08 : eStart[k - 1] + eSpan[k - 1] - 0.02 + R() * 0.05;
+          aNetC[i * 3] = nodes[k][0]; aNetC[i * 3 + 1] = nodes[k][1]; aNetC[i * 3 + 2] = nodes[k][2];
+        } else {                                       // edges: thin strands between them
+          let pick = R() * eTotal, e = 0;
+          while (pick > eLen[e] && e < edges.length - 1) { pick -= eLen[e]; e++; }
+          const [a, b] = edges[e], t = R();
+          x = nodes[a][0] + (nodes[b][0] - nodes[a][0]) * t + gauss() * 1.3;
+          y = nodes[a][1] + (nodes[b][1] - nodes[a][1]) * t + gauss() * 1.3;
+          z = nodes[a][2] + (nodes[b][2] - nodes[a][2]) * t + gauss() * 1.3;
+          aFlow[i * 4 + 1] = t; aFlow[i * 4 + 2] = ePhase[e];
+          aNet[i * 2] = eStart[e] + t * eSpan[e]; aNet[i * 2 + 1] = 1;
+          aNetC[i * 3] = x; aNetC[i * 3 + 1] = y; aNetC[i * 3 + 2] = z;
+        }
+        P[2][i * 3] = x; P[2][i * 3 + 1] = y; P[2][i * 3 + 2] = z;
+      }
+
+      // 3 · BRAIN: sized to sit inside the leg-4 HUD rings
+      const bs = minDim * 0.5 / 2.1;
+      for (let i = 0; i < N * 3; i++) P[3][i] = brain.pos[i] * bs;
+      // Where the leg-3 network lives inside the brain: a patch of outer cortex
+      // that faces the camera. The leg 3 → 4 reveal spreads outward from it;
+      // aRev = when each grain leaves the network for its place in the brain
+      // (~12% stay in the patch until the very end so it reads as "you were here").
+      const HT = [0.95, 0.4, 0.2];
+      let hb = 0, hd = Infinity;
+      for (let i = 0; i < N; i++) {
+        if (brain.part[i]) continue;
+        const d = (brain.pos[i * 3] - HT[0]) ** 2 + (brain.pos[i * 3 + 1] - HT[1]) ** 2 + (brain.pos[i * 3 + 2] - HT[2]) ** 2;
+        if (d < hd) { hd = d; hb = i; }
+      }
+      const HB = [brain.pos[hb * 3], brain.pos[hb * 3 + 1], brain.pos[hb * 3 + 2]];
+      const revAt = (x, y, z) => 0.04 + Math.min(Math.hypot(x - HB[0], y - HB[1], z - HB[2]) / 2.3, 1) * 0.78;
+      const aRev = new Float32Array(N);
+      for (let i = 0; i < N; i++) {
+        aRev[i] = R() < 0.12 ? 0.86 + R() * 0.1 : revAt(brain.pos[i * 3], brain.pos[i * 3 + 1], brain.pos[i * 3 + 2]) + R() * 0.04;
+      }
+
+      // 4 · MONOGRAM: your initials, big and quiet behind the sign-off
+      const mh = minDim * 0.8, mCount = mono.length / 2;
+      for (let i = 0; i < N; i++) {
+        if (mCount) {
+          const k = Math.floor(R() * mCount) * 2;
+          P[4][i * 3] = mono[k] * mh + gauss() * 1.1; P[4][i * 3 + 1] = mono[k + 1] * mh + gauss() * 1.1; P[4][i * 3 + 2] = gauss() * 12;
+        } else {
+          const a = R() * Math.PI * 2; P[4][i * 3] = Math.cos(a) * mh * 0.45; P[4][i * 3 + 1] = Math.sin(a) * mh * 0.45; P[4][i * 3 + 2] = gauss() * 10;
+        }
+      }
+
+      // Axon + dendrite lines for the brain, in the same pixel space. aD = when
+      // each lights up during the reveal (same outward front as the grains).
+      const BL = brain.lines;
+      lines.pos = BL.pos.map(v => v * bs);
+      lines.t = BL.t; lines.phase = BL.phase; lines.kind = BL.kind;
+      lines.d = new Float32Array(BL.mid.map(m => revAt(m[0], m[1], m[2])));
+
+      const s1 = minDim / 720;               // leg-1 viewBox (720×720, meet) → px
+      return {
+        P, aRand, aFlow, aNet, aNetC, aRev, aB3: brain.bright, ringR: 240 * s1, span: 400 * s2,
+        anchor: [HB[0] * bs, HB[1] * bs, HB[2] * bs],
+        s1, heroY: 240 * s1,                  // hero tile sits straight above the ring centre
+        nodeA: [ax, ay, 0], nodeB: [bx, by, 0], nodeR
+      };
+    }
+
+    // The leg-1 hero tile redrawn on a canvas and sampled into grains, in
+    // tile-local viewBox units (y down): 0 the tool mark, 1 tile outline,
+    // 2 the label underneath. Mirrors the SVG built above.
+    function sampleHeroTile() {
+      const hero = CONFIG.tools[0];
+      const dPath = ((hero.svg || '').match(/<path[^>]*\bd="([^"]+)"/) || [])[1];
+      const K = 6, X0 = -36, Y0 = -32, W = 72, H = 88;
+      const c = document.createElement('canvas');
+      c.width = W * K; c.height = H * K;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.setTransform(K, 0, 0, K, -X0 * K, -Y0 * K);
+      const shape = (x, y, w, h, r) => { g.beginPath(); g.roundRect ? g.roundRect(x, y, w, h, r) : g.rect(x, y, w, h); };
+      const layer = (kind, draw) => {
+        g.clearRect(X0, Y0, W, H);
+        g.globalCompositeOperation = 'source-over';
+        draw();
+        const d = g.getImageData(0, 0, c.width, c.height).data, pts = [];
+        for (let y = 0; y < c.height; y++) for (let x = 0; x < c.width; x++)
+          if (d[(y * c.width + x) * 4 + 3] > 110) pts.push(x / K + X0, y / K + Y0);
+        return { kind, pts };
+      };
+      return [
+        layer(0, () => {
+          g.fillStyle = '#fff';
+          if (dPath) {                       // the mark itself, same transform the SVG uses
+            g.save(); g.translate(-16, -18); g.scale(1.33, 1.33); g.fill(new Path2D(dPath)); g.restore();
+          } else {
+            g.font = '800 11.3px ui-sans-serif, system-ui, sans-serif'; g.textAlign = 'center';
+            g.fillText(hero.label, 0, 4);
+          }
+        }),
+        layer(1, () => { g.strokeStyle = '#fff'; g.lineWidth = 1.5; shape(-28, -28, 56, 56, 8); g.stroke(); }),
+        layer(2, () => {
+          g.fillStyle = '#fff'; g.font = '500 10px "JetBrains Mono", ui-monospace, monospace'; g.textAlign = 'center';
+          if ('letterSpacing' in g) g.letterSpacing = '1.4px';
+          g.fillText(hero.label, 0, 46);
+        })
+      ].filter(l => l.pts.length);
+    }
+
+    async function boot() {
+      const [THREE, mono] = await Promise.all([
+        import(new URL('./assets/vendor/three.module.min.js', document.baseURI).href),
+        sampleMonogram()
+      ]);
+      const brain = buildNeuralBrain(N);
+      try { await document.fonts.load('500 10px "JetBrains Mono"'); } catch (e) { /* label falls back to monospace */ }
+      const tileGrains = sampleHeroTile();
+
+      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 1.75));
+      renderer.setClearColor(0x000000, 0);
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, 1, 1, 6000);
+      camera.position.set(0, 0, CAM_Z);
+
+      const uniforms = {
+        uTime:   { value: 0 },
+        uMorph:  { value: 0 },
+        uOrder:  { value: 0 },
+        uCharge: { value: 0 },
+        uPR:     { value: renderer.getPixelRatio() },
+        uSize:   { value: isMobile ? 2.1 : 2.4 },
+        uRingR:  { value: 200 },
+        uRepel:  { value: 0 },
+        uMouse:  { value: new THREE.Vector2(-9999, -9999) },
+        uT:      { value: [0, 1, 2, 3, 4].map(() => new THREE.Vector3()) },
+        uXY:     { value: [0, 1, 2, 3, 4].map(() => new THREE.Vector2()) },
+        uSpin:   { value: [0, 1, 2, 3, 4].map(() => new THREE.Vector2()) },
+        uGain:   { value: [0.62, 1.0, 0.95, 1.0, 0.42] },
+        uLeave:  { value: 0 },
+        uGrow:   { value: 0 },
+        uBurst:  { value: 0 },
+        uBranch: { value: 0 },
+        uZoom:   { value: 0 },
+        uReveal: { value: 0 },
+        uK:      { value: NET_K },                // network's size inside the brain
+        uS:      { value: 1 / NET_K },            // camera zoom about the anchor
+        uA:      { value: new THREE.Vector3() },  // anchor patch, world (final brain)
+        uAS:     { value: new THREE.Vector3() },  // anchor patch, on screen right now
+        uHub:    { value: new THREE.Vector3() },  // network hub, world
+        uNodeR:  { value: 40 },
+        uSpan:   { value: 400 },
+        uNodeA:  { value: new THREE.Vector3() },
+        uNodeB:  { value: new THREE.Vector3() },
+        uAccent: { value: new THREE.Color(ACCENT) }, uHot: { value: new THREE.Color(HOT) }
+      };
+
+      const geo = new THREE.BufferGeometry();
+      const pointsMat = new THREE.ShaderMaterial({
+        uniforms, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+        vertexShader: `
+          uniform float uTime, uMorph, uOrder, uCharge, uPR, uSize, uRingR, uRepel, uLeave, uGrow, uBurst, uBranch, uNodeR, uSpan;
+          uniform float uZoom, uReveal, uK, uS;
+          uniform vec2 uMouse;
+          uniform vec3 uT[5];
+          uniform vec2 uXY[5];
+          uniform vec2 uSpin[5];
+          uniform float uGain[5];
+          uniform vec3 uNodeA, uNodeB, uA, uAS, uHub;
+          attribute vec3 aP0, aP1, aP2, aP3, aP4, aNetC;
+          attribute vec4 aRand, aFlow;
+          attribute vec2 aNet;
+          attribute float aRev, aB3;      // aB3: brain role: soma 1, axon .5, dendrite .45, tissue .26
+          varying float vBright;
+
+          vec3 rotXY(vec3 p, vec2 r) {
+            float cx = cos(r.x), sx = sin(r.x), cy = cos(r.y), sy = sin(r.y);
+            p = vec3(p.x, p.y * cx - p.z * sx, p.y * sx + p.z * cx);
+            return vec3(p.x * cy + p.z * sy, p.y, -p.x * sy + p.z * cy);
+          }
+          // shape-local → world: self spin, then that leg's CSS 3D flight
+          vec3 xf(vec3 p, int k) {
+            p = rotXY(p, uSpin[k]);
+            p = rotXY(p, uT[k].xy);
+            p.xy += vec2(uXY[k].x, -uXY[k].y);
+            p.z += uT[k].z;
+            return p;
+          }
+          vec3 place(int k) {
+            vec3 p;
+            if (k == 0) {
+              float ang = aRand.w * 6.2831853;
+              vec3 halo = vec3(cos(ang) * uRingR * (1.0 + (aRand.x - 0.5) * 0.22),
+                               sin(ang) * uRingR * (1.0 + (aRand.x - 0.5) * 0.22),
+                               (aRand.z - 1.1) * 40.0);
+              float joins = step(0.45, fract(aRand.w * 7.31));
+              p = mix(aP0, halo, uOrder * joins);
+            } else if (k == 1) p = aP1;
+            else if (k == 2) p = aP2;
+            else if (k == 3) p = aP3;
+            else p = aP4;
+            return xf(p, k);
+          }
+          void main() {
+            float m = clamp(uMorph, 0.0, 4.0);
+            int a = int(floor(m));
+            int b = min(a + 1, 4);
+            vec3 p;
+            float lt, mid, vis = 1.0, tip = 0.0, gate = 1.0;
+            if (a == 0) {
+              // Leg 1 → 2 is a hand-off, not a morph: the chaos rides the camera's
+              // dive into hero and thins out; then the node A blooms (where the
+              // dust gathers), the wire grows out of it, and node B assembles
+              // where the wire lands.
+              float g0 = aFlow.x >= 0.0 ? 0.1 + aFlow.x * 0.78
+                       : (aFlow.x < -1.5 ? 0.86 + aRand.x * 0.08 : aRand.x * 0.1);
+              float arr = clamp((uGrow - g0) / 0.14, 0.0, 1.0);
+              float arrE = arr * arr * (3.0 - 2.0 * arr);
+              vec3 loc = aP1;
+              if (aFlow.x >= 0.0) loc += vec3(sin(aRand.y * 5.1), cos(aRand.y * 3.7), sin(aRand.y * 2.3)) * (1.0 - arrE) * 26.0;
+              else loc = mix(aFlow.x < -1.5 ? uNodeB : uNodeA, aP1, arrE);
+              float gone = step(0.999, uLeave);
+              p = mix(place(0), xf(loc, 1), gone);
+              vis = mix(1.0 - uLeave, arr, gone);
+              lt = gone * arrE;
+              tip = gone * sin(arr * 3.14159265) * (aFlow.x >= 0.0 ? 1.0 : 0.25);   // the growing front flares; nodes just glow
+              mid = 0.0;
+            } else if (a == 1) {
+              // Leg 2 → 3: hero detonates in slow motion; the shock rolls down the
+              // wire and drags it (and node B) back into the blast, so it all
+              // becomes one cloud around hero. The cloud then feeds the network as
+              // it branches out of the hub: grains leave the cloud one by one and
+              // stream to the growing tips (spokes → nodes bloom → cross-links).
+              float isA = (aFlow.x < -0.5 && aFlow.x > -1.5) ? 1.0 : 0.0;
+              vec3 o = aP1 - uNodeA;
+              float shock = (1.0 - isA) * clamp(length(o.xy) / uSpan, 0.0, 1.0) * 0.5;
+              float eb = clamp((uBurst - shock) / (1.0 - shock), 0.0, 1.0);
+              float ebE = eb * eb * (3.0 - 2.0 * eb);
+              vec3 jit = vec3(sin(aRand.y * 4.1), cos(aRand.y * 2.9), sin(aRand.y * 6.3));
+              float su = aRand.w * 2.0 - 1.0, sr = sqrt(1.0 - su * su);
+              vec3 sph = vec3(cos(aRand.y) * sr, su, sin(aRand.y) * sr);   // uniform on the sphere (two independent randoms)
+              vec3 dir = isA > 0.5 ? normalize(o + jit * 14.0 + vec3(0.0, 0.0, 0.001)) : sph;
+              vec3 cloud = uNodeA + dir * uNodeR * (1.2 + aRand.z * 2.2);
+              vec3 drift = vec3(sin(uTime * 0.4 + aRand.y * 8.0), cos(uTime * 0.35 + aRand.y * 6.0), sin(uTime * 0.3 + aRand.y * 4.0));
+              vec3 ex = mix(aP1, cloud, isA > 0.5 ? eb : ebE) + drift * 10.0 * eb;
+
+              float arr = clamp((uBranch - aNet.x) / 0.16, 0.0, 1.0);
+              float arrE = arr * arr * (3.0 - 2.0 * arr);
+              vec3 nl = aNet.y > 0.5 ? aP2 : mix(aNetC, aP2, arrE);   // nodes bloom from their centre
+              p = mix(xf(ex, 1), xf(nl, 2), arrE);
+              vis = mix(1.0 - 0.3 * eb, 1.0, arrE);                    // the cloud glows on until it's used up
+              lt = arrE;
+              tip = sin(arr * 3.14159265) * (aNet.y > 0.5 ? 1.0 : 0.35)
+                  + (isA * sin(eb * 3.14159265) * 0.6 + (1.0 - isA) * sin(ebE * 3.14159265) * 0.3) * (1.0 - arrE);   // blast flare, then the branch tips
+              gate = 1.0 - eb;                                          // wire signals stop when the wire's gone
+              mid = 0.0;
+            } else if (a == 2) {
+              // Leg 3 → 4: the camera pulls back. Everything scales about the
+              // anchor patch (uS: 1/uK → 1): the network shrinks into one patch of
+              // cortex, then grains leave it outward-first (aRev) for their place
+              // in the brain, so the links spread until the whole brain shows.
+              float arr = clamp((uReveal - aRev) / 0.14, 0.0, 1.0);
+              float arrE = arr * arr * (3.0 - 2.0 * arr);
+              vec3 net = uAS + (xf(aP2, 2) - uHub) * uK * uS;
+              vec3 brn = uAS + (xf(aP3, 3) - uA) * uS;
+              p = mix(net, brn, arrE);
+              vis = mix(1.0 - 0.5 * uZoom, 1.0, arrE);                 // the shrinking patch dims so it doesn't blow out
+              lt = arrE;
+              tip = sin(arr * 3.14159265) * 0.7;                        // grains flare as they fire out to the brain
+              mid = 0.0;
+            } else {
+              float f = m - float(a);
+              lt = clamp(f * 1.6 - aRand.x * 0.6, 0.0, 1.0);
+              lt = lt * lt * (3.0 - 2.0 * lt);
+              p = mix(place(a), place(b), lt);
+              mid = sin(lt * 3.14159265);             // mid-flight swirl: a morph reads as a flock, not a crossfade
+            }
+            p += mid * vec3(sin(aRand.y * 3.1 + uTime * 0.9), cos(aRand.y * 2.3 + uTime * 0.7), sin(aRand.y * 1.7)) * 70.0;
+
+            float wA = 1.0 - lt, wB = lt;
+            float chaosW = (a == 0 ? wA : 0.0);
+            p += vec3(sin(uTime * 0.6 + aRand.y * 9.0), cos(uTime * 0.5 + aRand.y * 7.0), sin(uTime * 0.45 + aRand.y * 5.0)) * (2.5 + 9.0 * chaosW);
+
+            // cursor pushes particles aside
+            vec2 d = p.xy - uMouse;
+            float fall = exp(-dot(d, d) / 16000.0);
+            p.xy += normalize(d + vec2(0.0001)) * fall * uRepel * 60.0;
+
+            float gain = uGain[a] * wA + uGain[b] * wB;
+            float w1 = (a == 1 ? wA : 0.0) + (b == 1 ? wB : 0.0);
+            float w2 = (a == 2 ? wA : 0.0) + (b == 2 ? wB : 0.0);
+            float w3 = (a == 3 ? wA : 0.0) + (b == 3 ? wB : 0.0);
+            float pulse = 0.0;
+            if (aFlow.x >= 0.0) {
+              float h1 = fract(uTime * 0.28), h2 = fract(uTime * 0.28 + 0.5);
+              pulse += w1 * gate * max(smoothstep(0.08, 0.0, abs(h1 - aFlow.x)), smoothstep(0.08, 0.0, abs(h2 - aFlow.x)));
+            }
+            if (aFlow.y >= 0.0) pulse += w2 * smoothstep(0.1, 0.0, abs(fract(uTime * 0.32 + aFlow.z) - aFlow.y));
+            float tw = 0.5 + 0.5 * sin(uTime * (1.1 + uCharge * 2.6 * w3) + aRand.y * 6.2831853);
+            float n3 = mix(1.0, aB3 * 0.9, w3);            // in the brain: neurons glow, fibres and tissue sit back
+            vBright = (gain * n3 * (0.5 + 0.5 * tw * (0.6 + uCharge * w3 * 0.8)) + pulse * 0.7 + w2 * aFlow.w * 0.35) * vis + tip * 0.9;
+
+            vec4 mv = modelViewMatrix * vec4(p, 1.0);
+            float depth = -mv.z;
+            vBright *= smoothstep(60.0, 360.0, depth);   // grains rushing past the camera fade instead of ballooning
+            float s3 = mix(1.0, 0.55 + aB3 * 0.6, w3);     // somas a touch bigger, fibres finer
+            gl_PointSize = min(uSize * aRand.z * s3 * (1.0 + pulse * 0.6 + w2 * aFlow.w * 0.25 + tip * 0.8) * uPR * (${CAM_Z.toFixed(1)} / max(depth, 1.0)), 44.0 * uPR);
+            gl_Position = projectionMatrix * mv;
+          }`,
+        fragmentShader: `
+          uniform vec3 uAccent, uHot;
+          varying float vBright;
+          void main() {
+            float d = length(gl_PointCoord - 0.5);
+            float a = smoothstep(0.5, 0.08, d);
+            vec3 c = mix(vec3(1.0, 0.64, 0.22), vec3(1.0, 0.95, 0.85), clamp(vBright - 0.55, 0.0, 1.0));
+            gl_FragColor = vec4(c, a * clamp(vBright, 0.0, 1.6) * 0.8);
+          }`
+      });
+      const points = new THREE.Points(geo, pointsMat);
+      points.frustumCulled = false;
+      scene.add(points);
+
+      // Brain synapses ride the same transforms: outer = leg-4 flight, inner = brain spin
+      // During the leg 3 → 4 zoom-out they also scale about the anchor patch and
+      // light up with the same outward front as the grains (a flash, then settle).
+      const linkUniforms = {
+        uTime: uniforms.uTime, uCharge: uniforms.uCharge, uShow: { value: 0 },
+        uReveal: uniforms.uReveal, uA: uniforms.uA, uAS: uniforms.uAS, uS: uniforms.uS,
+        uAccent: uniforms.uAccent, uHot: uniforms.uHot
+      };
+      const linkGeo = new THREE.BufferGeometry();
+      const links = new THREE.LineSegments(linkGeo, new THREE.ShaderMaterial({
+        uniforms: linkUniforms, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+        vertexShader: `
+          uniform vec3 uA, uAS;
+          uniform float uS;
+          attribute float aT, aPhase, aD, aKind;
+          varying float vT, vPhase, vD, vKind;
+          void main() {
+            vT = aT; vPhase = aPhase; vD = aD; vKind = aKind;
+            vec4 wp = modelMatrix * vec4(position, 1.0);
+            gl_Position = projectionMatrix * viewMatrix * vec4(uAS + (wp.xyz - uA) * uS, 1.0);
+          }`,
+        fragmentShader: `
+          uniform float uTime, uCharge, uShow, uReveal;
+          uniform vec3 uAccent, uHot;
+          varying float vT, vPhase, vD, vKind;
+          void main() {
+            // Each axon fires now and then (more often once the brain is
+            // "charged"): a spike runs soma → soma along it. Dendrites don't
+            // fire; they just taper out from the cell body.
+            float cyc = uTime * (0.24 + uCharge * 0.22) + vPhase * 13.0;
+            float fires = step(fract(floor(cyc) * 0.618034 + vPhase * 3.7), 0.28 + uCharge * 0.5);
+            float spike = (1.0 - vKind) * fires * smoothstep(0.09, 0.0, abs(fract(cyc) - vT));
+            float base = vKind > 0.5 ? (1.0 - vT) * 0.34 : 0.15;
+            float lit = clamp((uReveal - vD) / 0.1, 0.0, 1.0);
+            float flash = sin(lit * 3.14159265);
+            vec3 col = mix(vec3(1.0, 0.72, 0.36), vec3(1.0, 0.95, 0.82), spike);
+            gl_FragColor = vec4(col, uShow * (lit * (base + spike * (0.7 + uCharge * 0.3)) + flash * 0.6));
+          }`
+      }));
+      links.frustumCulled = false;
+      const brainOuter = new THREE.Group(), brainInner = new THREE.Group();
+      brainOuter.rotation.order = brainInner.rotation.order = 'YXZ';
+      brainInner.add(links); brainOuter.add(brainInner); scene.add(brainOuter);
+
+      // hero dust: grains sampled from the leg-1 tile. They sit exactly on the
+      // tile (riding leg 1's dive), break free left → right like ash on the
+      // wind, then gather into leg 2's node A, where the wire grows from.
+      const dustUniforms = {
+        uTime: uniforms.uTime, uPR: uniforms.uPR, uT: uniforms.uT, uXY: uniforms.uXY,
+        uDust: { value: 0 }, uGather: { value: 0 }, uSize: { value: isMobile ? 1.3 : 1.5 },
+        uCenter: { value: new THREE.Vector3() }, uAccent: uniforms.uAccent, uHot: uniforms.uHot
+      };
+      const dustGeo = new THREE.BufferGeometry();
+      const dust = new THREE.Points(dustGeo, new THREE.ShaderMaterial({
+        uniforms: dustUniforms, transparent: true, depthWrite: false, depthTest: false, blending: THREE.AdditiveBlending,
+        vertexShader: `
+          uniform float uTime, uPR, uSize, uDust, uGather;
+          uniform vec3 uCenter;
+          uniform vec3 uT[5];
+          uniform vec2 uXY[5];
+          attribute vec3 aNode;
+          attribute vec4 aSeed;
+          attribute vec2 aKind;          // x brightness (mark / outline / label), y left → right sweep
+          varying float vA, vHot;
+          vec3 rotXY(vec3 p, vec2 r) {
+            float cx = cos(r.x), sx = sin(r.x), cy = cos(r.y), sy = sin(r.y);
+            p = vec3(p.x, p.y * cx - p.z * sx, p.y * sx + p.z * cx);
+            return vec3(p.x * cy + p.z * sy, p.y, -p.x * sy + p.z * cy);
+          }
+          vec3 flight(vec3 p, int k) {
+            p = rotXY(p, uT[k].xy);
+            p.xy += vec2(uXY[k].x, -uXY[k].y);
+            p.z += uT[k].z;
+            return p;
+          }
+          void main() {
+            vec3 p = flight(position, 0);
+            float rel = clamp((uDust - aKind.y * 0.45 - aSeed.x * 0.3) / 0.25, 0.0, 1.0);
+            float e = rel * rel;
+            vec3 curl = vec3(sin(aSeed.y * 9.0 + uTime * 1.3), cos(aSeed.z * 7.0 + uTime * 1.1), sin(aSeed.w * 5.0 + uTime * 0.9));
+            // bursts outward from the tile and toward the camera, so the dive flies
+            // through it; a light drift right keeps the left → right read
+            vec2 rad = normalize(position.xy - uCenter.xy + vec2(0.001, 0.0));
+            vec3 wind = vec3(rad * (0.45 + aSeed.y * 0.7) + vec2(0.3, 0.08), 0.5 + aSeed.w * 1.1);
+            p += (wind * 64.0 + curl * 18.0) * e;
+
+            float g = clamp((uGather - aSeed.x * 0.35) / 0.65, 0.0, 1.0);
+            g = g * g * (3.0 - 2.0 * g);
+            p = mix(p, flight(aNode, 1), g) + curl * sin(g * 3.14159265) * 36.0;
+
+            vec4 mv = modelViewMatrix * vec4(p, 1.0);
+            float depth = -mv.z;
+            vHot = rel * (1.0 - rel) * 4.0 * (1.0 - g);          // each grain flares as it breaks free
+            vA = aKind.x * smoothstep(0.0, 0.05, uDust) * (1.0 - smoothstep(0.7, 1.0, uGather)) * smoothstep(60.0, 300.0, depth);
+            gl_PointSize = min(uSize * (0.7 + aSeed.w * 0.6) * (1.0 + vHot * 0.5) * uPR * (${CAM_Z.toFixed(1)} / max(depth, 1.0)), 40.0 * uPR);
+            gl_Position = projectionMatrix * mv;
+          }`,
+        fragmentShader: `
+          uniform vec3 uAccent, uHot;
+          varying float vA, vHot;
+          void main() {
+            float d = length(gl_PointCoord - 0.5);
+            float a = smoothstep(0.5, 0.1, d);
+            vec3 c = mix(vec3(1.0, 0.66, 0.24), vec3(1.0, 0.93, 0.8), clamp(vHot, 0.0, 1.0));
+            gl_FragColor = vec4(c, a * vA * (0.55 + vHot * 0.35));
+          }`
+      }));
+      dust.frustumCulled = false;
+      dust.visible = false;
+      scene.add(dust);
+
+      function buildDust(S) {
+        if (!tileGrains.length) return false;
+        const M = lowEnd ? 500 : isMobile ? 800 : 1600;
+        const quota = [0.6, 0.28, 0.12], bright = [1.0, 0.6, 0.42];
+        const wsum = tileGrains.reduce((s, l) => s + quota[l.kind], 0);
+        const R = rng(4242);
+        const pos = new Float32Array(M * 3), node = new Float32Array(M * 3), seed = new Float32Array(M * 4), kind = new Float32Array(M * 2);
+        for (let o = 0; o < M; o++) {
+          let r = R() * wsum, lay = tileGrains[0];
+          for (const l of tileGrains) { r -= quota[l.kind]; if (r <= 0) { lay = l; break; } }
+          const k = Math.floor(R() * (lay.pts.length / 2)) * 2, u = lay.pts[k], v = lay.pts[k + 1];
+          pos[o * 3] = u * S.s1; pos[o * 3 + 1] = S.heroY - v * S.s1; pos[o * 3 + 2] = (R() - 0.5) * 2;
+          const uu = R() * 2 - 1, th = R() * Math.PI * 2, sx = Math.sqrt(1 - uu * uu), rr = S.nodeR * (0.85 + R() * 0.22);
+          node[o * 3] = S.nodeA[0] + Math.cos(th) * sx * rr; node[o * 3 + 1] = S.nodeA[1] + uu * rr; node[o * 3 + 2] = Math.sin(th) * sx * rr;
+          seed[o * 4] = R(); seed[o * 4 + 1] = R(); seed[o * 4 + 2] = R(); seed[o * 4 + 3] = R();
+          kind[o * 2] = bright[lay.kind]; kind[o * 2 + 1] = Math.min(Math.max((u + 28) / 56, 0), 1);
+        }
+        dustGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        dustGeo.setAttribute('aNode', new THREE.BufferAttribute(node, 3));
+        dustGeo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 4));
+        dustGeo.setAttribute('aKind', new THREE.BufferAttribute(kind, 2));
+        dustUniforms.uCenter.value.set(0, S.heroY, 0);
+        return true;
+      }
+      let dustReady = false;
+
+      // Same maths as the shader's xf(): self spin, then the leg's CSS flight.
+      // Used to find where the brain's anchor patch is on screen each frame.
+      const anchorLocal = new THREE.Vector3();
+      function xfJS(v, k, out) {
+        const sp = uniforms.uSpin.value[k], T = uniforms.uT.value[k], XY = uniforms.uXY.value[k];
+        let x = v.x, y = v.y, z = v.z;
+        for (const [rx, ry] of [[sp.x, sp.y], [T.x, T.y]]) {
+          const cx = Math.cos(rx), sx = Math.sin(rx), cy = Math.cos(ry), sy = Math.sin(ry);
+          const y1 = y * cx - z * sx, z1 = y * sx + z * cx;
+          const x2 = x * cy + z1 * sy, z2 = -x * sy + z1 * cy;
+          x = x2; y = y1; z = z2;
+        }
+        return out.set(x + XY.x, y - XY.y, z + T.z);
+      }
+
+      // Layout-dependent geometry + camera
+      let L = null;
+      function rebuild() {
+        if (L) { geo.dispose(); linkGeo.dispose(); dustGeo.dispose(); }   // free the previous layout's GPU buffers
+        L = layout();
+        renderer.setSize(L.W, L.H, false);
+        const Wf = 2 * Math.max(L.cx, L.W - L.cx), Hf = 2 * Math.max(L.cy, L.H - L.cy);
+        camera.fov = 2 * Math.atan((Hf / 2) / CAM_Z) / D2R;
+        camera.aspect = Wf / Hf;
+        camera.setViewOffset(Wf, Hf, Wf / 2 - L.cx, Hf / 2 - L.cy, L.W, L.H);   // vanishing point = scene centre, like the CSS
+
+        const lines = {};
+        const S = buildShapes(L, mono, brain, lines);
+        ['aP0', 'aP1', 'aP2', 'aP3', 'aP4'].forEach((n, k) => geo.setAttribute(n, new THREE.BufferAttribute(S.P[k], 3)));
+        geo.setAttribute('position', new THREE.BufferAttribute(S.P[0], 3));
+        geo.setAttribute('aRand', new THREE.BufferAttribute(S.aRand, 4));
+        geo.setAttribute('aFlow', new THREE.BufferAttribute(S.aFlow, 4));
+        geo.setAttribute('aNet', new THREE.BufferAttribute(S.aNet, 2));
+        geo.setAttribute('aNetC', new THREE.BufferAttribute(S.aNetC, 3));
+        geo.setAttribute('aRev', new THREE.BufferAttribute(S.aRev, 1));
+        anchorLocal.fromArray(S.anchor);
+        uniforms.uNodeR.value = S.nodeR;
+        uniforms.uSpan.value = S.span;
+        uniforms.uRingR.value = S.ringR;
+        uniforms.uNodeA.value.fromArray(S.nodeA);
+        uniforms.uNodeB.value.fromArray(S.nodeB);
+        dustReady = buildDust(S);
+        linkGeo.setAttribute('position', new THREE.BufferAttribute(lines.pos, 3));
+        linkGeo.setAttribute('aT', new THREE.BufferAttribute(lines.t, 1));
+        linkGeo.setAttribute('aPhase', new THREE.BufferAttribute(lines.phase, 1));
+        linkGeo.setAttribute('aD', new THREE.BufferAttribute(lines.d, 1));
+        linkGeo.setAttribute('aKind', new THREE.BufferAttribute(lines.kind, 1));
+        geo.setAttribute('aB3', new THREE.BufferAttribute(S.aB3, 1));
+      }
+      rebuild();
+      let rt = 0;
+      addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { rebuild(); wake(); }, 180); });
+
+      // Cursor
+      let mX = -9999, mY = -9999, sMX = 0, sMY = 0, repelTarget = 0;
+      if (fine) {
+        addEventListener('mousemove', e => {
+          mX = e.clientX - L.cx; mY = -(e.clientY - L.cy);
+          sMX = e.clientX / L.W - 0.5; sMY = e.clientY / L.H - 0.5;
+          repelTarget = 1;
+          wake();
+        }, { passive: true });
+        addEventListener('mouseout', e => { if (!e.relatedTarget) repelTarget = 0; });
+      }
+
+      // Render loop: runs while the stage is on screen and the tab is visible
+      const clock = new THREE.Clock();
+      let onScreen = true, running = false, bY = -1.35, bX = 0.16, smX = mX, smY = mY;
+      new IntersectionObserver(es => { onScreen = es.some(e => e.isIntersecting); if (onScreen) wake(); }).observe(stage);
+
+      function frame() {
+        if (!onScreen || document.hidden) { running = false; return; }
+        const dt = Math.min(clock.getDelta(), 0.05);
+        if (!reduced) uniforms.uTime.value += dt;
+        const t = uniforms.uTime.value, p = pw.progress;
+
+        uniforms.uMorph.value = pw.morph;
+        uniforms.uOrder.value = pw.order;
+        uniforms.uCharge.value = pw.charge;
+        uniforms.uGain.value[4] = pw.monoGain;
+        uniforms.uLeave.value = pw.leave;
+        uniforms.uGrow.value = pw.grow;
+        uniforms.uBurst.value = pw.burst;
+        uniforms.uBranch.value = pw.branch;
+        dustUniforms.uDust.value = pw.dust;
+        dustUniforms.uGather.value = pw.gather;
+        dust.visible = dustReady && pw.dust > 0.001 && pw.gather < 0.999;
+
+        // mirror each leg's CSS flight
+        for (let k = 0; k < 5; k++) {
+          const s = scenes[k];
+          uniforms.uT.value[k].set(-gsap.getProperty(s, 'rotationX') * D2R, gsap.getProperty(s, 'rotationY') * D2R, gsap.getProperty(s, 'z'));
+          uniforms.uXY.value[k].set(gsap.getProperty(s, 'x'), gsap.getProperty(s, 'y'));
+        }
+        // per-shape self rotation
+        const legT = Math.min(Math.max((p - 0.6) / 0.2, 0), 1);
+        bY += ((-1.35 + legT * 1.1 + Math.sin(t * 0.35) * 0.05 + sMX * 0.3) - bY) * 0.08;
+        bX += ((0.16 + sMY * 0.14) - bX) * 0.08;
+        uniforms.uSpin.value[0].set(0, t * 0.015);
+        uniforms.uSpin.value[2].set(0.42 + Math.sin(t * 0.2) * 0.05, t * 0.14 + p * 3.0);
+        uniforms.uSpin.value[3].set(bX, bY);
+        uniforms.uSpin.value[4].set(0, Math.sin(t * 0.25) * 0.12);
+
+        // cursor
+        smX += (mX - smX) * 0.12; smY += (mY - smY) * 0.12;
+        uniforms.uMouse.value.set(smX, smY);
+        uniforms.uRepel.value += (repelTarget - uniforms.uRepel.value) * 0.08;
+
+        // brain synapses
+        const m = pw.morph;
+        linkUniforms.uShow.value = m < 2 ? 0 : (m <= 3 ? 1 : 1 - smoothstep(3.0, 3.2, m));
+
+        // leg 3 → 4 zoom-out: the world scales about the brain's anchor patch
+        uniforms.uZoom.value = pw.zoom;
+        uniforms.uReveal.value = pw.reveal;
+        uniforms.uS.value = Math.pow(1 / NET_K, 1 - pw.zoom);
+        const T3 = uniforms.uT.value[2], XY3 = uniforms.uXY.value[2];
+        uniforms.uHub.value.set(XY3.x, -XY3.y, T3.z);
+        xfJS(anchorLocal, 3, uniforms.uA.value);
+        uniforms.uAS.value.lerpVectors(uniforms.uHub.value, uniforms.uA.value, pw.zoom);
+        const T4 = uniforms.uT.value[3];
+        brainOuter.rotation.set(T4.x, T4.y, 0); brainOuter.position.z = T4.z;
+        brainInner.rotation.set(bX, bY, 0);
+        links.visible = linkUniforms.uShow.value > 0.001 && pw.reveal > 0.001;
+
+        renderer.render(scene, camera);
+        if (reduced) { running = false; return; }
+        requestAnimationFrame(frame);
+      }
+      function smoothstep(a, b, x) { const k = Math.min(Math.max((x - a) / (b - a), 0), 1); return k * k * (3 - 2 * k); }
+      function wake() {
+        if (running || !onScreen || document.hidden) return;
+        running = true;
+        clock.getDelta();
+        requestAnimationFrame(frame);
+      }
+      window.__pwWake = wake;
+      document.addEventListener('visibilitychange', wake);
+
+      stage.classList.add('pw-live');   // hand over from the SVG fallback
+      wake();
+    }
+  </script>
+</body>
+</html>
