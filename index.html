@@ -9,24 +9,27 @@
       var h = location.hash, own = ['#top', '#intro', '#story', '#signoff', '#atom-01', '#atom-02', '#atom-03', '#atom-04', '#atom-05'];
       if (h && h !== '#' && own.indexOf(h) < 0) location.replace('/work/' + h);
     })();
-    /* Gate: the flight through the molecule runs only on a fine pointer, 768px and wider,
-       without Save-Data or reduced motion, with WebGL2. Everyone else keeps the static
-       skeletal molecule, which is also what the page shows with JavaScript off. */
+    /* Gate: the flight through the molecule runs with WebGL2, without Save-Data or reduced
+       motion. A fine pointer at 768px and wider gets the desktop engine; touch screens and
+       narrow windows get the light mobile tier (html.mob). Everyone else keeps the static
+       skeletal molecule, which is also what the page shows with JavaScript off.
+       ?static forces the static page, ?3d forces the engine on any device (testing). */
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
       try {
         var mm = function (q) { return window.matchMedia(q).matches; };
-        var c = navigator.connection;
-        var ok = mm('(pointer: fine)') && mm('(min-width: 768px)') &&
-                 !mm('(prefers-reduced-motion: reduce)') && !(c && c.saveData) &&
-                 location.search.indexOf('static') < 0;
+        var c = navigator.connection, s = location.search;
+        var desk = mm('(pointer: fine)') && mm('(min-width: 768px)');
+        var ok = s.indexOf('static') < 0 &&
+                 (/[?&]3d(?:[=&]|$)/.test(s) || (!mm('(prefers-reduced-motion: reduce)') && !(c && c.saveData)));
         if (ok) {
           var gl = document.createElement('canvas').getContext('webgl2');
           ok = !!gl;
           if (gl && gl.getExtension('WEBGL_lose_context')) gl.getExtension('WEBGL_lose_context').loseContext();
         }
         if (ok) d.classList.add('mol3d');
+        if (ok && !desk) d.classList.add('mob');
       } catch (e) {}
     })();
   </script>
@@ -72,7 +75,8 @@
       length 1, 120 degree angles). Generic, not any named compound.
     · Palette and fonts from assets/tokens.css; the shader reads --accent, --hot, --ink.
     · Self-hosted libraries only (assets/vendor). No CDN.
-    · ?q=full or ?q=low forces a quality tier; ?static forces the static page.
+    · ?q=full or ?q=low forces a quality tier; ?static forces the static page; ?3d forces
+      the engine on any device. Touch screens and narrow windows run the mobile tier.
 -->
   <link rel="preload" href="fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -261,6 +265,14 @@
     .minimap button:hover { background: color-mix(in srgb, var(--gold) 18%, transparent); }
     .minimap button:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; }
     html.mol3d .is-hover-atom { cursor: pointer; }
+
+    /* ============================================================
+       MOBILE TIER (html.mol3d.mob): touch screens and narrow windows
+       ============================================================ */
+    html.mol3d.mob .hud { width: min(400px, calc(100vw - 32px)); padding: 16px 18px 18px; }
+    html.mol3d.mob .ch[data-ch="5"] .hud { width: calc(100vw - 32px); padding: 20px 20px 22px; }
+    html.mol3d.mob:not(.engine-on) .ch[data-ch="1"] .hud { transform: translate(16px, 52vh); }
+    html.mol3d.mob .minimap { display: none; }
   </style>
 </head>
 
@@ -433,8 +445,9 @@
   if (root.classList.contains('mol3d')) start().catch((err) => { console.warn('molecule engine off:', err && err.message); fallback(); });
 
   function fallback() {
-    root.classList.remove('mol3d', 'engine-on');
+    root.classList.remove('mol3d', 'mob', 'engine-on', 'is-hover-atom');
     const c = document.querySelector('#molCanvas canvas'); if (c) c.remove();
+    document.querySelectorAll('#story .hud').forEach((p) => p.removeAttribute('style'));
   }
 
   /* ---------- seeded RNG ---------- */
@@ -629,6 +642,10 @@
     const THREE = await import(new URL('./assets/vendor/three.module.min.js', document.baseURI).href);
     const params = new URLSearchParams(location.search);
     const forceQ = params.get('q');
+    /* tiers: desktop draws everything; the mobile tier (touch or narrow) a quarter sample,
+       a smaller depth of field, no pointer catalyst and native touch scrolling */
+    const MOB = root.classList.contains('mob');
+    const MOBF = { mol: 0.25, bond: 0.3, far: 0.12, farGain: 1.4, grow: 1.3 };
     const css = getComputedStyle(root);
     const hex = (v, d) => new THREE.Color((css.getPropertyValue(v) || d).trim() || d);
     const GOLD = hex('--accent', '#ffb547'), HOT = hex('--hot', '#ff6a2b'), WHITE = hex('--ink', '#f5f1eb');
@@ -820,12 +837,31 @@
     }
 
     /* shuffle so any prefix of the buffer is an even sample (the low tier draws half) */
-    const N = P.length / STRIDE;
-    const order = new Uint32Array(N); for (let i = 0; i < N; i++) order[i] = i;
-    for (let i = N - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); const t = order[i]; order[i] = order[j]; order[j] = t; }
+    const N0 = P.length / STRIDE;
+    const order0 = new Uint32Array(N0); for (let i = 0; i < N0; i++) order0[i] = i;
+    for (let i = N0 - 1; i > 0; i--) { const j = Math.floor(rand() * (i + 1)); const t = order0[i]; order0[i] = order0[j]; order0[j] = t; }
     // the solid sphere sprites go first, so the low tier (which draws half) keeps them all
-    for (let k = 0, front = 0; k < N; k++) if (P[order[k] * STRIDE + 9] === 4) { const t = order[front]; order[front++] = order[k]; order[k] = t; }
-    const pos = new Float32Array(N * 3), bpos = new Float32Array(N * 3), scat = new Float32Array(N * 3), aP = new Float32Array(N * 4), aF = new Float32Array(N * 4), col = new Float32Array(N * 3);
+    for (let k = 0, front = 0; k < N0; k++) if (P[order0[k] * STRIDE + 9] === 4) { const t = order0[front]; order0[front++] = order0[k]; order0[k] = t; }
+    /* the mobile tier keeps an even sample: every solid sphere and wide glow, about a
+       quarter of the molecule's particles (a little larger and brighter to carry the same
+       light) and a thin share of the far field */
+    let N = N0, order = order0;
+    if (MOB) {
+      const keep = [], rest = [], acc = [0, 0, 0, 0];
+      const frac = { 0: MOBF.mol, 1: MOBF.bond, 2: MOBF.far, 3: MOBF.mol };
+      for (let k = 0; k < N0; k++) {
+        const s = order0[k] * STRIDE, kind = P[s + 9];
+        if (kind === 4 || P[s + 10] > 0.05) { keep.push(order0[k]); continue; }
+        acc[kind] += frac[kind];
+        if (acc[kind] >= 1) {
+          acc[kind] -= 1; rest.push(order0[k]);
+          const g = kind === 2 ? MOBF.farGain : 1 / (frac[kind] * MOBF.grow * MOBF.grow);
+          P[s + 10] *= kind === 2 ? 1 : MOBF.grow; P[s + 17] *= g; P[s + 18] *= g; P[s + 19] *= g;
+        }
+      }
+      order = Uint32Array.from([...keep, ...rest]); N = order.length;
+    }
+    const pos =new Float32Array(N * 3), bpos = new Float32Array(N * 3), scat = new Float32Array(N * 3), aP = new Float32Array(N * 4), aF = new Float32Array(N * 4), col = new Float32Array(N * 3);
     for (let k = 0; k < N; k++) {
       const s = order[k] * STRIDE;
       pos.set([P[s], P[s + 1], P[s + 2]], k * 3); bpos.set([P[s + 3], P[s + 4], P[s + 5]], k * 3); scat.set([P[s + 6], P[s + 7], P[s + 8]], k * 3);
@@ -1016,7 +1052,7 @@
     const evRate = [1, 1 / 1.3, 1 / 1.3, 1 / 2.8, 1 / 2.2];
 
     let lenis = null;
-    try {
+    if (!MOB) try {
       await new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'assets/vendor/lenis.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
       lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 0.9, smoothWheel: true });
     } catch (e) { lenis = null; }
@@ -1090,7 +1126,7 @@
 
     /* ---------- pointer ---------- */
     let ptrX = 0, ptrY = 0, ptrIn = false, look = new THREE.Vector2(), hover = 0;
-    addEventListener('pointermove', (e) => { ptrX = (e.clientX / W) * 2 - 1; ptrY = -(e.clientY / H) * 2 + 1; ptrIn = e.pointerType === 'mouse' || e.pointerType === 'pen'; }, { passive: true });
+    if (!MOB) addEventListener('pointermove', (e) => { ptrX = (e.clientX / W) * 2 - 1; ptrY = -(e.clientY / H) * 2 + 1; ptrIn = e.pointerType === 'mouse' || e.pointerType === 'pen'; }, { passive: true });
     document.addEventListener('pointerleave', () => { ptrIn = false; });
     renderer.domElement.style.pointerEvents = 'none';
     addEventListener('click', (e) => {
@@ -1104,11 +1140,12 @@
     { const t0 = evTarget(scrollY); for (let i = 1; i < 5; i++) ev[i] = t0[i]; }
     const v = new THREE.Vector3(), cp = new THREE.Vector3(), lp = new THREE.Vector3(), q1 = new THREE.Vector3(), q2 = new THREE.Vector3();
     const chapterPos = M.chapters.map((id) => A[id].p);
-    let hoverAmt = 0, ptrAmt = 0, roll = 0, holdT = 0, dockT = -1, waveAmt = 0;
+    let hoverAmt = 0, ptrAmt = 0, roll = 0, holdT = 0, dockT = -1, waveAmt = 0, frozen = null;
 
     function tick(now) {
       raf = requestAnimationFrame(tick);
-      const dt = Math.min(0.05, (now - last) / 1000); last = now; time += dt;
+      let dt = Math.min(0.05, (now - last) / 1000); last = now; time += dt;
+      if (frozen != null) { dt = 0.05; time = frozen; }   // test handle: a still frame for screenshot diffs
       if (lenis) lenis.raf(now);
       const y = scrollY;
       const tT = scrollToT(y);
@@ -1123,6 +1160,7 @@
       // the reveal holds: a slow eased orbit about the molecule, a few degrees a second
       const pullW = smoother(clamp01((tCur * NW - (NW - 1)) / 1));
       holdT = pullW > 0.01 ? holdT + dt * pullW : 0;
+      if (frozen != null && pullW > 0.01) holdT = 3;
       if (pullW > 0.01) {
         const th = pullW * reveal.orbit * Math.sin(holdT * 0.25);
         v.copy(cp).sub(lookEnd).applyAxisAngle(Y, th);
@@ -1137,6 +1175,7 @@
       const acc = q1.add(q2).multiplyScalar(0.5).sub(cp);
       const rollT = Math.max(-0.1, Math.min(0.1, acc.dot(right) * -0.9));
       roll += (rollT - roll) * (1 - Math.exp(-dt * 2));
+      if (frozen != null) roll = rollT;
       camera.up.copy(Y).applyAxisAngle(fwd, roll);
       camera.lookAt(lp);
       // look around toward the cursor, a few degrees, eased
@@ -1149,7 +1188,7 @@
       { const wi = Math.min(Rs.length - 1, tCur * NW), k = Math.floor(wi), fr = wi - k;
         v.copy(Rs[k]).lerp(Rs[Math.min(Rs.length - 1, k + 1)], fr); }
       uniforms.uFocus.value = cp.distanceTo(v) * (1 - pull) + cp.distanceTo(focusEnd) * pull;
-      uniforms.uAperture.value = (7 + (reveal.ap - 7) * pull) * dpr; uniforms.uPull.value = pull;
+      uniforms.uAperture.value = MOB ? (4 + (16 - 4) * pull) * dpr : (7 + (reveal.ap - 7) * pull) * dpr; uniforms.uPull.value = pull;
       uniforms.uFog.value = 0.5 - 0.15 * pull;
       // the seven atoms dock: a flash at atom 01, then the pulse starts down the chain
       if (ev[4] >= 0.8) { if (dockT < 0) dockT = time; } else if (ev[4] < 0.6) dockT = -1;
@@ -1179,7 +1218,8 @@
 
       // adaptive quality: watch the first two seconds of frames
       frames++;
-      if (!forceQ && quality === 'full' && frames > 12 && sampleT.length < 90) {
+      if (MOB) { if (!forceQ) adaptMobile(dt); }
+      else if (!forceQ && quality === 'full' && frames > 12 && sampleT.length < 90) {
         sampleT.push(dt);
         if (sampleT.length === 90 || (time > 2.4 && sampleT.length > 20)) {
           const s = [...sampleT].sort((a, b) => a - b), med = s[Math.floor(s.length / 2)];
@@ -1187,6 +1227,37 @@
           if (med > 0.024) setQuality('low');
         }
       }
+    }
+
+    /* mobile: a slow phone drops to half the particles; if that still runs worse than
+       about 25 frames a second, it hands over to the static page */
+    let adaptStage = 0, adaptFrom = 12;
+    function adaptMobile(dt) {
+      if (adaptStage > 1 || frames <= adaptFrom) return;
+      sampleT.push(dt);
+      if (sampleT.length < 60 && !(sampleT.length > 20 && time - time0 > 3)) return;
+      const s = [...sampleT].sort((a, b) => a - b), med = s[Math.floor(s.length / 2)];
+      sampleT.length = 0;
+      if (adaptStage === 0) {
+        if (med > 0.024) { setQuality('low'); adaptStage = 1; adaptFrom = frames + 12; time0 = time; }
+        else adaptStage = 2;
+      } else {
+        adaptStage = 2;
+        if (med > 0.040) giveUp();
+      }
+    }
+    let time0 = 0, dead = false;
+    function giveUp() {
+      dead = true; pause();
+      removeEventListener('resize', resize);
+      // keep the reader where they were: the chapter on screen, in the static page
+      let cur = -1; arrive.forEach((ay, i) => { if (scrollY >= ay - vh * 0.6) cur = i; });
+      const past = scrollY > arrive[4] + vh * 1.2;
+      try { renderer.dispose(); renderer.forceContextLoss(); } catch (e) {}
+      fallback();
+      if (past) document.getElementById('signoff').scrollIntoView();
+      else if (cur > 0 || scrollY > vh * 0.3) lis[Math.max(0, cur)].scrollIntoView();
+      if (window.__mol) window.__mol.gaveUp = true;
     }
 
     const lerpK = (k, dt) => 1 - Math.exp(-dt * k);
@@ -1197,7 +1268,8 @@
       let tx = sd > 0 ? s.x + 120 : s.x - 120 - pw;
       let ty = h === 0 ? s.y - ph - 70 : h === 1 ? s.y - ph * 0.5 - 30 : s.y + 70;
       ty = Math.max(96, Math.min(H - ph - 150, ty));
-      tx = Math.max(32, Math.min(W - pw - 32, tx));
+      const G = MOB ? 16 : 32;
+      tx = Math.max(G, Math.min(W - pw - G, tx));
       return [tx, ty, sd];
     }
     // the bright atoms on screen, refreshed a few times a second: [x, y, radius px, weight]
@@ -1249,7 +1321,7 @@
         }
         const pw = p._w, ph = p._h;
         let tx, ty, side = 1;
-        if (i === 4) { tx = Math.max(40, W * 0.06); ty = H - ph - Math.max(48, H * 0.08); side = s.x > tx + pw ? -1 : 1; }
+        if (i === 4) { tx = MOB ? 16 : Math.max(40, W * 0.06); ty = H - ph - Math.max(48, H * 0.08); side = s.x > tx + pw ? -1 : 1; }
         else {
           // pick the side and height that cover the least of the bright atoms, and only
           // move off the current choice when another is clearly better
@@ -1309,17 +1381,18 @@
 
     /* ---------- run / pause ---------- */
     let storyVisible = true;
-    function run() { if (running || document.hidden || !storyVisible) return; running = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+    function run() { if (dead || running || document.hidden || !storyVisible) return; running = true; last = performance.now(); raf = requestAnimationFrame(tick); }
     function pause() { running = false; cancelAnimationFrame(raf); }
     document.addEventListener('visibilitychange', () => (document.hidden ? pause() : run()));
     new IntersectionObserver((es) => { storyVisible = es[0].isIntersecting; storyVisible ? run() : pause(); }, { rootMargin: '0px 0px -2px 0px' }).observe(document.getElementById('story'));
     // when paused (story off screen) Lenis still needs its frames
-    (function lenisIdle(now) { if (!running && lenis) lenis.raf(now); requestAnimationFrame(lenisIdle); })(performance.now());
+    if (lenis) (function lenisIdle(now) { if (!running && lenis) lenis.raf(now); requestAnimationFrame(lenisIdle); })(performance.now());
     addEventListener('resize', resize);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
     setQuality(forceQ === 'low' ? 'low' : 'full');
-    window.__mol = { N, nMol, atoms: A.length, bonds: B.length, quality: () => quality, setQuality, arrive: () => arrive, ev, jump,
+    window.__mol = { N, nMol, tier: MOB ? 'mobile' : 'desktop', drawn: () => geo.drawRange.count === Infinity ? N : Math.min(N, geo.drawRange.count), atoms: A.length, bonds: B.length, quality: () => quality, setQuality, arrive: () => arrive, ev, jump,
       dbg: () => ({ flash: +uniforms.uFlash.value.toFixed(2), wave: +uniforms.uWave.value.toFixed(2), pull: +uniforms.uPull.value.toFixed(2), holdT: +holdT.toFixed(2), picks: lead.map((l) => l.pick) }),
+      freeze(t) { frozen = t == null ? null : +t; },
       snap() { const y = scrollY; tCur = scrollToT(y); const t = evTarget(y); for (let i = 1; i < 5; i++) ev[i] = t[i]; } };
     run();
   }
