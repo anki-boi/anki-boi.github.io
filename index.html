@@ -292,6 +292,35 @@
       html.mol3d.mob .ch[data-ch="5"] .hud .name { font-size: 2.2rem; }
     }
 
+    /* ============================================================
+       COMPACT PANELS: every chapter panel at about 75% of its first size,
+       so more of the molecule stays in view. Body text stops at 13px and
+       mono at 12px so it stays readable; tap targets keep their height.
+       ============================================================ */
+    html.mol3d .hud { width: min(29ch, 300px); padding: 15px 18px 16px; }
+    html.mol3d .hud .kick { margin-bottom: 10px; }
+    html.mol3d .hud h2 { font-size: clamp(1.3rem, 1.8vw, 1.7rem); margin-bottom: 10px; }
+    html.mol3d .hud p.body { font-size: 13px; line-height: 1.5; }
+    html.mol3d .ch[data-ch="5"] .hud { width: min(420px, 35vw); padding: 20px 22px 21px; }
+    html.mol3d .ch[data-ch="5"] .hud .name { font-size: clamp(1.9rem, 2.9vw, 2.75rem); margin-bottom: 9px; white-space: nowrap; }
+    html.mol3d .ch[data-ch="5"] .hud .tag { font-size: clamp(0.95rem, 1.8vw, 1.2rem); }
+    html.mol3d .ch[data-ch="5"] .hud .row { margin-top: 18px; }
+
+    html.mol3d.mob .hud { right: auto; width: calc((100vw - 32px) * 0.75); max-height: 35vh; padding: 12px 14px 13px; }
+    html.mol3d.mob .hud .kick { margin-bottom: 7px; }
+    html.mol3d.mob .hud h2 { font-size: clamp(1.05rem, 4.65vw, 1.3rem); margin-bottom: 7px; }
+    html.mol3d.mob .hud p.body { font-size: 13px; line-height: 1.5; }
+    /* the sign-off keeps the full width so both buttons stay big enough to tap */
+    html.mol3d.mob .ch[data-ch="5"] .hud { right: max(16px, env(safe-area-inset-right)); width: auto; padding: 15px; }
+    html.mol3d.mob .ch[data-ch="5"] .hud .name { font-size: clamp(1.65rem, 7.9vw, 2.25rem); margin-bottom: 6px; }
+    html.mol3d.mob .ch[data-ch="5"] .hud .tag { font-size: clamp(0.85rem, 3.45vw, 1rem); }
+    html.mol3d.mob .ch[data-ch="5"] .hud .row { margin-top: 14px; }
+    html.mol3d.mob .hud .row .btn { min-height: 44px; }
+    @media (orientation: landscape) and (max-height: 540px) {
+      html.mol3d.mob .hud, html.mol3d.mob .ch[data-ch="5"] .hud { right: auto; width: min(315px, 36vw); }
+      html.mol3d.mob .ch[data-ch="5"] .hud .name { font-size: 1.65rem; }
+    }
+
     /* the progress strip: five chapter atoms down the right edge, tap one to fly there */
     .strip { display: none; }
     html.mol3d.mob.engine-on .strip {
