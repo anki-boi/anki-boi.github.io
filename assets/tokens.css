@@ -1,0 +1,64 @@
+/* ============================================================
+   Shared design tokens: anki-boi.github.io landing (/) and portfolio (/work/)
+   ============================================================
+   Light "lab" theme. Both pages load this file before their own inline CSS and
+   must not redefine these colours, so the palette cannot drift between them.
+   Layout CSS stays inline in each page.
+
+   Canonical names come first. The alias blocks below map each page's
+   historic token names onto them, so neither page had to be renamed:
+     landing   (index.html)       uses --ink --mut --accent --hot --lime --panel
+     portfolio (work/index.html)  uses --bone --muted --amber --sage --ink-50
+   Note: on the portfolio --amber is the ACCENT (cyan), not an orange. The real
+   amber is --warn.
+   ============================================================ */
+:root {
+  /* palette */
+  --bg0: #f2f6fa;           /* page */
+  --bg1: #eaf1f8;           /* alternate band */
+  --panel: #ffffff;
+  --panel-2: #f4f8fc;
+  --cyan: #0a85ad;          /* accent */
+  --cyan-deep: #086c8e;     /* accent text on light, hover */
+  --cyan-soft: rgba(10, 133, 173, 0.12);
+  --mag: #cf1b76;           /* hot accent, used sparingly */
+  --lime: #3f7d1e;          /* ok / verified */
+  --warn: #d97b06;          /* amber */
+  --ink: #17222f;           /* body text */
+  --ink-strong: #101b28;    /* headings */
+  --mut: #38485f;           /* secondary text */
+  --mut-2: #485970;
+  --line: rgba(10, 133, 173, 0.22);
+  --line-strong: rgba(10, 133, 173, 0.42);
+
+  /* type */
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --serif: var(--display);
+  --sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, Menlo, monospace;
+
+  /* layout and motion */
+  --maxw: 1180px;
+  --gut: 28px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: var(--ease);
+  --chamfer: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  --grain-opacity: 0.05;
+
+  /* aliases: landing */
+  --bg: var(--bg0);
+  --bg-warm: var(--bg1);
+  --accent: var(--cyan);
+  --hot: var(--mag);
+  --accent-glow: color-mix(in srgb, var(--cyan) 22%, transparent);
+
+  /* aliases: portfolio */
+  --bone: var(--ink);
+  --muted: var(--mut);
+  --amber: var(--cyan);
+  --amber-deep: var(--cyan-deep);
+  --amber-soft: var(--cyan-soft);
+  --sage: var(--lime);
+  --ink-50: var(--panel);
+  --ink-100: var(--panel);
+}
