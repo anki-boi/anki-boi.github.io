@@ -17,7 +17,7 @@ work/index.html       portfolio: services, work, about, experience, stack, conta
 assets/tokens.css     the shared palette, type families, spacing and motion tokens
 assets/vendor/        GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.20, Three.js 0.170.0 (see LICENSES.md)
 fonts/                Fraunces (display), Inter (body), JetBrains Mono (labels), self-hosted
-img/                  screenshots, portraits, og.png share card
+img/                  screenshots, portraits (all .webp), og-card.png share card
 cv.pdf                built from Typst, see The CV
 sitemap.xml           both URLs
 ```
@@ -54,25 +54,25 @@ python -m http.server 8899 --bind 127.0.0.1   # then open http://127.0.0.1:8899
 
 `fonts/`, `img/` and `assets/vendor/` are committed deliberately. A push that forgets the fonts
 silently falls back to Georgia and 404s the preloads; a push that forgets the vendor folder breaks
-every animation. Every screenshot is `.webp` at 1000px wide, and the `width`/`height` attributes are
-the true intrinsic size, which stops lazy images from shifting the layout as they arrive.
+every animation. Every screenshot and portrait is `.webp` (screenshots 1000px wide; the hero has a 3-step
+srcset). Only `og-card.png` stays PNG, because social crawlers need it. The `width`/`height`
+attributes are the true intrinsic size, which stops lazy images from shifting the layout.
 
 ## The CV
 
-`cv.pdf` at the site root is `resume-kb.typ` from `Dropbox\Resumes\!Clinical-Data-Automation
-Master Resume` compiled a second time, with one switch:
+`cv.pdf` at the site root is the owner's `resume-kb.typ` (kept outside this repo, in the Resumes
+folder) compiled a second time, with one switch:
 
 ```
-typst compile --font-path fonts --input web=1 resume-kb.typ /c/Users/PC/repos/anki-boi.github.io/cv.pdf
+typst compile --font-path fonts --input web=1 resume-kb.typ <path-to-this-repo>/cv.pdf
 ```
 
 `web=1` drops the phone number from the header. The deliverable PDF keeps it; the published copy
-does not, because this is a public, scrapable, permanent URL and the pages already obfuscate the
-email address. Do not hand-edit `cv.pdf`. Rebuild it, or the two copies of the same source start
-disagreeing. The site no longer publishes a rate, so the CV's rate line should go in the next
-rebuild.
+does not, because this is a public, scrapable, permanent URL and the landing obfuscates the
+email address. `/work/` uses a plain `mailto:` link, an accepted trade-off the owner confirmed on 2026-10-07. Do not hand-edit `cv.pdf`. Rebuild it, or the two copies of the same source start
+disagreeing. The site publishes no rate. Checked 2026-10-07: `cv.pdf` contains no rate and no phone number.
 
-`check-truth.py` in the Resumes folder gates it (present, 1 page, no `+63`, still linked, and a
+`check-truth.py` (kept with the owner's Resumes folder, not in this repo) gates it (present, 1 page, no `+63`, still linked, and a
 drift WARN against the KB master). Run it after touching either file.
 
 ## Content rules
@@ -88,6 +88,9 @@ public only if it survived verification. Concretely, neither page claims:
   credential: **HIPAA Privacy & Security trained**. Do not upgrade it to CHP/CHPS unless the exam
   certificate exists.
 - a price. Pricing is scoped per engagement on a call.
+- an OnlineJobs.ph profile link. The audience is direct clients; the OJ.ph Cleaner project stays as open-source work.
+- a production claim for the Zoho order desk. It is **in pilot with one team** until the owner says otherwise.
+- a time-saving total without its arithmetic: `~6 min to ~40 s per order, at my own 20 to 30 orders a day, roughly 40 to 60 hours a month`.
 
 Also deliberately absent: a client testimonial, and a written response-time commitment. Do not
 invent these. References stay "available on request" until a real one is written down.

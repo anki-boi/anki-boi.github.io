@@ -1,7 +1,9 @@
 # Unify plan: landing page + portfolio, one theme
 
-Status: approved decisions captured 2026-10-05. Nothing in this plan has been built yet.
-Supersedes `plan.md`, which is a historic worklog from 2026-09-24 and should be archived in Phase 0.
+Status: Phases 0 to 3 shipped (2026-10-05/06). Follow-up fixes are tracked in `REVIEW-AND-FIXES.md`.
+**Theme changed after this plan was written:** both pages are warm dark, not light. The light retheme killed
+the landing's additive WebGL glow. Section 2's "no dark mode" and section 3's light token names are
+superseded; the live tokens are in `assets/tokens.css`. `plan.md` (the 2026-09-24 worklog) was deleted.
 
 ## 1. Decisions (locked with Jeyson on 2026-10-05)
 

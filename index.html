@@ -7,7 +7,11 @@
        at /work/. Forward any hash this page does not own before anything renders. */
     (function () {
       var h = location.hash, own = ['#top', '#intro', '#story', '#signoff', '#atom-01', '#atom-02', '#atom-03', '#atom-04', '#atom-05'];
-      if (h && h !== '#' && own.indexOf(h) < 0) location.replace('/work/' + h);
+      /* old portfolio anchor -> its id on /work/. Unknown hashes go to /work/ with no hash. */
+      var moved = {'#projects': '#work', '#tools': '#stack', '#working': '#services', '#proj-clinical': '#cb-suite',
+                   '#proj-ojph': '#cb-ojph', '#proj-jobhunter': '#other-work', '#about': '#about', '#experience': '#experience',
+                   '#contact': '#contact', '#services': '#services', '#work': '#work', '#stack': '#stack', '#other-work': '#other-work'};
+      if (h && h !== '#' && own.indexOf(h) < 0) location.replace('/work/' + (/^#cb-[a-z]+$/.test(h) ? h : (moved[h] || '')));
     })();
     /* Gate: the flight through the molecule runs with WebGL2, without Save-Data or reduced
        motion. A fine pointer at 768px and wider gets the desktop engine; touch screens and
@@ -438,7 +442,7 @@
         <article class="hud" aria-labelledby="t3">
           <p class="kick">Atom 03 · The system</p>
           <h2 id="t3">45+ scripts, one ops layer.</h2>
-          <p class="body">~6 min → ~40 s per order, 40 to 60 hours a month handed back, and a human still signs off every action.</p>
+          <p class="body">~6 min → ~40 s per order. At my own 20 to 30 orders a day, that is roughly 40 to 60 hours a month handed back, and a human still signs off every action.</p>
         </article>
       </li>
 
